@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/mapView"
+            android:icon="@drawable/ic_baseline_map_24px"
+            android:title="@string/map_bottom_nav" />
+
+    <item
+            android:id="@+id/tripsView"
+            android:icon="@drawable/ic_hiker_icon"
+            android:title="@string/trips_bottom_nav" />
+
+    <item
+            android:id="@+id/chatView"
+            android:icon="@drawable/ic_comment_solid"
+            android:title="@string/chat_bottom_nav" />
+
+</menu>
