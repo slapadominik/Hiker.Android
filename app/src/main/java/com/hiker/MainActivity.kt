@@ -1,11 +1,10 @@
 package com.hiker
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         bottomNavigation.setupWithNavController(navController)
+        setSupportActionBar(findViewById(R.id.toolbar))
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
 

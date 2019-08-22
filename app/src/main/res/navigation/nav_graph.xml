@@ -4,10 +4,10 @@
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
             app:startDestination="@id/mapView">
 
-    <fragment android:id="@+id/mapView" android:name="com.hiker.MapView" android:label="fragment_map_view"
+    <fragment android:id="@+id/mapView" android:name="com.hiker.map.MapView" android:label="fragment_map_view"
               tools:layout="@layout/fragment_map_view"/>
-    <fragment android:id="@+id/tripsView" android:name="com.hiker.TripsView" android:label="fragment_trips_view"
+    <fragment android:id="@+id/tripsView" android:name="com.hiker.trips.TripsView" android:label="fragment_trips_view"
               tools:layout="@layout/fragment_trips_view"/>
-    <fragment android:id="@+id/chatView" android:name="com.hiker.ChatView" android:label="fragment_chat_view"
+    <fragment android:id="@+id/chatView" android:name="com.hiker.chat.ChatView" android:label="fragment_chat_view"
               tools:layout="@layout/fragment_chat_view"/>
 </navigation>

@@ -1,11 +1,12 @@
-package com.hiker
+package com.hiker.trips
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.hiker.R
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -17,14 +18,14 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class MapView : Fragment() {
+class TripsView : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map_view, container, false)
+        return inflater.inflate(R.layout.fragment_trips_view, container, false)
     }
 
 
