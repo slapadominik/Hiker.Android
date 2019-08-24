@@ -18,8 +18,6 @@ class MainActivity : AppCompatActivity() {
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         bottomNavigation.setupWithNavController(navController)
-        setSupportActionBar(findViewById(R.id.toolbar))
-        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
