@@ -10,19 +10,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.hiker.R
+import com.hiker.data.repository.MountainsRepositoryImpl
+import com.hiker.domain.repository.MountainsRepository
 
 
 class MapView : Fragment(), OnMapReadyCallback {
 
-    private lateinit var mapView: com.google.android.gms.maps.MapView
+    private lateinit var googleMapView: com.google.android.gms.maps.MapView
     private lateinit var googleMap : GoogleMap
     private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var mapViewModel : MapViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,18 +36,35 @@ class MapView : Fragment(), OnMapReadyCallback {
     ): View? {
         var view = inflater.inflate(R.layout.fragment_map_view, container, false)
 
-        mapView = view.findViewById(R.id.mapView2)
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this)
+        googleMapView = view.findViewById(R.id.mapView2)
+        googleMapView.onCreate(savedInstanceState)
+        googleMapView.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initMapViewModel()
+        bindMountainsToMap()
     }
 
 
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         setUpMap()
+        bindMountainsToMap()
+    }
+
+    private fun bindMountainsToMap(){
+        mapViewModel.getAllMountains().observe(this, Observer { mountains ->
+            mountains.forEach { m -> setUpMarker(m.location.latitude, m.location.longitude, m.location.regionName) }
+        })
+    }
+
+    private fun setUpMarker(latitude: Double, longitude: Double, title: String){
+        googleMap.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).title(title))
     }
 
     private fun setUpMap() {
@@ -62,23 +85,28 @@ class MapView : Fragment(), OnMapReadyCallback {
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        googleMapView.onPause()
     }
     override fun onResume() {
         super.onResume()
-        mapView.onResume()
+        googleMapView.onResume()
     }
     override fun onDestroy() {
         super.onDestroy()
-        mapView.onDestroy()
+        googleMapView.onDestroy()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        googleMapView.onLowMemory()
+    }
+
+    private fun initMapViewModel() {
+        mapViewModel = ViewModelProviders.of(this, MapViewModelFactory(MountainsRepositoryImpl())).get(MapViewModel::class.java)
     }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        fun newInstance() = MapView()
     }
 }

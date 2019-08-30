@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "109913867813",
+    "firebase_url": "https://hiker-1564214562556.firebaseio.com",
+    "project_id": "hiker-1564214562556",
+    "storage_bucket": "hiker-1564214562556.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109913867813:android:6adf7faa07faaa00",
+        "android_client_info": {
+          "package_name": "com.hiker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "109913867813-3dami3geh3cdt6as8muupvbpdh0lfel6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hiker",
+            "certificate_hash": "72a4c195a16b3ac6f0cbf1a6d09620225dab3f54"
+          }
+        },
+        {
+          "client_id": "109913867813-o7pukd0fh4470av9qm9ikqa309c1i8l2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcfV79PPQfNLgPmtctNR2_0SkQ3F4gzT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109913867813-o7pukd0fh4470av9qm9ikqa309c1i8l2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
