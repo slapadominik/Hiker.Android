@@ -22,7 +22,7 @@ interface MountainsSerivce {
 
     companion object {
         fun create(): MountainsSerivce {
-            val baseUrl = "http://192.168.0.171:5000/api/"
+            val baseUrl = "https://hikerapi20190830053746.azurewebsites.net/api/"
             return Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
