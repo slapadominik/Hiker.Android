@@ -2,6 +2,7 @@ package com.hiker.presentation.map
 
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -15,11 +16,22 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.hiker.R
 import com.hiker.data.repository.MountainsRepositoryImpl
 import com.hiker.domain.repository.MountainsRepository
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import androidx.core.content.ContextCompat
+import android.graphics.drawable.Drawable
+
+import androidx.annotation.DrawableRes
+
+
+
 
 
 class MapView : Fragment(), OnMapReadyCallback {
@@ -59,12 +71,15 @@ class MapView : Fragment(), OnMapReadyCallback {
 
     private fun bindMountainsToMap(){
         mapViewModel.getAllMountains().observe(this, Observer { mountains ->
-            mountains.forEach { m -> setUpMarker(m.location.latitude, m.location.longitude, m.location.regionName) }
+            mountains.forEach { m -> setUpMarker(m.location.latitude, m.location.longitude, m.name ,m.trails.count) }
         })
     }
 
-    private fun setUpMarker(latitude: Double, longitude: Double, title: String){
-        googleMap.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).title(title))
+    private fun setUpMarker(latitude: Double, longitude: Double, title: String, tripsCount: Int){
+        googleMap.addMarker(MarkerOptions()
+            .position(LatLng(latitude, longitude))
+            .title(title)
+            .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips)))
     }
 
     private fun setUpMap() {
@@ -108,5 +123,14 @@ class MapView : Fragment(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         fun newInstance() = MapView()
+    }
+
+    private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {
+        val background = ContextCompat.getDrawable(context, vectorDrawableResourceId)
+        background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
+        val bitmap = Bitmap.createBitmap(background.intrinsicWidth, background.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        background.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 }
