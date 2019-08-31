@@ -22,16 +22,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.hiker.R
 import com.hiker.data.repository.MountainsRepositoryImpl
-import com.hiker.domain.repository.MountainsRepository
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.core.content.ContextCompat
-import android.graphics.drawable.Drawable
 
 import androidx.annotation.DrawableRes
-
-
-
+import androidx.constraintlayout.widget.ConstraintLayout
 
 
 class MapView : Fragment(), OnMapReadyCallback {
@@ -41,6 +37,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mapViewModel : MapViewModel
+    private lateinit var mountainCustomInfoWindow : ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +45,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     ): View? {
         var view = inflater.inflate(R.layout.fragment_map_view, container, false)
 
+        mountainCustomInfoWindow = view.findViewById(R.id.mountain_info_window)
         googleMapView = view.findViewById(R.id.mapView2)
         googleMapView.onCreate(savedInstanceState)
         googleMapView.getMapAsync(this)
@@ -80,6 +78,11 @@ class MapView : Fragment(), OnMapReadyCallback {
             .position(LatLng(latitude, longitude))
             .title(title)
             .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips)))
+        googleMap.setOnMapClickListener { mountainCustomInfoWindow.visibility = View.INVISIBLE }
+        googleMap.setOnMarkerClickListener { x ->
+            mountainCustomInfoWindow.visibility = View.VISIBLE
+            true
+        }
     }
 
     private fun setUpMap() {
