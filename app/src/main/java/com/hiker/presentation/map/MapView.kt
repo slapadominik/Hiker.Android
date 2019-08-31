@@ -16,10 +16,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.hiker.R
 import com.hiker.data.repository.MountainsRepositoryImpl
 import android.graphics.Bitmap
@@ -28,6 +24,10 @@ import androidx.core.content.ContextCompat
 
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.gms.maps.model.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.hiker.data.dto.Mountain
+import kotlinx.android.synthetic.main.fragment_map_view.*
 
 
 class MapView : Fragment(), OnMapReadyCallback {
@@ -38,6 +38,8 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mapViewModel : MapViewModel
     private lateinit var mountainCustomInfoWindow : ConstraintLayout
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private val mountainsMarkers = HashMap<Marker, Mountain>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +52,7 @@ class MapView : Fragment(), OnMapReadyCallback {
         googleMapView.onCreate(savedInstanceState)
         googleMapView.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
+        bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
         return view
     }
 
@@ -65,24 +67,22 @@ class MapView : Fragment(), OnMapReadyCallback {
         googleMap = map
         setUpMap()
         bindMountainsToMap()
+        setUpMountainInfoWindow(googleMap)
     }
 
     private fun bindMountainsToMap(){
         mapViewModel.getAllMountains().observe(this, Observer { mountains ->
-            mountains.forEach { m -> setUpMarker(m.location.latitude, m.location.longitude, m.name ,m.trails.count) }
+            mountains.forEach { mountain -> setUpMarker(mountain) }
         })
     }
 
-    private fun setUpMarker(latitude: Double, longitude: Double, title: String, tripsCount: Int){
-        googleMap.addMarker(MarkerOptions()
-            .position(LatLng(latitude, longitude))
-            .title(title)
+    private fun setUpMarker(mountain: Mountain){
+        val marker = googleMap.addMarker(MarkerOptions()
+            .position(LatLng(mountain.location.latitude, mountain.location.longitude))
+            .title(mountain.name)
             .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips)))
-        googleMap.setOnMapClickListener { mountainCustomInfoWindow.visibility = View.INVISIBLE }
-        googleMap.setOnMarkerClickListener { x ->
-            mountainCustomInfoWindow.visibility = View.VISIBLE
-            true
-        }
+        mountainsMarkers[marker] = mountain
+
     }
 
     private fun setUpMap() {
@@ -98,6 +98,26 @@ class MapView : Fragment(), OnMapReadyCallback {
                 val currentLatLng = LatLng(location.latitude, location.longitude)
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 7.5f))
             }
+        }
+    }
+
+    private fun setUpMountainInfoWindow(map : GoogleMap){
+        map.setOnMapClickListener {
+            mountainCustomInfoWindow.visibility = View.INVISIBLE
+
+            bottomNavigationView.visibility = View.VISIBLE
+        }
+        map.setOnMarkerClickListener { marker ->
+            val mountain = mountainsMarkers[marker]
+            if (mountain != null) {
+                marker_object_name.text = mountain.name
+                marker_object_regionName.text = mountain.location.regionName
+                marker_object_metersAboveSeaLevel.text = mountain.metersAboveSeaLevel.toString()
+            }
+            mountainCustomInfoWindow.visibility = View.VISIBLE
+            bottomNavigationView.visibility = View.INVISIBLE
+
+            true
         }
     }
 
