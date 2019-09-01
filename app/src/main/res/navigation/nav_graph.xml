@@ -5,9 +5,13 @@
             app:startDestination="@id/mapView">
 
     <fragment android:id="@+id/mapView" android:name="com.hiker.presentation.map.MapView" android:label="fragment_map_view"
-              tools:layout="@layout/fragment_map_view"/>
+              tools:layout="@layout/fragment_map_view">
+        <action android:id="@+id/action_mapView_to_mountainDetailsView" app:destination="@id/mountainDetailsView"/>
+    </fragment>
     <fragment android:id="@+id/tripsView" android:name="com.hiker.presentation.trips.TripsView" android:label="fragment_trips_view"
               tools:layout="@layout/fragment_trips_view"/>
     <fragment android:id="@+id/chatView" android:name="com.hiker.presentation.chat.ChatView" android:label="fragment_chat_view"
               tools:layout="@layout/fragment_chat_view"/>
+    <fragment android:id="@+id/mountainDetailsView" android:name="com.hiker.presentation.mountains.MountainDetailsView"
+              android:label="fragment_mountain_details_view" tools:layout="@layout/fragment_mountain_details_view"/>
 </navigation>

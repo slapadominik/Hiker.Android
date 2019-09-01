@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".presentation.mountains.MountainDetailsView"
+              android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp" app:cardBackgroundColor="@color/white">
+        <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:id="@+id/illness_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="275dp"
+                    android:background="@color/design_default_color_primary"
+                    android:cropToPadding="true" tools:srcCompat="@tools:sample/backgrounds/scenic[11]"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                <TextView
+                        android:id="@+id/illness_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Giewont"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:textSize="20sp" android:textAlignment="center"/>
+
+                <TextView
+                        android:id="@+id/illness_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tatry, 1890 m n.p.m"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textSize="14sp" android:textAlignment="center"/>
+
+            </LinearLayout>
+            <com.google.android.material.tabs.TabLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Informacje"
+                        />
+
+                <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wycieczki"/>
+
+            </com.google.android.material.tabs.TabLayout>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/mountain_details_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+</LinearLayout>

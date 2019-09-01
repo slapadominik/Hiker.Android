@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.data.dto.Mountain
@@ -53,6 +54,8 @@ class MapView : Fragment(), OnMapReadyCallback {
         googleMapView.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
+        mountainCustomInfoWindow.visibility = View.INVISIBLE
+        bottomNavigationView.visibility = View.VISIBLE
         return view
     }
 
@@ -116,7 +119,9 @@ class MapView : Fragment(), OnMapReadyCallback {
             }
             mountainCustomInfoWindow.visibility = View.VISIBLE
             bottomNavigationView.visibility = View.INVISIBLE
-
+            mountain_details_button.setOnClickListener { btn ->
+                findNavController().navigate(R.id.action_mapView_to_mountainDetailsView)
+            }
             true
         }
     }
