@@ -31,7 +31,7 @@ class MountainDetailsView : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val fragmentAdapter = MountainDetailsViewPagerAdapter(requireFragmentManager())
+        val fragmentAdapter = MountainDetailsViewPagerAdapter(childFragmentManager)
         mountain_details_viewpager.adapter = fragmentAdapter
         mountain_details_tablayout.setupWithViewPager(mountain_details_viewpager)
     }
