@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager.widget.ViewPager
 import com.hiker.R
+import kotlinx.android.synthetic.main.fragment_mountain_details_view.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,13 +21,19 @@ private const val ARG_PARAM2 = "param2"
  *
  */
 class MountainDetailsView : Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mountain_details_view, container, false)
+        val view = inflater.inflate(R.layout.fragment_mountain_details_view, container, false)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val fragmentAdapter = MountainDetailsViewPagerAdapter(requireFragmentManager())
+        mountain_details_viewpager.adapter = fragmentAdapter
+        mountain_details_tablayout.setupWithViewPager(mountain_details_viewpager)
     }
 
 
