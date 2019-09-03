@@ -33,20 +33,48 @@
                     android:padding="10dp">
 
                 <TextView
-                        android:id="@+id/illness_title"
+                        android:id="@+id/mountainDetailsView_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Giewont"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:textSize="20sp" android:textAlignment="center"/>
 
-                <TextView
-                        android:id="@+id/illness_description"
+                <LinearLayout
+                        android:id="@+id/mountainDetailsView_textLayout"
                         android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                <TextView
+                        android:id="@+id/mountainDetailsView_regionName"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tatry, 1890 m n.p.m"
+                        android:text="Tatry"
                         android:textAppearance="?attr/textAppearanceBody2"
-                        android:textSize="14sp" android:textAlignment="center"/>
+                        android:textSize="14sp"/>
+                    <TextView
+                            android:id="@+id/mountainDetailsView_text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=", "
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textSize="14sp"/>
+                    <TextView
+                            android:id="@+id/mountainDetailsView_metersAboveSea"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1429"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textSize="14sp"/>
+                    <TextView
+                            android:id="@+id/mountainDetailsView_text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" m n.p.m."
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textSize="14sp"/>
+                </LinearLayout>
 
             </LinearLayout>
             <com.google.android.material.tabs.TabLayout

@@ -117,11 +117,18 @@ class MapView : Fragment(), OnMapReadyCallback {
                 marker_object_regionName.text = mountain.location.regionName
                 marker_object_metersAboveSeaLevel.text = mountain.metersAboveSeaLevel.toString()
             }
+            mountain_details_button.setOnClickListener {
+                val action = MapViewDirections.actionMapViewToMountainDetailsView()
+                if (mountain != null) {
+                    action.mountainId = mountain.id
+                    action.mountainName = mountain.name
+                    action.regionName = mountain.location.regionName
+                    action.metersAboveSea = mountain.metersAboveSeaLevel
+                }
+                findNavController().navigate(action)
+            }
             mountainCustomInfoWindow.visibility = View.VISIBLE
             bottomNavigationView.visibility = View.INVISIBLE
-            mountain_details_button.setOnClickListener { btn ->
-                findNavController().navigate(R.id.action_mapView_to_mountainDetailsView)
-            }
             true
         }
     }

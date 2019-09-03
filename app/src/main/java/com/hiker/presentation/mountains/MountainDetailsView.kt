@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.hiker.R
 import kotlinx.android.synthetic.main.fragment_mountain_details_view.*
@@ -34,6 +35,18 @@ class MountainDetailsView : Fragment() {
         val fragmentAdapter = MountainDetailsViewPagerAdapter(childFragmentManager)
         mountain_details_viewpager.adapter = fragmentAdapter
         mountain_details_tablayout.setupWithViewPager(mountain_details_viewpager)
+
+        arguments?.let {
+            val safeArgs = MountainDetailsViewArgs.fromBundle(it)
+            val mountainId = safeArgs.mountainId
+            setBasicMountainInfo(safeArgs.mountainName, safeArgs.regionName, safeArgs.metersAboveSea)
+        }
+    }
+
+    private fun setBasicMountainInfo(mountainName: String, regionName: String, metersAboveSeaLevel: Int){
+        mountainDetailsView_regionName.text = regionName
+        mountainDetailsView_title.text = mountainName
+        mountainDetailsView_metersAboveSea.text = metersAboveSeaLevel.toString()
     }
 
 
