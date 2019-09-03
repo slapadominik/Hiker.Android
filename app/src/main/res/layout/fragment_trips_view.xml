@@ -4,7 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
               tools:context=".presentation.trips.TripsView"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:layout_marginBottom="60dp">
 
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/tripsview_toolbar"
@@ -33,7 +34,5 @@
             android:id="@+id/tripsView_viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
-    <!-- TODO: Update blank fragment layout -->
 
 </LinearLayout>
