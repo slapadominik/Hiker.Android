@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Hiker</string>
+    <string name="map_bottom_nav">Mapa</string>
+    <string name="trips_bottom_nav">Wycieczki</string>
+    <string name="chat_bottom_nav">Czat</string>
+    <string name="profile_bottom_nav">Profil</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

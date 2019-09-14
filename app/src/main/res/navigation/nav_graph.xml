@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
+            app:startDestination="@id/mapView">
+
+    <fragment android:id="@+id/mapView" android:name="com.hiker.presentation.map.MapView" android:label="fragment_map_view"
+              tools:layout="@layout/fragment_map_view">
+        <action android:id="@+id/action_mapView_to_mountainDetailsView" app:destination="@+id/mountainDetailsView"/>
+    </fragment>
+    <fragment android:id="@+id/tripsView" android:name="com.hiker.presentation.trips.TripsView" android:label="fragment_trips_view"
+              tools:layout="@layout/fragment_trips_view"/>
+    <fragment android:id="@+id/chatView" android:name="com.hiker.presentation.chat.ChatView" android:label="fragment_chat_view"
+              tools:layout="@layout/fragment_chat_view"/>
+    <fragment android:id="@+id/mountainDetailsView" android:name="com.hiker.presentation.mountains.MountainDetailsView"
+              android:label="fragment_mountain_details_view" tools:layout="@layout/fragment_mountain_details_view">
+        <argument android:name="mountainId" app:argType="integer" android:defaultValue="0"/>
+        <argument android:name="mountainName" app:argType="string" android:defaultValue="Góra"/>
+        <argument android:name="regionName" app:argType="string" android:defaultValue="Region"/>
+        <argument android:name="metersAboveSea" app:argType="integer" android:defaultValue="0"/>
+    </fragment>
+</navigation>

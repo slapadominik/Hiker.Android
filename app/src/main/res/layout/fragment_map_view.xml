@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent"
+                android:id="@+id/relativeLayout">
+
+
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mapview_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize">
+        <ImageView
+                android:id="@+id/tv_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_logo_hiker"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.google.android.gms.maps.MapView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mapview_toolbar"
+            android:id="@+id/mapView2"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mountain_info_window"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/corner_radius_shape"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp">
+
+        <Button
+                android:id="@+id/mountain_details_button"
+                android:text="Szczegóły"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:textSize="10sp"
+                android:color="@color/colorPrimary" android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" app:layout_constraintVertical_bias="1.0"
+                android:layout_marginTop="8dp"/>
+        <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp">
+
+            <TextView
+                    android:id="@+id/marker_object_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Giewont"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="18sp"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                        android:id="@+id/marker_object_regionName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tatry" android:textSize="12sp"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=", "/>
+                <TextView
+                        android:id="@+id/marker_object_metersAboveSeaLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1000" android:textSize="12sp"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" m. n.p.m." android:textSize="12sp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nadchodzące wycieczki: " android:textSize="12sp"/>
+                <TextView
+                        android:id="@+id/marker_object_tripsCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2" android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+                android:layout_width="105dp"
+                android:layout_height="118dp"
+                android:src="@drawable/mountain_sample_img"
+                android:id="@+id/mountain_info_window_imageview"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="5dp"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" android:layout_marginEnd="16dp"
+                android:contentDescription="mountains_picture"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
