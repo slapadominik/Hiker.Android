@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.hiker.R
+import com.hiker.presentation.mountains.detailsTabs.MountainInformationTabView
+import com.hiker.presentation.mountains.detailsTabs.MountainTripsTabView
 import kotlinx.android.synthetic.main.fragment_mountain_details_view.*
 
 
@@ -32,14 +34,12 @@ class MountainDetailsView : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val fragmentAdapter = MountainDetailsViewPagerAdapter(childFragmentManager)
-        mountain_details_viewpager.adapter = fragmentAdapter
-        mountain_details_tablayout.setupWithViewPager(mountain_details_viewpager)
-
+        super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             val safeArgs = MountainDetailsViewArgs.fromBundle(it)
             val mountainId = safeArgs.mountainId
             setBasicMountainInfo(safeArgs.mountainName, safeArgs.regionName, safeArgs.metersAboveSea)
+            setUpTabs(safeArgs.regionName, safeArgs.metersAboveSea)
         }
     }
 
@@ -47,6 +47,14 @@ class MountainDetailsView : Fragment() {
         mountainDetailsView_regionName.text = regionName
         mountainDetailsView_title.text = mountainName
         mountainDetailsView_metersAboveSea.text = metersAboveSeaLevel.toString()
+    }
+
+    private fun setUpTabs(regionName: String, metersAboveSeaLevel: Int){
+        val fragmentAdapter = MountainDetailsViewPagerAdapter(childFragmentManager)
+        fragmentAdapter.addFragment(MountainInformationTabView.create(regionName, metersAboveSeaLevel), "Informacje")
+        fragmentAdapter.addFragment(MountainTripsTabView(), "Wycieczki")
+        mountain_details_viewpager.adapter = fragmentAdapter
+        mountain_details_tablayout.setupWithViewPager(mountain_details_viewpager)
     }
 
 

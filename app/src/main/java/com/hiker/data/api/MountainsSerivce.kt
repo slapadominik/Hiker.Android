@@ -22,9 +22,8 @@ interface MountainsSerivce {
 
     companion object {
         fun create(): MountainsSerivce {
-            val baseUrl = "https://hikerapi20190830053746.azurewebsites.net/api/"
             return Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(ApiConsts.HikerAPI)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(MountainsSerivce::class.java)

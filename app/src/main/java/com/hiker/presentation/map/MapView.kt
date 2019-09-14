@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.data.dto.Mountain
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_map_view.*
 
 
@@ -107,7 +108,6 @@ class MapView : Fragment(), OnMapReadyCallback {
     private fun setUpMountainInfoWindow(map : GoogleMap){
         map.setOnMapClickListener {
             mountainCustomInfoWindow.visibility = View.INVISIBLE
-
             bottomNavigationView.visibility = View.VISIBLE
         }
         map.setOnMarkerClickListener { marker ->
@@ -116,6 +116,7 @@ class MapView : Fragment(), OnMapReadyCallback {
                 marker_object_name.text = mountain.name
                 marker_object_regionName.text = mountain.location.regionName
                 marker_object_metersAboveSeaLevel.text = mountain.metersAboveSeaLevel.toString()
+                mapViewModel.setMountainThumbnail(mountain_info_window_imageview, mountain.id)
             }
             mountain_details_button.setOnClickListener {
                 val action = MapViewDirections.actionMapViewToMountainDetailsView()
