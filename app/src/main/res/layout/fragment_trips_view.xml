@@ -13,7 +13,8 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:minHeight="?attr/actionBarSize"
-            app:title="Wycieczki"/>
+            app:title="Wycieczki"
+            android:elevation="2dp"/>
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/tripsview_tablayout"
             android:layout_width="match_parent"

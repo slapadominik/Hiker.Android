@@ -8,8 +8,8 @@
     </solid>
 
     <stroke
-            android:width="2dp"
-            android:color="#C4CDE0" >
+            android:width="1dp"
+            android:color="@color/colorPrimary" >
     </stroke>
 
     <padding
