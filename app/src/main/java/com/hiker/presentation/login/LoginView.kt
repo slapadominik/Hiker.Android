@@ -3,6 +3,7 @@ package com.hiker.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +20,9 @@ import com.facebook.login.LoginResult
 import com.hiker.R
 import com.hiker.data.repository.UserRepositoryImpl
 import kotlinx.android.synthetic.main.fragment_login_view.*
+import java.lang.Exception
 
-
+private const val TAG : String = "LoginView"
 
 class LoginView : Fragment() {
 
@@ -47,29 +49,37 @@ class LoginView : Fragment() {
     }
 
     private fun initFacebookButton(){
-        facebookCallbackManager = CallbackManager.Factory.create()
-        login_button.fragment = this;
-        LoginManager.getInstance().registerCallback(facebookCallbackManager,  object : FacebookCallback<LoginResult> {
-            override fun onSuccess(loginResult: LoginResult) {
-                loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {
-                    if (it != null){
-                        findNavController().navigate(LoginViewDirections.actionLoginViewToMapView())
-                    }
-                    else{
-                        Toast.makeText(requireContext(), "Facebook user does not exist", Toast.LENGTH_LONG).show()
-                    }
-                })
-            }
+        try{
+            facebookCallbackManager = CallbackManager.Factory.create()
+            login_button.fragment = this;
+            LoginManager.getInstance().registerCallback(facebookCallbackManager,  object : FacebookCallback<LoginResult> {
+                override fun onSuccess(loginResult: LoginResult) {
+                    loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {
+                        if (it != null){
+                            Log.i(TAG, "Facebook user already exist")
+                            findNavController().navigate(LoginViewDirections.actionLoginViewToMapView())
+                        }
+                        else{
+                            Log.i(TAG, "Facebook user does not exist")
+                            loginViewModel.registerUserFromFacebook(loginResult.accessToken.token)
+                            findNavController().navigate(LoginViewDirections.actionLoginViewToMapView())
+                        }
+                    })
+                }
 
-            override fun onCancel() {
-                Toast.makeText(requireContext(), "onCancel()", Toast.LENGTH_LONG).show()
+                override fun onCancel() {
+                    Toast.makeText(requireContext(), "onCancel()", Toast.LENGTH_LONG).show()
 
-            }
+                }
 
-            override fun onError(error: FacebookException) {
-                Toast.makeText(requireContext(), "Facebook error", Toast.LENGTH_LONG).show()
-            }
-        })
+                override fun onError(error: FacebookException) {
+                    Toast.makeText(requireContext(), "Facebook error", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+        catch (ex: Exception){
+            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun initMapViewModel() {

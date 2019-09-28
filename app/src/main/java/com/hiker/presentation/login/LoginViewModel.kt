@@ -8,6 +8,7 @@ import com.hiker.domain.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
@@ -18,6 +19,17 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
             if (user != null){
                 result.postValue(user)
             }
+            else{
+                result.postValue(null)
+            }
+        }
+        return result
+    }
+
+    fun registerUserFromFacebook(facebookToken: String) : LiveData<UUID>{
+        val result = MutableLiveData<UUID>()
+        CoroutineScope(Dispatchers.Default).launch {
+            result.postValue(userRepository.addUser(facebookToken))
         }
         return result
     }
