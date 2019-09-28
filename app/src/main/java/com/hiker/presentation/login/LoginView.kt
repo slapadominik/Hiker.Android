@@ -3,12 +3,13 @@ package com.hiker.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -16,22 +17,16 @@ import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.hiker.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.hiker.data.repository.UserRepositoryImpl
 import kotlinx.android.synthetic.main.fragment_login_view.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- *
- */
 class LoginView : Fragment() {
 
-    private lateinit var callbackManager: CallbackManager
+    private lateinit var facebookCallbackManager: CallbackManager
+    private lateinit var loginViewModel: LoginViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,11 +37,28 @@ class LoginView : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        callbackManager = CallbackManager.Factory.create()
+        initMapViewModel()
+        initFacebookButton()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private fun initFacebookButton(){
+        facebookCallbackManager = CallbackManager.Factory.create()
         login_button.fragment = this;
-        LoginManager.getInstance().registerCallback(callbackManager,  object : FacebookCallback<LoginResult> {
+        LoginManager.getInstance().registerCallback(facebookCallbackManager,  object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                Toast.makeText(requireContext(), "Facebook token: " + loginResult.accessToken.token, Toast.LENGTH_LONG).show()
+                loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {
+                    if (it != null){
+                        findNavController().navigate(LoginViewDirections.actionLoginViewToMapView())
+                    }
+                    else{
+                        Toast.makeText(requireContext(), "Facebook user does not exist", Toast.LENGTH_LONG).show()
+                    }
+                })
             }
 
             override fun onCancel() {
@@ -60,8 +72,7 @@ class LoginView : Fragment() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+    private fun initMapViewModel() {
+        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(UserRepositoryImpl())).get(LoginViewModel::class.java)
     }
 }
