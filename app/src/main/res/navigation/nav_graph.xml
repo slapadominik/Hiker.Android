@@ -23,4 +23,9 @@
               tools:layout="@layout/fragment_login_view">
         <action android:id="@+id/action_loginView_to_mapView" app:destination="@id/mapView"/>
     </fragment>
+    <fragment
+            android:id="@+id/userView"
+            android:name="com.hiker.presentation.user.UserView"
+            android:label="fragment_user_view"
+            tools:layout="@layout/fragment_user_view" />
 </navigation>

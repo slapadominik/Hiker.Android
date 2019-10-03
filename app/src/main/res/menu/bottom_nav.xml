@@ -14,5 +14,8 @@
             android:id="@+id/chatView"
             android:icon="@drawable/ic_comment_solid"
             android:title="@string/chat_bottom_nav" />
-
+    <item
+            android:id="@+id/userView"
+            android:icon="@drawable/ic_user_solid"
+            android:title="Profil" />
 </menu>
