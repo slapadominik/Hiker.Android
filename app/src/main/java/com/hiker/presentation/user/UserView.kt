@@ -21,6 +21,8 @@ import com.hiker.presentation.login.LoginViewModelFactory
 import com.hiker.presentation.login.UserViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_view.*
+import java.time.LocalDateTime
+import java.time.Period
 import java.util.*
 
 
@@ -53,7 +55,7 @@ class UserView : Fragment() {
         userViewModel.getUser(UUID.fromString(userSystemId)).observe(this@UserView, Observer {
             userView_firstName_textView.text = it?.firstName
             userView_lastName_textView.text = it?.lastName
-            userView_age_textView.text = it?.birthday.toString()
+            userView_age_textView.text =  com.hiker.domain.extensions.Period.between(it!!.birthday, Calendar.getInstance().time).toString()
             userViewModel.setMountainThumbnail(userView_imageView, it?.facebookId)
         })
     }

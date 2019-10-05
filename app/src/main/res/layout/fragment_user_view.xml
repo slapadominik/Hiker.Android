@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            xmlns:tools="http://schemas.android.com/tools"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:orientation="vertical"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="40dp"
             tools:context=".presentation.user.UserView">
 
         <!-- TODO: Update blank fragment layout -->
 
         <ImageView
                 android:id="@+id/userView_imageView"
-                android:layout_width="141dp"
-                android:layout_height="140dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 android:layout_gravity="center"
 
                 android:backgroundTint="@color/colorPrimary"
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="10dp">
 
             <TextView
                     android:id="@+id/textView8"
@@ -69,22 +69,24 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:text="Wiek:"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
 
             <TextView
                     android:id="@+id/userView_age_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0"
                     android:text="15 lat"
-                    android:layout_marginLeft="5dp"/>
+                    android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="10dp">
 
             <TextView
                     android:id="@+id/textView11"
@@ -92,22 +94,24 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:text="Wycieczki:"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
 
             <TextView
                     android:id="@+id/userView_tripsCount_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0"
                     android:text="0"
-                    android:layout_marginLeft="5dp"/>
+                    android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="50dp">
 
             <TextView
                     android:id="@+id/textview15"
@@ -115,25 +119,28 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:text="Zdobyte szczyty:"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
 
             <TextView
                     android:id="@+id/userView_peaksCount_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0"
                     android:text="0"
-                    android:layout_marginLeft="5dp"/>
+                    android:textSize="16sp" />
         </LinearLayout>
 
         <Button
                 android:id="@+id/logoutButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="28dp"
                 android:layout_gravity="center"
                 android:background="@color/colorPrimary"
                 android:text="Wyloguj się"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
     </LinearLayout>
 </FrameLayout>
