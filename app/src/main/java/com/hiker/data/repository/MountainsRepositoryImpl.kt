@@ -1,7 +1,7 @@
 package com.hiker.data.repository
 
-import com.hiker.data.api.MountainsSerivce
-import com.hiker.data.dto.Mountain
+import com.hiker.data.remote.api.MountainsSerivce
+import com.hiker.data.remote.dto.Mountain
 import com.hiker.domain.entities.Location
 import com.hiker.domain.repository.MountainsRepository
 

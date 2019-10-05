@@ -1,6 +1,7 @@
 package com.hiker.presentation.login
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -56,7 +57,15 @@ class LoginView : Fragment() {
                 override fun onSuccess(loginResult: LoginResult) {
                     loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {
                         if (it != null){
+                            it.firstName
                             Log.i(TAG, "Facebook user already exist")
+                            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                            if (sharedPref != null) {
+                                with (sharedPref.edit()){
+                                    putString(getString(R.string.preferences_userSystemId), it.id)
+                                    commit()
+                                }
+                            }
                             findNavController().navigate(LoginViewDirections.actionLoginViewToMapView())
                         }
                         else{
@@ -83,6 +92,6 @@ class LoginView : Fragment() {
     }
 
     private fun initMapViewModel() {
-        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(UserRepositoryImpl())).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(LoginViewModel::class.java)
     }
 }

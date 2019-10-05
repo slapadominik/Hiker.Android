@@ -3,7 +3,7 @@ package com.hiker.presentation.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hiker.data.dto.User
+import com.hiker.data.models.User
 import com.hiker.domain.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

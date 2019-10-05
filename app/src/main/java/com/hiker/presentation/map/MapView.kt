@@ -20,8 +20,6 @@ import com.hiker.R
 import com.hiker.data.repository.MountainsRepositoryImpl
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 
 import androidx.annotation.DrawableRes
@@ -29,7 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.hiker.data.dto.Mountain
+import com.hiker.data.remote.dto.Mountain
 import kotlinx.android.synthetic.main.fragment_map_view.*
 
 

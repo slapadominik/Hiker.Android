@@ -1,4 +1,4 @@
-package com.hiker.data.api
+package com.hiker.data.remote.api
 
 interface AuthenticationService {
 }

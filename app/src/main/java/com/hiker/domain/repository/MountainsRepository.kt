@@ -1,7 +1,6 @@
 package com.hiker.domain.repository
 
-import androidx.lifecycle.LiveData
-import com.hiker.data.dto.Mountain
+import com.hiker.data.remote.dto.Mountain
 import com.hiker.domain.entities.Location
 
 interface MountainsRepository {

@@ -2,21 +2,34 @@ package com.hiker.presentation.user
 
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.facebook.login.LoginManager
 import com.hiker.R
+import com.hiker.data.remote.api.ApiConsts
+import com.hiker.presentation.login.LoginViewModel
+import com.hiker.presentation.login.LoginViewModelFactory
+import com.hiker.presentation.login.UserViewModelFactory
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_view.*
+import java.util.*
+
 
 /**
  * A simple [Fragment] subclass.
  */
 class UserView : Fragment() {
+
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +41,24 @@ class UserView : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupLoginButton()
+        initMapViewModel()
+        setupOnClicks()
+        setupObservers()
     }
 
-    private fun setupLoginButton(){
+    private fun setupObservers(){
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
+
+        userViewModel.getUser(UUID.fromString(userSystemId)).observe(this@UserView, Observer {
+            userView_firstName_textView.text = it?.firstName
+            userView_lastName_textView.text = it?.lastName
+            userView_age_textView.text = it?.birthday.toString()
+            userViewModel.setMountainThumbnail(userView_imageView, it?.facebookId)
+        })
+    }
+
+    private fun setupOnClicks(){
         logoutButton.setOnClickListener {
             androidx.appcompat.app.AlertDialog.Builder(requireContext())
                 .setTitle("Uwaga")
@@ -42,9 +69,9 @@ class UserView : Fragment() {
                 }
                 .setNegativeButton("Nie", /* listener = */ null)
                 .show()
-
         }
     }
-
-
+    private fun initMapViewModel() {
+        userViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(UserViewModel::class.java)
+    }
 }

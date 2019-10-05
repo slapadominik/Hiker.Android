@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.hiker.data.repository.UserRepositoryImpl
 import com.hiker.domain.repository.UserRepository
 
-class LoginViewModelFactory(val context: Context) : ViewModelProvider.Factory {
+class UserViewModelFactory(val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return modelClass.getConstructor(UserRepository::class.java).newInstance(UserRepositoryImpl.getInstance(context))
     }

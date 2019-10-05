@@ -1,8 +1,8 @@
-package com.hiker.data.api
+package com.hiker.data.remote.api
 
 import com.hiker.BuildConfig
-import com.hiker.data.dto.FacebookToken
-import com.hiker.data.dto.User
+import com.hiker.data.remote.dto.FacebookToken
+import com.hiker.data.remote.dto.User
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -15,8 +15,13 @@ import java.util.concurrent.TimeUnit
 interface UserService {
 
     @GET("users")
-    suspend fun getUser(
+    suspend fun getUserByFacebookId(
         @Query("facebookId") facebookId: String
+    ) : Response<User>
+
+    @GET("users")
+    suspend fun getUserBySystemId(
+        @Query("userSystemId") userSystemId: UUID
     ) : Response<User>
 
     @POST("authentication/login/facebook")

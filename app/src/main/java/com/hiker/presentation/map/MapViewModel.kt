@@ -4,8 +4,8 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hiker.data.api.ApiConsts
-import com.hiker.data.dto.Mountain
+import com.hiker.data.remote.api.ApiConsts
+import com.hiker.data.remote.dto.Mountain
 import com.hiker.domain.repository.MountainsRepository
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
