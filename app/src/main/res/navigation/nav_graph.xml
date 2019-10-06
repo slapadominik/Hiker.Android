@@ -57,4 +57,9 @@
             android:name="com.hiker.presentation.user.UserView"
             android:label="fragment_user_view"
             tools:layout="@layout/fragment_user_view" />
+    <fragment
+            android:id="@+id/tripFormView"
+            android:name="com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip.TripFormView"
+            android:label="fragment_trip_form_view"
+            tools:layout="@layout/fragment_trip_form_view" />
 </navigation>

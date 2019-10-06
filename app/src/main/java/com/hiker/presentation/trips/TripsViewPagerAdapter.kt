@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.hiker.presentation.trips.tabViews.HistoryTripsTabView
-import com.hiker.presentation.trips.tabViews.UpcomingTripsTabView
+import com.hiker.presentation.trips.tabViews.upcomingTrips.UpcomingTripsTabView
 
 class TripsViewPagerAdapter(fm : FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getCount(): Int {
