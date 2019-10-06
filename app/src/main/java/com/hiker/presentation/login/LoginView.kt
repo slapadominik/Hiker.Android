@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -57,7 +58,6 @@ class LoginView : Fragment() {
                 override fun onSuccess(loginResult: LoginResult) {
                     loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {
                         if (it != null){
-                            it.firstName
                             Log.i(TAG, "Facebook user already exist")
                             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
                             if (sharedPref != null) {
@@ -66,23 +66,22 @@ class LoginView : Fragment() {
                                     commit()
                                 }
                             }
-                            findNavController().navigate(LoginViewDirections.actionLoginViewToMapView())
+                            findNavController().popBackStack()
                         }
                         else{
                             Log.i(TAG, "Facebook user does not exist")
                             loginViewModel.registerUserFromFacebook(loginResult.accessToken.token)
-                            findNavController().navigate(LoginViewDirections.actionLoginViewToMapView())
+                            findNavController().popBackStack()
                         }
                     })
                 }
 
                 override fun onCancel() {
-                    Toast.makeText(requireContext(), "onCancel()", Toast.LENGTH_LONG).show()
-
+                    Toast.makeText(requireContext(), "elo", Toast.LENGTH_LONG).show()
                 }
 
                 override fun onError(error: FacebookException) {
-                    Toast.makeText(requireContext(), "Facebook error", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "elo", Toast.LENGTH_LONG).show()
                 }
             })
         }
@@ -91,6 +90,9 @@ class LoginView : Fragment() {
         }
     }
 
+    private fun showErrorMessage(text:String){
+        Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
+    }
     private fun initMapViewModel() {
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(LoginViewModel::class.java)
     }

@@ -20,14 +20,22 @@ import com.hiker.R
 import com.hiker.data.repository.MountainsRepositoryImpl
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Handler
+import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
+import com.facebook.AccessToken
+import com.facebook.AccessTokenManager
+import com.facebook.AccessTokenTracker
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.data.remote.dto.Mountain
+import com.hiker.presentation.login.LoginViewModel
+import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_map_view.*
 
 
@@ -40,6 +48,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var mapViewModel : MapViewModel
     private lateinit var mountainCustomInfoWindow : ConstraintLayout
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var loginViewModel: LoginViewModel
     private val mountainsMarkers = HashMap<Marker, Mountain>()
 
     override fun onCreateView(
@@ -61,7 +70,15 @@ class MapView : Fragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initMapViewModel()
+        initViewModels()
+
+        val navController = findNavController()
+        loginViewModel.isUserLoggedIn(AccessToken.getCurrentAccessToken()).observe(viewLifecycleOwner, Observer { result ->
+            Log.d("MapView", "Authentication state: ${result}")
+            if (result == false){
+                navController.navigate(R.id.loginView)
+            }
+        })
         bindMountainsToMap()
     }
 
@@ -152,8 +169,9 @@ class MapView : Fragment(), OnMapReadyCallback {
         googleMapView.onLowMemory()
     }
 
-    private fun initMapViewModel() {
+    private fun initViewModels() {
         mapViewModel = ViewModelProviders.of(this, MapViewModelFactory(MountainsRepositoryImpl())).get(MapViewModel::class.java)
+        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(LoginViewModel::class.java)
     }
 
     companion object {

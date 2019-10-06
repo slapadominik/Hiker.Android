@@ -3,6 +3,8 @@ package com.hiker.presentation.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.facebook.AccessToken
+import com.facebook.login.LoginManager
 import com.hiker.data.models.User
 import com.hiker.domain.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
@@ -11,6 +13,12 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
+
+    fun isUserLoggedIn(accessToken: AccessToken?) : LiveData<Boolean>{
+        var result = MutableLiveData<Boolean>()
+        result.value = accessToken != null
+        return result;
+    }
 
     fun getUserByFacebookId(facebookId: String) : LiveData<User?> {
         val result = MutableLiveData<User>()
