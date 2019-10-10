@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             when (destination.id) {
                 com.hiker.R.id.loginView -> bottomNavigation.visibility = View.INVISIBLE
+                com.hiker.R.id.tripFormView -> bottomNavigation.visibility = View.INVISIBLE
             }
 
         }

@@ -1,14 +1,19 @@
 package com.hiker.presentation.trips
 
 
+import android.app.DatePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
+import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import kotlinx.android.synthetic.main.fragment_trips_view.*
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,7 +32,10 @@ class TripsView : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trips_view, container, false)
+        var view = inflater.inflate(R.layout.fragment_trips_view, container, false)
+        var bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigationView.visibility = View.VISIBLE
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

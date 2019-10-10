@@ -90,9 +90,6 @@ class LoginView : Fragment() {
         }
     }
 
-    private fun showErrorMessage(text:String){
-        Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
-    }
     private fun initMapViewModel() {
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(LoginViewModel::class.java)
     }

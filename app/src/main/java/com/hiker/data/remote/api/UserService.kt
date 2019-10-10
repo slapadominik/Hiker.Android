@@ -24,7 +24,7 @@ interface UserService {
         @Query("userSystemId") userSystemId: UUID
     ) : Response<User>
 
-    @POST("authentication/login/facebook")
+    @POST("authentication/register/facebook")
     suspend fun addUser(@Body facebookToken: FacebookToken) : Response<UUID>
 
     companion object {

@@ -3,6 +3,7 @@ package com.hiker.data.remote.dto
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
+
 data class User(
     @SerializedName("id") val id: UUID,
     @SerializedName("firstName") val firstName: String,
