@@ -3,20 +3,18 @@ package com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.text.Layout
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
+import android.widget.*
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.facebook.login.LoginManager
 import com.hiker.R
 import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
+import androidx.lifecycle.Observer
 
 /**
  * A simple [Fragment] subclass.
@@ -25,7 +23,8 @@ class TripFormView : Fragment() {
 
     private val beginTripCalendar = Calendar.getInstance()
     private val endTripCalendar = Calendar.getInstance()
-    
+    private lateinit var tripFormViewModel: TripFormViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +35,7 @@ class TripFormView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModels()
         tipFormView_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_20dp)
         setupOnClickListeners()
     }
@@ -73,5 +73,24 @@ class TripFormView : Fragment() {
             }, endTripCalendar.get(Calendar.YEAR), endTripCalendar.get(Calendar.MONTH), endTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
+        tripFormViewModel.getMountains().observe(viewLifecycleOwner, Observer { result ->
+            val mountainsNames = result.map { it.name }.toTypedArray()
+            val adapter = ArrayAdapter<String>(
+                requireContext(), // Context
+                android.R.layout.simple_dropdown_item_1line, // Layout
+                mountainsNames
+            )
+            tripForm_searchView_1.setAdapter(adapter)
+        })
+
+
+        tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
+            val selectedItem = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),"Selected : $selectedItem",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun initViewModels() {
+        tripFormViewModel = ViewModelProviders.of(this, TripFormViewModelFactory(requireContext())).get(TripFormViewModel::class.java)
     }
 }

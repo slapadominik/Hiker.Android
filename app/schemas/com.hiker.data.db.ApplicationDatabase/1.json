@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9852fff2d66a55ad89621b38298aca43",
+    "identityHash": "e21b13d028f30e58e31c6f5ec04abd01",
     "entities": [
       {
         "tableName": "User",
@@ -53,12 +53,44 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "Mountain",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `metersAboveSeaLevel` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "metersAboveSeaLevel",
+            "columnName": "metersAboveSeaLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9852fff2d66a55ad89621b38298aca43')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e21b13d028f30e58e31c6f5ec04abd01')"
     ]
   }
 }

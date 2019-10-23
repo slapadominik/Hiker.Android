@@ -1,7 +1,7 @@
 package com.hiker.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.hiker.data.models.User
+import com.hiker.domain.entities.User
 import java.util.*
 
 interface UserRepository {

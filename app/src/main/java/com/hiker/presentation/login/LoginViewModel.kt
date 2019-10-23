@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.facebook.AccessToken
-import com.facebook.login.LoginManager
-import com.hiker.data.models.User
+import com.hiker.domain.entities.User
 import com.hiker.domain.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

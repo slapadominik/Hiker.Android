@@ -1,7 +1,6 @@
-package com.hiker.data.models
+package com.hiker.domain.entities
 
 import java.util.*
-
 
 data class User(
      val id: String,

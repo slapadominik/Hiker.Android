@@ -1,12 +1,9 @@
 package com.hiker.presentation.user
 
-import android.util.Log
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.hiker.data.models.User
+import com.hiker.domain.entities.User
 import com.hiker.data.remote.api.ApiConsts
 import com.hiker.domain.repository.UserRepository
 import com.squareup.picasso.Picasso

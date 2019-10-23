@@ -17,23 +17,17 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.hiker.R
-import com.hiker.data.repository.MountainsRepositoryImpl
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Handler
 import android.util.Log
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
 import com.facebook.AccessToken
-import com.facebook.AccessTokenManager
-import com.facebook.AccessTokenTracker
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.hiker.data.remote.dto.Mountain
+import com.hiker.domain.entities.Mountain
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_map_view.*
@@ -73,6 +67,7 @@ class MapView : Fragment(), OnMapReadyCallback {
         initViewModels()
 
         val navController = findNavController()
+        AccessToken.refreshCurrentAccessTokenAsync()
         loginViewModel.isUserLoggedIn(AccessToken.getCurrentAccessToken()).observe(viewLifecycleOwner, Observer { result ->
             Log.d("MapView", "Authentication state: ${result}")
             if (result == false){
@@ -93,13 +88,14 @@ class MapView : Fragment(), OnMapReadyCallback {
     private fun bindMountainsToMap(){
         mapViewModel.getAllMountains().observe(this, Observer { mountains ->
             mountains.forEach { mountain -> setUpMarker(mountain) }
+            mapViewModel.addMountains(mountains)
         })
     }
 
 
     private fun setUpMarker(mountain: Mountain){
         val marker = googleMap.addMarker(MarkerOptions()
-            .position(LatLng(mountain.location.latitude, mountain.location.longitude))
+            .position(LatLng(mountain.location!!.latitude, mountain.location.longitude))
             .title(mountain.name)
             .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips)))
         mountainsMarkers[marker] = mountain
@@ -131,7 +127,7 @@ class MapView : Fragment(), OnMapReadyCallback {
             val mountain = mountainsMarkers[marker]
             if (mountain != null) {
                 marker_object_name.text = mountain.name
-                marker_object_regionName.text = mountain.location.regionName
+                marker_object_regionName.text = mountain.location!!.regionName
                 marker_object_metersAboveSeaLevel.text = mountain.metersAboveSeaLevel.toString()
                 mapViewModel.setMountainThumbnail(mountain_info_window_imageview, mountain.id)
             }
@@ -140,7 +136,7 @@ class MapView : Fragment(), OnMapReadyCallback {
                 if (mountain != null) {
                     action.mountainId = mountain.id
                     action.mountainName = mountain.name
-                    action.regionName = mountain.location.regionName
+                    action.regionName = mountain.location!!.regionName
                     action.metersAboveSea = mountain.metersAboveSeaLevel
                 }
                 findNavController().navigate(action)
@@ -170,7 +166,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     }
 
     private fun initViewModels() {
-        mapViewModel = ViewModelProviders.of(this, MapViewModelFactory(MountainsRepositoryImpl())).get(MapViewModel::class.java)
+        mapViewModel = ViewModelProviders.of(this, MapViewModelFactory(requireContext())).get(MapViewModel::class.java)
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(LoginViewModel::class.java)
     }
 

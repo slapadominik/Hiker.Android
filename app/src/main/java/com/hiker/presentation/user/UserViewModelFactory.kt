@@ -10,5 +10,4 @@ class UserViewModelFactory(val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return modelClass.getConstructor(UserRepository::class.java).newInstance(UserRepositoryImpl.getInstance(context))
     }
-
 }

@@ -8,7 +8,7 @@ import androidx.lifecycle.Transformations
 import com.hiker.data.converters.asDatabaseModel
 import com.hiker.data.converters.asDomainModel
 import com.hiker.data.db.ApplicationDatabase
-import com.hiker.data.models.User
+import com.hiker.domain.entities.User
 import com.hiker.data.remote.api.UserService
 import com.hiker.data.remote.dto.FacebookToken
 import com.hiker.domain.exceptions.ApiException
@@ -60,7 +60,6 @@ class UserRepositoryImpl(context: Context) : UserRepository {
 
     private suspend fun refreshUser(userSystemId: UUID){
             withContext(Dispatchers.IO){
-//                if (database.userDao().hasUser(userSystemId.toString())){
                 val user = userService.getUserBySystemId(userSystemId)
                 if (user.isSuccessful){
                     if (user.body() != null){
@@ -71,10 +70,6 @@ class UserRepositoryImpl(context: Context) : UserRepository {
                         Log.d(TAG, "User not found in remote serivce.")
                     }
                 }
-                else{
-                    Log.d("wtf", user.message())
-                }
- //           }
-        }
+            }
     }
 }

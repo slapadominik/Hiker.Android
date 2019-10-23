@@ -1,9 +1,11 @@
 package com.hiker.domain.repository
 
-import com.hiker.data.remote.dto.Mountain
-import com.hiker.domain.entities.Location
+
+import androidx.lifecycle.LiveData
+import com.hiker.domain.entities.Mountain
 
 interface MountainsRepository {
-    fun getByLocation(location: Location)
+    fun getAllFromDb() : LiveData<List<Mountain>>
     suspend fun getAll() : List<Mountain>?
+    suspend fun addMountains(mountains: List<Mountain>)
 }
