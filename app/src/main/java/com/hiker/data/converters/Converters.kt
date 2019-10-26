@@ -3,6 +3,7 @@ package com.hiker.data.converters
 import com.hiker.data.remote.dto.MountainTrailBrief
 import com.hiker.domain.entities.Location
 import com.hiker.domain.entities.Mountain
+import com.hiker.domain.entities.TripBrief
 import com.hiker.domain.entities.User
 
 
@@ -51,4 +52,11 @@ fun com.hiker.data.db.entity.User.asDomainModel() = User(
     birthday = birthday,
     firstName = firstName,
     lastName = lastName
+)
+
+fun com.hiker.data.remote.dto.TripBrief.asDomainModel() = TripBrief(
+    id = id,
+    tripTitle = tripTitle,
+    dateFrom = dateFrom,
+    dateTo = dateTo
 )
