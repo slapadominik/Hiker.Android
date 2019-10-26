@@ -2,6 +2,8 @@ package com.hiker.data.remote.api
 
 import com.google.gson.GsonBuilder
 import com.hiker.BuildConfig
+import com.hiker.data.remote.dto.FacebookToken
+import com.hiker.data.remote.dto.Trip
 import com.hiker.data.remote.dto.TripBrief
 import com.hiker.data.remote.dto.User
 import okhttp3.OkHttpClient
@@ -9,9 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -26,6 +26,9 @@ interface TripsService {
     suspend fun getUserHistoryTripsBriefs(
         @Path("userId") userId: String, @Query("dateTo") dateTo: String) : Response<List<TripBrief>>
 
+    @POST("trips")
+    suspend fun addTrip(@Body trip: Trip) : Response<Int>
+
     companion object {
         fun create(): TripsService {
             val okHttpClientBuilder = OkHttpClient.Builder()
@@ -37,7 +40,10 @@ interface TripsService {
                 logging.level = HttpLoggingInterceptor.Level.BASIC
                 okHttpClientBuilder.addInterceptor(logging)
             }
-            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+            val gson = GsonBuilder()
+                .setDateFormat("yyyy-MM-dd")
+                .create()
+
             return Retrofit.Builder()
                 .baseUrl(ApiConsts.HikerAPI)
                 .client(okHttpClientBuilder.build())

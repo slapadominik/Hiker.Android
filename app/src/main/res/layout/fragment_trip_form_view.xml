@@ -48,6 +48,7 @@
                         android:hint="Nazwa wyjazdu">
 
                     <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_trip_form_view_tripTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="14sp" />
@@ -126,6 +127,7 @@
                     android:hint="Opis wyjazdu">
 
                 <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_trip_form_view_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="14sp" />

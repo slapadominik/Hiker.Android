@@ -2,7 +2,9 @@ package com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip
 
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
+import com.hiker.data.remote.dto.Trip
 
 /**
  * A simple [Fragment] subclass.
@@ -23,6 +26,7 @@ class TripFormView : Fragment() {
 
     private val beginTripCalendar = Calendar.getInstance()
     private val endTripCalendar = Calendar.getInstance()
+    private val dateFormater = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
     private lateinit var tripFormViewModel: TripFormViewModel
 
     override fun onCreateView(
@@ -60,8 +64,7 @@ class TripFormView : Fragment() {
         tripForm_beginDate_editText.setOnClickListener{
             DatePickerDialog(requireContext(), {view, year, month, day ->
                 beginTripCalendar.set(year, month, day)
-                val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
-                tripForm_beginDate_editText.setText(sdf.format(beginTripCalendar.time))
+                tripForm_beginDate_editText.setText(dateFormater.format(beginTripCalendar.time))
             }, beginTripCalendar.get(Calendar.YEAR), beginTripCalendar.get(Calendar.MONTH), beginTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
@@ -87,6 +90,35 @@ class TripFormView : Fragment() {
         tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
             val selectedItem = parent.getItemAtPosition(position).toString()
             Toast.makeText(requireContext(),"Selected : $selectedItem",Toast.LENGTH_SHORT).show()
+        }
+
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
+
+        upcomingTripsView_submit_button.setOnClickListener{
+
+            val trip = Trip(
+                id = null,
+                tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
+                authorId = userSystemId!!,
+                dateFrom = beginTripCalendar.time,
+                dateTo = endTripCalendar.time,
+                description = fragment_trip_form_view_description.text.toString(),
+                tripDestinations = null,
+                tripParticipants = null
+            )
+            Log.i("TripFormView", "Id: ${trip.id}, " +
+                    "tripTitle: ${trip.tripTitle}, " +
+                    "authorId: ${trip.authorId}," +
+                    "dateFrom: ${trip.dateFrom}, " +
+                    "dateTo: ${trip.dateTo}," +
+                    "description: ${trip.description}")
+            try{
+                tripFormViewModel.addTrip(trip).observe(this, Observer { tripId -> findNavController().popBackStack()})
+            }
+            catch (ex: Exception){
+                Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
+            }
         }
     }
 

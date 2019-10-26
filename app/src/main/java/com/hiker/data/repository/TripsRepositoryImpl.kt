@@ -2,6 +2,7 @@ package com.hiker.data.repository
 
 import com.hiker.data.converters.asDomainModel
 import com.hiker.data.remote.api.TripsService
+import com.hiker.data.remote.dto.Trip
 import com.hiker.domain.entities.TripBrief
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.repository.TripsRepository
@@ -27,6 +28,13 @@ class TripsRepositoryImpl : TripsRepository {
         val response = tripsService.getUserIncomingTripsBriefs(userId, dateFormater.format(dateFrom))
         return if (response.isSuccessful){
             response.body()!!.map { x -> x.asDomainModel() }
+        } else throw ApiException(response.errorBody()?.string())
+    }
+
+    override suspend fun addTrip(trip: Trip) : Int {
+        val response = tripsService.addTrip(trip)
+        return if (response.isSuccessful){
+            response.body()!!
         } else throw ApiException(response.errorBody()?.string())
     }
 
