@@ -18,6 +18,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
 import com.hiker.data.remote.dto.Trip
+import com.hiker.data.remote.dto.TripDestination
+import com.hiker.domain.entities.Mountain
+import kotlinx.android.synthetic.main.fragment_trip_form_view.view.*
+import kotlinx.android.synthetic.main.upcoming_trips_destination_field.*
+import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.*
+import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.tripForm_searchView_1
 
 /**
  * A simple [Fragment] subclass.
@@ -28,6 +34,8 @@ class TripFormView : Fragment() {
     private val endTripCalendar = Calendar.getInstance()
     private val dateFormater = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
     private lateinit var tripFormViewModel: TripFormViewModel
+    private lateinit var mountains: List<Mountain>
+    private val tripDestinations : MutableList<TripDestination> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +66,21 @@ class TripFormView : Fragment() {
 
         upcomingTripsView_addDestination_button.setOnClickListener {
             val destinationRowView = requireActivity().layoutInflater.inflate(R.layout.upcoming_trips_destination_field, null)
-            tripForm_destinations_layout.addView(destinationRowView, tripForm_destinations_layout.childCount - 1)
+            val adapter = MountainArrayAdapter(
+                requireContext(), // Context
+                android.R.layout.simple_dropdown_item_1line, // Layout
+                mountains
+            )
+            destinationRowView.tripForm_searchView_1.setAdapter(adapter)
+            destinationRowView.trip_form_removeDestinationBtn.setOnClickListener{
+                (destinationRowView.parent as ViewGroup).removeView(destinationRowView)
+            }
+            destinationRowView.tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
+                val selectedItem =  parent.getItemAtPosition(position) as Mountain
+                tripDestinations.add(TripDestination(type = 1, mountainId = selectedItem.id, rockId = null))
+                Toast.makeText(requireContext(),"Selected nowe: ${selectedItem.id}",Toast.LENGTH_SHORT).show()
+            }
+            tripForm_destinations_layout.addView(destinationRowView, tripForm_destinations_layout.childCount)
         }
 
         tripForm_beginDate_editText.setOnClickListener{
@@ -76,20 +98,25 @@ class TripFormView : Fragment() {
             }, endTripCalendar.get(Calendar.YEAR), endTripCalendar.get(Calendar.MONTH), endTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        tripFormViewModel.getMountains().observe(viewLifecycleOwner, Observer { result ->
-            val mountainsNames = result.map { it.name }.toTypedArray()
-            val adapter = ArrayAdapter<String>(
+        tripFormViewModel.getMountains().observe(viewLifecycleOwner, Observer { mountains ->
+            this.mountains = mountains
+            val adapter = MountainArrayAdapter(
                 requireContext(), // Context
                 android.R.layout.simple_dropdown_item_1line, // Layout
-                mountainsNames
+                mountains
             )
             tripForm_searchView_1.setAdapter(adapter)
         })
 
 
         tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
-            val selectedItem = parent.getItemAtPosition(position).toString()
-            Toast.makeText(requireContext(),"Selected : $selectedItem",Toast.LENGTH_SHORT).show()
+            val selectedItem =  parent.getItemAtPosition(position) as Mountain
+            tripDestinations.add(TripDestination(type = 1, mountainId = selectedItem.id, rockId = null))
+            Toast.makeText(requireContext(),"Selected : ${selectedItem.id}",Toast.LENGTH_SHORT).show()
+        }
+
+        trip_form_removeDestinationBtn.setOnClickListener{
+            tripForm_destinations_layout.removeView(tripForm_destinationRowLayout)
         }
 
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
@@ -104,7 +131,7 @@ class TripFormView : Fragment() {
                 dateFrom = beginTripCalendar.time,
                 dateTo = endTripCalendar.time,
                 description = fragment_trip_form_view_description.text.toString(),
-                tripDestinations = null,
+                tripDestinations = tripDestinations,
                 tripParticipants = null
             )
             Log.i("TripFormView", "Id: ${trip.id}, " +

@@ -8,4 +8,8 @@ data class Mountain(
     val metersAboveSeaLevel: Int,
     val location : Location?,
     val trails: MountainTrailBrief?
-)
+){
+    override fun toString(): String {
+        return "${name}, ${metersAboveSeaLevel} m n.p.m."
+    }
+}

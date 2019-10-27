@@ -3,7 +3,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="10">
+        android:weightSum="10"
+        android:id="@+id/tripForm_destinationRowLayout">
 
         <AutoCompleteTextView
                 android:id="@+id/tripForm_searchView_1"
@@ -12,6 +13,7 @@
                 android:layout_weight="8"
                 android:queryHint="Szukaj celu"/>
         <ImageView
+                android:id="@+id/trip_form_removeDestinationBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_remove_red_24dp"
