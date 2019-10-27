@@ -20,7 +20,6 @@
                 android:src="@mipmap/ic_logo_hiker"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- TODO: Update blank fragment layout -->
     <com.google.android.gms.maps.MapView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

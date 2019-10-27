@@ -18,7 +18,11 @@
             android:id="@+id/tripsView"
             android:name="com.hiker.presentation.trips.TripsView"
             android:label="fragment_trips_view"
-            tools:layout="@layout/fragment_trips_view" />
+            tools:layout="@layout/fragment_trips_view" >
+        <action
+                android:id="@+id/action_tripsView_to_tripDetailsView"
+                app:destination="@id/tripDetailsView" />
+    </fragment>
     <fragment
             android:id="@+id/chatView"
             android:name="com.hiker.presentation.chat.ChatView"
@@ -62,4 +66,26 @@
             android:name="com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip.TripFormView"
             android:label="fragment_trip_form_view"
             tools:layout="@layout/fragment_trip_form_view" />
+    <fragment
+            android:id="@+id/tripDetailsView"
+            android:name="com.hiker.presentation.trips.tripDetails.TripDetailsView"
+            android:label="fragment_trip_details_view"
+            tools:layout="@layout/fragment_trip_details_view">
+        <argument
+                android:name="tripId"
+                android:defaultValue="0"
+                app:argType="integer" />
+        <argument
+                android:name="tripTitle"
+                android:defaultValue="Góra"
+                app:argType="string" />
+        <argument
+                android:name="tripDateFrom"
+                android:defaultValue="Region"
+                app:argType="string" />
+        <argument
+                android:name="tripDateTo"
+                android:defaultValue="0"
+                app:argType="string" />
+    </fragment>
 </navigation>

@@ -1,4 +1,4 @@
-package com.hiker.presentation.trips.tabViews
+package com.hiker.presentation.trips.tabViews.historyTrips
 
 
 import android.os.Bundle

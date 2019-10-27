@@ -12,7 +12,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiker.R
+import com.hiker.presentation.trips.TripsViewDirections
+import com.hiker.presentation.trips.tripDetails.TripDetailsViewArgs
 import kotlinx.android.synthetic.main.fragment_upcoming_trips_tab_view.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -21,8 +24,8 @@ import java.util.*
  */
 class UpcomingTripsTabView : Fragment() {
 
-    private val calendar = Calendar.getInstance()
     private lateinit var upcomingTripsTabViewModel: UpcomingTripsTabViewModel
+    private val dateFormater  = SimpleDateFormat("yyyy-MM-dd")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +54,14 @@ class UpcomingTripsTabView : Fragment() {
 
         upcomingTripsTabViewModel.getUserUpcomingTripsBriefs(userSystemId!!).observe(this, Observer { tripsBriefs ->
             upcomingTripsView_recyclerView.layoutManager = LinearLayoutManager(activity)
-            upcomingTripsView_recyclerView.adapter = TripAdapter(tripsBriefs.map { x -> Trip(x.tripTitle, x.dateFrom, x.dateTo) }, requireContext())
+            upcomingTripsView_recyclerView.adapter = TripAdapter(tripsBriefs.map { x -> Trip(x.id, x.tripTitle, x.dateFrom, x.dateTo) }, requireContext()) {
+                val action = TripsViewDirections.actionTripsViewToTripDetailsView()
+                action.tripId = it.id
+                action.tripTitle = it.title
+                action.tripDateFrom = dateFormater.format(it.dateFrom)
+                action.tripDateTo = dateFormater.format(it.dateTo)
+                findNavController().navigate(action)
+            }
         })
     }
 
