@@ -8,5 +8,6 @@ import java.util.*
 interface TripsRepository {
     suspend fun getUserUpcomingTripsBriefs(userId: String, dateFrom: Date) : List<TripBrief>
     suspend fun getUserHistoryTripsBriefs(userId: String, dateTo: Date) : List<TripBrief>
+    suspend fun getTrip(tripId: Int) : Trip
     suspend fun addTrip(trip: Trip) : Int
 }

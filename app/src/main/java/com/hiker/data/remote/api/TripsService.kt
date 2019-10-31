@@ -18,6 +18,9 @@ import java.util.concurrent.TimeUnit
 
 interface TripsService {
 
+    @GET("trips/{tripId}")
+    suspend fun getTripDetails(@Path("tripId") tripId:Int) : Trip
+
     @GET("users/{userId}/trips")
     suspend fun getUserIncomingTripsBriefs(
         @Path("userId") userId: String, @Query("dateFrom") dateFrom: String) : Response<List<TripBrief>>

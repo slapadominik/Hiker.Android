@@ -19,6 +19,7 @@ import java.util.*
 import androidx.lifecycle.Observer
 import com.hiker.data.remote.dto.Trip
 import com.hiker.data.remote.dto.TripDestination
+import com.hiker.data.remote.dto.UserBrief
 import com.hiker.domain.entities.Mountain
 import kotlinx.android.synthetic.main.fragment_trip_form_view.view.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.*
@@ -127,7 +128,7 @@ class TripFormView : Fragment() {
             val trip = Trip(
                 id = null,
                 tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
-                authorId = userSystemId!!,
+                author = UserBrief(UUID.fromString(userSystemId!!), null, null, null),
                 dateFrom = beginTripCalendar.time,
                 dateTo = endTripCalendar.time,
                 description = fragment_trip_form_view_description.text.toString(),
@@ -136,7 +137,7 @@ class TripFormView : Fragment() {
             )
             Log.i("TripFormView", "Id: ${trip.id}, " +
                     "tripTitle: ${trip.tripTitle}, " +
-                    "authorId: ${trip.authorId}," +
+                    "authorId: ${trip.author.id}," +
                     "dateFrom: ${trip.dateFrom}, " +
                     "dateTo: ${trip.dateTo}," +
                     "description: ${trip.description}")

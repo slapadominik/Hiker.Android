@@ -14,6 +14,10 @@ class TripsRepositoryImpl : TripsRepository {
     private val tripsService = TripsService.create()
     private val dateFormater = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
 
+    override suspend fun getTrip(tripId: Int): Trip {
+        return tripsService.getTripDetails(tripId)
+    }
+
     override suspend fun getUserHistoryTripsBriefs(userId: String, dateTo: Date): List<TripBrief> {
         val response = tripsService.getUserHistoryTripsBriefs(userId, dateFormater.format(dateTo))
         return if (response.isSuccessful){
