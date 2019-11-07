@@ -1,4 +1,4 @@
-package com.hiker.presentation.mountains.detailsTabs
+package com.hiker.presentation.mountainObjects.detailsTabs.mountainInformation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +13,6 @@ private const val ARG_REGION_NAME = "ARG_REGION_NAME"
 private const val ARG_METERS_ABOVE_SEA = "ARG_METERS_ABOVE_SEA"
 
 class MountainInformationTabView : Fragment() {
-    private var regionName: String? = null
-    private var metersAboveSea: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_mountain_information_view, container, false)
@@ -23,8 +21,8 @@ class MountainInformationTabView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            regionName = it.getString(ARG_REGION_NAME)
-            metersAboveSea = it.getInt(ARG_METERS_ABOVE_SEA)
+            val regionName = it.getString(ARG_REGION_NAME)
+            val metersAboveSea = it.getInt(ARG_METERS_ABOVE_SEA)
             setUpText(regionName!!, metersAboveSea)
         }
     }

@@ -1,4 +1,4 @@
-package com.hiker.presentation.mountains
+package com.hiker.presentation.mountainObjects
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

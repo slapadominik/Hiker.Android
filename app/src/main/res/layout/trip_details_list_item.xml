@@ -8,8 +8,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/trips_details_profile_image"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/ic_user_solid"
                 app:civ_border_color="#FF000000"/>
 

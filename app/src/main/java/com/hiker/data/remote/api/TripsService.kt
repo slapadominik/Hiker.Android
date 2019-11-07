@@ -2,24 +2,22 @@ package com.hiker.data.remote.api
 
 import com.google.gson.GsonBuilder
 import com.hiker.BuildConfig
-import com.hiker.data.remote.dto.FacebookToken
-import com.hiker.data.remote.dto.Trip
+import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.TripBrief
-import com.hiker.data.remote.dto.User
+import com.hiker.data.remote.dto.query.TripQuery
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
 interface TripsService {
 
     @GET("trips/{tripId}")
-    suspend fun getTripDetails(@Path("tripId") tripId:Int) : Trip
+    suspend fun getTripDetails(@Path("tripId") tripId:Int) : TripQuery
 
     @GET("users/{userId}/trips")
     suspend fun getUserIncomingTripsBriefs(
@@ -29,8 +27,14 @@ interface TripsService {
     suspend fun getUserHistoryTripsBriefs(
         @Path("userId") userId: String, @Query("dateTo") dateTo: String) : Response<List<TripBrief>>
 
+    @GET("trips")
+    suspend fun getTripBriefs(@Query("tripDestinationType") tripDestinationType: Int,
+                              @Query("mountainId") mountainId: Int?,
+                              @Query("mountainId") rockId: Int?,
+                              @Query("dateFrom") dateFrom: String) : Response<List<TripBrief>>
+
     @POST("trips")
-    suspend fun addTrip(@Body trip: Trip) : Response<Int>
+    suspend fun addTrip(@Body tripCommand: TripCommand) : Response<Int>
 
     companion object {
         fun create(): TripsService {

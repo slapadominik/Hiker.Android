@@ -1,4 +1,4 @@
-package com.hiker.presentation.mountains
+package com.hiker.presentation.mountainObjects
 
 
 import android.os.Bundle
@@ -6,31 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.viewpager.widget.ViewPager
 import com.hiker.R
-import com.hiker.presentation.mountains.detailsTabs.MountainInformationTabView
-import com.hiker.presentation.mountains.detailsTabs.MountainTripsTabView
+import com.hiker.presentation.mountainObjects.detailsTabs.mountainInformation.MountainInformationTabView
+import com.hiker.presentation.mountainObjects.detailsTabs.mountainTrips.MountainTripsTabView
 import kotlinx.android.synthetic.main.fragment_mountain_details_view.*
 
+const val MountainTripDestinationType = 1
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- *
- */
 class MountainDetailsView : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_mountain_details_view, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_mountain_details_view, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,7 +27,7 @@ class MountainDetailsView : Fragment() {
             val safeArgs = MountainDetailsViewArgs.fromBundle(it)
             val mountainId = safeArgs.mountainId
             setBasicMountainInfo(safeArgs.mountainName, safeArgs.regionName, safeArgs.metersAboveSea)
-            setUpTabs(safeArgs.regionName, safeArgs.metersAboveSea)
+            setUpTabs(safeArgs.regionName, safeArgs.metersAboveSea, MountainTripDestinationType, mountainId)
         }
     }
 
@@ -49,10 +37,10 @@ class MountainDetailsView : Fragment() {
         mountainDetailsView_metersAboveSea.text = metersAboveSeaLevel.toString()
     }
 
-    private fun setUpTabs(regionName: String, metersAboveSeaLevel: Int){
+    private fun setUpTabs(regionName: String, metersAboveSeaLevel: Int, tripDestinationType: Int, mountainId: Int){
         val fragmentAdapter = MountainDetailsViewPagerAdapter(childFragmentManager)
         fragmentAdapter.addFragment(MountainInformationTabView.create(regionName, metersAboveSeaLevel), "Informacje")
-        fragmentAdapter.addFragment(MountainTripsTabView(), "Wycieczki")
+        fragmentAdapter.addFragment(MountainTripsTabView.create(tripDestinationType, mountainId, 0), "Wycieczki")
         mountain_details_viewpager.adapter = fragmentAdapter
         mountain_details_tablayout.setupWithViewPager(mountain_details_viewpager)
     }

@@ -13,7 +13,6 @@ import java.util.*
 class UpcomingTripsTabViewModel(private val tripsRepository: TripsRepository) : ViewModel() {
 
     private val calendar = Calendar.getInstance()
-    private val dateFormater = SimpleDateFormat("yyyy-MM-dd")
 
     fun getUserUpcomingTripsBriefs(userId: String) : LiveData<List<TripBrief>>{
         var upcomingTrips = MutableLiveData<List<TripBrief>>()

@@ -1,10 +1,7 @@
 package com.hiker.data.converters
 
 import com.hiker.data.remote.dto.MountainTrailBrief
-import com.hiker.domain.entities.Location
-import com.hiker.domain.entities.Mountain
-import com.hiker.domain.entities.TripBrief
-import com.hiker.domain.entities.User
+import com.hiker.domain.entities.*
 
 
 fun com.hiker.data.remote.dto.Mountain.asDomainModel() = Mountain(
@@ -60,3 +57,11 @@ fun com.hiker.data.remote.dto.TripBrief.asDomainModel() = TripBrief(
     dateFrom = dateFrom,
     dateTo = dateTo
 )
+
+
+fun com.hiker.data.remote.dto.Rock.asDomainModel() = Rock(
+    id = id,
+    name = name,
+    location = Location(location.latitude, location.longitude, location.regionName)
+)
+

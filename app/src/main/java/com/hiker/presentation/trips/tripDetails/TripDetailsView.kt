@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.hiker.R
+import com.hiker.data.converters.asDomainModel
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
 import com.hiker.presentation.map.MapViewModel
@@ -40,7 +41,6 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_trip_details_view, container, false)
         googleMapView = view.findViewById(R.id.trip_details_mapView)
         googleMapView.onCreate(savedInstanceState)
@@ -61,6 +61,8 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
                 trip_details_description.text = trip.description
                 trip_details_participantsList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
                 trip_details_participantsList.adapter = UserBriefAdapter((trip.tripParticipants!!.map { u -> UserBrief(u.id.toString(), u.firstName!!, u.lastName!!, u.profilePictureUrl!!)} + UserBrief(trip.author.id.toString(), trip.author.firstName!!, trip.author.lastName!!, trip.author.profilePictureUrl!!)))
+                trip_destination_destinationsList.layoutManager = LinearLayoutManager(activity)
+                trip_destination_destinationsList.adapter = TripDestinationAdapter(trip.tripDestinations!!.mapIndexed { index, td -> TripDestination(index,td.type, td.mountain?.asDomainModel(), td.rock?.asDomainModel()) })
             })
         }
     }

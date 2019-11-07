@@ -17,11 +17,10 @@ import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
-import com.hiker.data.remote.dto.Trip
-import com.hiker.data.remote.dto.TripDestination
-import com.hiker.data.remote.dto.UserBrief
+import com.hiker.data.remote.dto.command.TripCommand
+import com.hiker.data.remote.dto.command.TripDestinationCommand
+import com.hiker.data.remote.dto.query.UserBrief
 import com.hiker.domain.entities.Mountain
-import kotlinx.android.synthetic.main.fragment_trip_form_view.view.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.tripForm_searchView_1
@@ -36,7 +35,7 @@ class TripFormView : Fragment() {
     private val dateFormater = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
     private lateinit var tripFormViewModel: TripFormViewModel
     private lateinit var mountains: List<Mountain>
-    private val tripDestinations : MutableList<TripDestination> = mutableListOf()
+    private val tripDestinations : MutableList<TripDestinationCommand> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +77,13 @@ class TripFormView : Fragment() {
             }
             destinationRowView.tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
                 val selectedItem =  parent.getItemAtPosition(position) as Mountain
-                tripDestinations.add(TripDestination(type = 1, mountainId = selectedItem.id, rockId = null))
+                tripDestinations.add(
+                    TripDestinationCommand(
+                        type = 1,
+                        mountainId = selectedItem.id,
+                        rockId = null
+                    )
+                )
                 Toast.makeText(requireContext(),"Selected nowe: ${selectedItem.id}",Toast.LENGTH_SHORT).show()
             }
             tripForm_destinations_layout.addView(destinationRowView, tripForm_destinations_layout.childCount)
@@ -112,7 +117,13 @@ class TripFormView : Fragment() {
 
         tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
             val selectedItem =  parent.getItemAtPosition(position) as Mountain
-            tripDestinations.add(TripDestination(type = 1, mountainId = selectedItem.id, rockId = null))
+            tripDestinations.add(
+                TripDestinationCommand(
+                    type = 1,
+                    mountainId = selectedItem.id,
+                    rockId = null
+                )
+            )
             Toast.makeText(requireContext(),"Selected : ${selectedItem.id}",Toast.LENGTH_SHORT).show()
         }
 
@@ -125,19 +136,17 @@ class TripFormView : Fragment() {
 
         upcomingTripsView_submit_button.setOnClickListener{
 
-            val trip = Trip(
-                id = null,
+            val trip = TripCommand(
                 tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
-                author = UserBrief(UUID.fromString(userSystemId!!), null, null, null),
+                authorId = userSystemId!!,
                 dateFrom = beginTripCalendar.time,
                 dateTo = endTripCalendar.time,
                 description = fragment_trip_form_view_description.text.toString(),
-                tripDestinations = tripDestinations,
-                tripParticipants = null
+                tripDestinations = tripDestinations
             )
-            Log.i("TripFormView", "Id: ${trip.id}, " +
+            Log.i("TripFormView",
                     "tripTitle: ${trip.tripTitle}, " +
-                    "authorId: ${trip.author.id}," +
+                    "authorId: ${trip.authorId}," +
                     "dateFrom: ${trip.dateFrom}, " +
                     "dateTo: ${trip.dateTo}," +
                     "description: ${trip.description}")

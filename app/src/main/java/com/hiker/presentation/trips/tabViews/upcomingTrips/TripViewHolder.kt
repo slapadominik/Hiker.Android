@@ -14,7 +14,6 @@ class TripViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView
     private var dateFromTextView: TextView = itemView.findViewById(R.id.trip_list_item_dateFrom)
     private var dateToTextView: TextView = itemView.findViewById(R.id.trip_list_item_dateTo)
     private var titleTextView: TextView = itemView.findViewById(R.id.trip_list_item_title)
-    private var participantsTextView: TextView = itemView.findViewById(R.id.trip_list_item_title)
     private var dateFormater: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
     private var itemLayout: LinearLayout = itemView.findViewById(R.id.trip_list_item_layout)
 

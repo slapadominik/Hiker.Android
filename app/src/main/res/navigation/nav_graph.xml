@@ -30,7 +30,7 @@
             tools:layout="@layout/fragment_chat_view" />
     <fragment
             android:id="@+id/mountainDetailsView"
-            android:name="com.hiker.presentation.mountains.MountainDetailsView"
+            android:name="com.hiker.presentation.mountainObjects.MountainDetailsView"
             android:label="fragment_mountain_details_view"
             tools:layout="@layout/fragment_mountain_details_view">
         <argument
