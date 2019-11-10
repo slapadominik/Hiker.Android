@@ -20,6 +20,8 @@ import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.hiker.R
+import com.hiker.data.converters.asUserBrief
+import com.hiker.data.db.entity.UserBrief
 import com.hiker.data.repository.UserRepositoryImpl
 import kotlinx.android.synthetic.main.fragment_login_view.*
 import java.lang.Exception
@@ -56,21 +58,26 @@ class LoginView : Fragment() {
             login_button.fragment = this;
             LoginManager.getInstance().registerCallback(facebookCallbackManager,  object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
-                    loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {
-                        if (it != null){
+                    loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {user ->
+                        if (user != null){
                             Log.i(TAG, "Facebook user already exist")
                             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
                             if (sharedPref != null) {
                                 with (sharedPref.edit()){
-                                    putString(getString(R.string.preferences_userSystemId), it.id)
+                                    putString(getString(R.string.preferences_userSystemId), user.id)
                                     commit()
                                 }
                             }
+                            loginViewModel.addUserToDatabase(user.asUserBrief())
                             findNavController().popBackStack()
                         }
                         else{
                             Log.i(TAG, "Facebook user does not exist")
-                            loginViewModel.registerUserFromFacebook(loginResult.accessToken.token)
+                            loginViewModel.registerUserFromFacebook(loginResult.accessToken.token).observe(this@LoginView, Observer {
+                                loginViewModel.getUserBySystemId(it).observe(this@LoginView, Observer { user ->
+                                    loginViewModel.addUserToDatabase(user!!.asUserBrief())
+                                })
+                            })
                             findNavController().popBackStack()
                         }
                     })

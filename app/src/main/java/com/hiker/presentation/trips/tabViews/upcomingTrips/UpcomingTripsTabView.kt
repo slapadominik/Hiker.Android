@@ -66,6 +66,6 @@ class UpcomingTripsTabView : Fragment() {
     }
 
     private fun initViewModel(){
-        upcomingTripsTabViewModel = ViewModelProviders.of(this, UpcomingTripsTabViewModelFactory()).get(UpcomingTripsTabViewModel::class.java)
+        upcomingTripsTabViewModel = ViewModelProviders.of(this, UpcomingTripsTabViewModelFactory(requireContext())).get(UpcomingTripsTabViewModel::class.java)
     }
 }

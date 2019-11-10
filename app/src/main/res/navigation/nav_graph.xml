@@ -24,11 +24,6 @@
                 app:destination="@id/tripDetailsView" />
     </fragment>
     <fragment
-            android:id="@+id/chatView"
-            android:name="com.hiker.presentation.chat.ChatView"
-            android:label="fragment_chat_view"
-            tools:layout="@layout/fragment_chat_view" />
-    <fragment
             android:id="@+id/mountainDetailsView"
             android:name="com.hiker.presentation.mountainObjects.MountainDetailsView"
             android:label="fragment_mountain_details_view"
@@ -49,6 +44,9 @@
                 android:name="metersAboveSea"
                 android:defaultValue="0"
                 app:argType="integer" />
+        <action
+                android:id="@+id/action_mountainDetailsView_to_tripDetailsView"
+                app:destination="@id/tripDetailsView" />
     </fragment>
     <fragment
             android:id="@+id/loginView"

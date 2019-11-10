@@ -7,16 +7,22 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.hiker.data.db.converters.DateConverter
 import com.hiker.data.db.dao.MountainsDao
+import com.hiker.data.db.dao.TripParticipantDao
+import com.hiker.data.db.dao.UserBriefDao
 import com.hiker.data.db.dao.UserDao
 import com.hiker.data.db.entity.Mountain
+import com.hiker.data.db.entity.TripParticipant
 import com.hiker.data.db.entity.User
+import com.hiker.data.db.entity.UserBrief
 
-@Database(entities = arrayOf(User::class, Mountain::class), version = 1)
+@Database(entities = arrayOf(User::class, Mountain::class, TripParticipant::class, UserBrief::class), version = 1)
 @TypeConverters(DateConverter::class)
 abstract class ApplicationDatabase: RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun mountainsDao() : MountainsDao
+    abstract fun userBriefDao(): UserBriefDao
+    abstract fun tripParticipantDao(): TripParticipantDao
 
     companion object {
         @Volatile

@@ -4,9 +4,11 @@ import com.google.gson.GsonBuilder
 import com.hiker.BuildConfig
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.TripBrief
+import com.hiker.data.remote.dto.TripParticipant
 import com.hiker.data.remote.dto.query.TripQuery
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,7 +19,7 @@ import java.util.concurrent.TimeUnit
 interface TripsService {
 
     @GET("trips/{tripId}")
-    suspend fun getTripDetails(@Path("tripId") tripId:Int) : TripQuery
+    suspend fun getTripDetails(@Path("tripId") tripId:Int) : Response<TripQuery>
 
     @GET("users/{userId}/trips")
     suspend fun getUserIncomingTripsBriefs(
@@ -35,6 +37,10 @@ interface TripsService {
 
     @POST("trips")
     suspend fun addTrip(@Body tripCommand: TripCommand) : Response<Int>
+
+    @POST("trips/{tripId}/tripParticipants")
+    suspend fun addTripParticipant(@Path("tripId") tripId: Int,
+                                   @Body tripParticipant: TripParticipant) : Response<Void>
 
     companion object {
         fun create(): TripsService {

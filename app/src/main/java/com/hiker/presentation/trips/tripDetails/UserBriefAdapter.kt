@@ -4,20 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class UserBriefAdapter(private val users: List<UserBrief>) : RecyclerView.Adapter<UserBriefViewHolder>() {
+class UserBriefAdapter : RecyclerView.Adapter<UserBriefViewHolder>() {
+    private var users: List<UserBrief> = mutableListOf()
 
-    override fun onBindViewHolder(holder: UserBriefViewHolder, position: Int) {
-        val user = users[position]
-        holder.bind(user)
+    fun setData(items: List<UserBrief>){
+        this.users = items
+        notifyDataSetChanged()
+        notifyItemInserted(this.users.size)
     }
-
-    override fun getItemCount(): Int {
-        return users.count()
-    }
-
+    override fun onBindViewHolder(holder: UserBriefViewHolder, position: Int) = holder.bind(users[position])
+    override fun getItemCount() = users.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserBriefViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return UserBriefViewHolder(inflater, parent)
     }
-
 }

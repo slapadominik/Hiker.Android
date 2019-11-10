@@ -19,6 +19,9 @@ interface UserDao {
     @Query("SELECT * FROM User where Id = :id LIMIT 1")
     suspend fun hasUser(id: String) : User?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(user: User)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUsers(users: List<User>)
 }

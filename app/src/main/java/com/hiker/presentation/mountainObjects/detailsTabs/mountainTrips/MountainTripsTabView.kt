@@ -8,11 +8,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiker.R
+import com.hiker.presentation.mountainObjects.MountainDetailsViewDirections
+import com.hiker.presentation.trips.TripsViewDirections
 import com.hiker.presentation.trips.tabViews.upcomingTrips.Trip
 import com.hiker.presentation.trips.tabViews.upcomingTrips.TripAdapter
 import kotlinx.android.synthetic.main.fragment_mountain_trips_view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 private const val ARG_TRIP_DESTINATION_TYPE = "ARG_TRIP_DESTINATION_TYPE"
@@ -22,6 +27,7 @@ private const val ARG_ROCK_ID = "ARG_ROCK_ID"
 class MountainTripsTabView : Fragment() {
 
     private lateinit var mountainTripsTabViewModel: MountainTripsTabViewModel
+    private val dateFormater = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_mountain_trips_view, container, false)
@@ -47,16 +53,21 @@ class MountainTripsTabView : Fragment() {
                     mountain_details_tripsList.adapter = TripAdapter(
                         trips.map { tB -> Trip(tB.id, tB.tripTitle, tB.dateFrom, tB.dateTo) },
                         requireContext()
-                    ) { t -> Toast.makeText(requireContext(), "Id: "+t.id, Toast.LENGTH_LONG).show()}
+                    )
+                    { trip ->
+                        val action = MountainDetailsViewDirections.actionMountainDetailsViewToTripDetailsView()
+                        action.tripId = trip.id
+                        action.tripTitle = trip.title
+                        action.tripDateFrom = dateFormater.format(trip.dateFrom)
+                        action.tripDateTo = dateFormater.format(trip.dateTo)
+                        findNavController().navigate(action)
+                    }
                 })
         }
-
-
-
     }
 
     private fun initViewModels() {
-        mountainTripsTabViewModel = ViewModelProviders.of(this, MountainTripsTabViewModelFactory()).get(MountainTripsTabViewModel::class.java)
+        mountainTripsTabViewModel = ViewModelProviders.of(this, MountainTripsTabViewModelFactory(requireContext())).get(MountainTripsTabViewModel::class.java)
     }
 
     companion object {

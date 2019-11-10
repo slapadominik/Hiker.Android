@@ -3,12 +3,15 @@ package com.hiker.presentation.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.facebook.AccessToken
+import com.hiker.data.db.entity.UserBrief
 import com.hiker.domain.entities.User
 import com.hiker.domain.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
@@ -21,7 +24,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     fun getUserByFacebookId(facebookId: String) : LiveData<User?> {
         val result = MutableLiveData<User>()
-        CoroutineScope(Dispatchers.Default).launch {
+        viewModelScope.launch {
             val user = userRepository.getUserByFacebookId(facebookId)
             if (user != null){
                 result.postValue(user)
@@ -35,9 +38,18 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     fun registerUserFromFacebook(facebookToken: String) : LiveData<UUID>{
         val result = MutableLiveData<UUID>()
-        CoroutineScope(Dispatchers.Default).launch {
-            result.postValue(userRepository.addUser(facebookToken))
+        viewModelScope.launch {
+            result.postValue(userRepository.registerFacebookUser(facebookToken))
         }
         return result
+    }
+
+    fun getUserBySystemId(userSystemId: UUID) = runBlocking{ userRepository.getUserBySystemId(userSystemId) }
+
+
+    fun addUserToDatabase(userBrief: UserBrief){
+        viewModelScope.launch{
+            userRepository.addUserToLocalDb(userBrief)
+        }
     }
 }

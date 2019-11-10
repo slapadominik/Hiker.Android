@@ -99,7 +99,6 @@ class MapView : Fragment(), OnMapReadyCallback {
             .title(mountain.name)
             .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips)))
         mountainsMarkers[marker] = mountain
-
     }
 
     private fun setUpMap() {

@@ -1,5 +1,6 @@
 package com.hiker.data.converters
 
+import com.hiker.data.db.entity.UserBrief
 import com.hiker.data.remote.dto.MountainTrailBrief
 import com.hiker.domain.entities.*
 
@@ -63,5 +64,19 @@ fun com.hiker.data.remote.dto.Rock.asDomainModel() = Rock(
     id = id,
     name = name,
     location = Location(location.latitude, location.longitude, location.regionName)
+)
+
+fun com.hiker.data.remote.dto.query.UserBrief.asDatabaseModel() = UserBrief(
+    id = id.toString(),
+    firstName = firstName,
+    lastName = lastName,
+    profilePictureUrl = profilePictureUrl
+)
+
+fun User.asUserBrief() = UserBrief(
+    id = id,
+    firstName = firstName,
+    lastName = lastName,
+    profilePictureUrl = "https://graph.facebook.com/${id}/picture?width=300&height=300"
 )
 

@@ -8,6 +8,7 @@ import androidx.lifecycle.Transformations
 import com.hiker.data.converters.asDatabaseModel
 import com.hiker.data.converters.asDomainModel
 import com.hiker.data.db.ApplicationDatabase
+import com.hiker.data.db.entity.UserBrief
 import com.hiker.domain.entities.User
 import com.hiker.data.remote.api.UserService
 import com.hiker.data.remote.dto.FacebookToken
@@ -24,23 +25,15 @@ class UserRepositoryImpl(context: Context) : UserRepository {
     private val userService = UserService.create()
     private val database = ApplicationDatabase.getDatabase(context)
 
-    companion object {
-        private var instance: UserRepositoryImpl? = null
-
-        @Synchronized
-        fun getInstance(context: Context): UserRepositoryImpl{
-            if (instance == null)
-                instance =
-                    UserRepositoryImpl(context)
-            return instance as UserRepositoryImpl
-        }
-    }
-
     override suspend fun getUserBySystemId(userSystemId: UUID): LiveData<User?> {
         refreshUser(userSystemId)
         return Transformations.map(database.userDao().getById(userSystemId.toString())){
             it?.asDomainModel()
         }
+    }
+
+    override fun getUserBriefs(userIds: List<String>): LiveData<List<UserBrief>> {
+        return database.userBriefDao().getMany(userIds)
     }
 
     override suspend fun getUserByFacebookId(facebookId: String): User? {
@@ -50,7 +43,13 @@ class UserRepositoryImpl(context: Context) : UserRepository {
         else null
     }
 
-    override suspend fun addUser(facebookToken: String) : UUID {
+    override suspend fun addUserToLocalDb(userBrief: UserBrief) {
+        withContext(Dispatchers.IO){
+            database.userBriefDao().add(userBrief)
+        }
+    }
+
+    override suspend fun registerFacebookUser(facebookToken: String) : UUID {
         val response = userService.addUser(FacebookToken(facebookToken))
         return if (response.isSuccessful){
             response.body()!!
@@ -71,5 +70,18 @@ class UserRepositoryImpl(context: Context) : UserRepository {
                     }
                 }
             }
+    }
+
+
+    companion object {
+        private var instance: UserRepositoryImpl? = null
+
+        @Synchronized
+        fun getInstance(context: Context): UserRepositoryImpl{
+            if (instance == null)
+                instance =
+                    UserRepositoryImpl(context)
+            return instance as UserRepositoryImpl
+        }
     }
 }
