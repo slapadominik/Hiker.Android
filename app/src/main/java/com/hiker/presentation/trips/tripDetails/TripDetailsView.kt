@@ -155,7 +155,9 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
             .position(LatLng(it.latitude, it.longitude))
             .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips))}
         markers.forEach{map.addMarker(it)}
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(locations[0], 7.5f))
+        if (locations.isNotEmpty()){
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(locations[0], 7.5f))
+        }
     }
 
     private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {

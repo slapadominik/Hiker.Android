@@ -1,4 +1,4 @@
-package com.hiker.presentation.trips.tabViews.upcomingTrips
+package com.hiker.presentation.trips.tabViews
 
 import android.content.Context
 import android.view.LayoutInflater

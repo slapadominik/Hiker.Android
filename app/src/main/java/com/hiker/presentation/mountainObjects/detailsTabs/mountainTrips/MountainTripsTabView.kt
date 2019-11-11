@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,9 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiker.R
 import com.hiker.presentation.mountainObjects.MountainDetailsViewDirections
-import com.hiker.presentation.trips.TripsViewDirections
-import com.hiker.presentation.trips.tabViews.upcomingTrips.Trip
-import com.hiker.presentation.trips.tabViews.upcomingTrips.TripAdapter
+import com.hiker.presentation.trips.tabViews.Trip
+import com.hiker.presentation.trips.tabViews.TripAdapter
 import kotlinx.android.synthetic.main.fragment_mountain_trips_view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -50,18 +48,27 @@ class MountainTripsTabView : Fragment() {
             mountainTripsTabViewModel.getUpcomingTripsForMountainObject(tripDestinationType, mountainId, rockId)
                 .observe(this, Observer { trips ->
                     mountain_details_tripsList.layoutManager = LinearLayoutManager(activity)
-                    mountain_details_tripsList.adapter = TripAdapter(
-                        trips.map { tB -> Trip(tB.id, tB.tripTitle, tB.dateFrom, tB.dateTo) },
-                        requireContext()
-                    )
-                    { trip ->
-                        val action = MountainDetailsViewDirections.actionMountainDetailsViewToTripDetailsView()
-                        action.tripId = trip.id
-                        action.tripTitle = trip.title
-                        action.tripDateFrom = dateFormater.format(trip.dateFrom)
-                        action.tripDateTo = dateFormater.format(trip.dateTo)
-                        findNavController().navigate(action)
-                    }
+                    mountain_details_tripsList.adapter =
+                        TripAdapter(
+                            trips.map { tB ->
+                                Trip(
+                                    tB.id,
+                                    tB.tripTitle,
+                                    tB.dateFrom,
+                                    tB.dateTo
+                                )
+                            },
+                            requireContext()
+                        )
+                        { trip ->
+                            val action =
+                                MountainDetailsViewDirections.actionMountainDetailsViewToTripDetailsView()
+                            action.tripId = trip.id
+                            action.tripTitle = trip.title
+                            action.tripDateFrom = dateFormater.format(trip.dateFrom)
+                            action.tripDateTo = dateFormater.format(trip.dateTo)
+                            findNavController().navigate(action)
+                        }
                 })
         }
     }

@@ -1,4 +1,4 @@
-package com.hiker.presentation.trips.tabViews.upcomingTrips
+package com.hiker.presentation.trips.tabViews
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hiker.R
+import com.hiker.presentation.trips.tabViews.Trip
 import java.text.SimpleDateFormat
 import java.util.*
 
