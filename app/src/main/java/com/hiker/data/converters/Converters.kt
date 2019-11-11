@@ -10,7 +10,8 @@ fun com.hiker.data.remote.dto.Mountain.asDomainModel() = Mountain(
     name = name,
     metersAboveSeaLevel = metersAboveSeaLevel,
     location = Location(location.latitude, location.longitude, location.regionName),
-    trails = MountainTrailBrief(trails.href, trails.count)
+    trails = MountainTrailBrief(trails.href, trails.count),
+    upcomingTripsCount = upcomingTripsCount
 )
 
 fun com.hiker.data.db.entity.Mountain.asDomainModel() = Mountain(
@@ -18,7 +19,8 @@ fun com.hiker.data.db.entity.Mountain.asDomainModel() = Mountain(
     name = name,
     metersAboveSeaLevel = metersAboveSeaLevel,
     location = null,
-    trails = null
+    trails = null,
+    upcomingTripsCount = null
 )
 
 fun Mountain.asDatabaseModel() = com.hiker.data.db.entity.Mountain(

@@ -6,6 +6,7 @@ data class Mountain(
     val id: Int,
     val name: String,
     val metersAboveSeaLevel: Int,
+    val upcomingTripsCount: Int?,
     val location : Location?,
     val trails: MountainTrailBrief?
 ){

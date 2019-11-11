@@ -31,6 +31,7 @@ import com.hiker.domain.entities.Mountain
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_map_view.*
+import kotlinx.android.synthetic.main.fragment_mountain_trips_view.*
 
 
 class MapView : Fragment(), OnMapReadyCallback {
@@ -128,6 +129,12 @@ class MapView : Fragment(), OnMapReadyCallback {
                 marker_object_name.text = mountain.name
                 marker_object_regionName.text = mountain.location!!.regionName
                 marker_object_metersAboveSeaLevel.text = mountain.metersAboveSeaLevel.toString()
+                if (mountain.upcomingTripsCount != null){
+                    marker_object_tripsCount.text = mountain.upcomingTripsCount.toString()
+                }
+                else{
+                    marker_object_tripsCount.text = "0";
+                }
                 mapViewModel.setMountainThumbnail(mountain_info_window_imageview, mountain.id)
             }
             mountain_details_button.setOnClickListener {
