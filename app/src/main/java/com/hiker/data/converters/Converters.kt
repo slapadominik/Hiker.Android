@@ -77,6 +77,6 @@ fun User.asUserBrief() = UserBrief(
     id = id,
     firstName = firstName,
     lastName = lastName,
-    profilePictureUrl = "https://graph.facebook.com/${id}/picture?width=300&height=300"
+    profilePictureUrl = "https://graph.facebook.com/${facebookId}/picture?width=300&height=300"
 )
 

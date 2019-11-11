@@ -10,7 +10,6 @@ class UserBriefAdapter : RecyclerView.Adapter<UserBriefViewHolder>() {
     fun setData(items: List<UserBrief>){
         this.users = items
         notifyDataSetChanged()
-        notifyItemInserted(this.users.size)
     }
     override fun onBindViewHolder(holder: UserBriefViewHolder, position: Int) = holder.bind(users[position])
     override fun getItemCount() = users.size

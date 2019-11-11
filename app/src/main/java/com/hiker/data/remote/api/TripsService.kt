@@ -42,6 +42,9 @@ interface TripsService {
     suspend fun addTripParticipant(@Path("tripId") tripId: Int,
                                    @Body tripParticipant: TripParticipant) : Response<Void>
 
+    @DELETE("trips/{tripId}/tripParticipants")
+    suspend fun removeTripParticipant(@Path("tripId") tripId: Int, @Query("userId") userId: String) : Response<Void>
+
     companion object {
         fun create(): TripsService {
             val okHttpClientBuilder = OkHttpClient.Builder()

@@ -64,6 +64,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
             val safeArgs = TripDetailsViewArgs.fromBundle(it)
             setUpTextViews(safeArgs.tripTitle, safeArgs.tripDateFrom, safeArgs.tripDateTo)
             setUpJoinTripButton(safeArgs.tripId, userSystemId)
+            setUpQuitTripButton(safeArgs.tripId, userSystemId)
             getTripDetails(safeArgs.tripId, userSystemId)
             getTripParticipants(safeArgs.tripId)
         }
@@ -78,7 +79,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         try{
             tripsDetailsViewModel.getTripParticipants(tripId).observe(this, Observer {participants ->
                 tripsDetailsViewModel.getUsersBriefs(participants.map { x -> x.userId }).observe(this, Observer{ users ->
-                    userBriefAdapter.setData(users)
+                   userBriefAdapter.setData(users)
                 })
             })
         }
@@ -129,6 +130,19 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
                 tripsDetailsViewModel.addTripParticipant(tripId, userId)
                 trip_details_joinTripButton.visibility = View.GONE
                 trip_details_quitTripButton.visibility = View.VISIBLE
+            }
+            catch (apiException: ApiException){
+                Log.e("TripDetailsView", apiException.message.toString())
+            }
+        }
+    }
+
+    private fun setUpQuitTripButton(tripId: Int, userId: UUID){
+        trip_details_quitTripButton.setOnClickListener{
+            try{
+                tripsDetailsViewModel.removeTripParticipant(tripId, userId)
+                trip_details_joinTripButton.visibility = View.VISIBLE
+                trip_details_quitTripButton.visibility = View.GONE
             }
             catch (apiException: ApiException){
                 Log.e("TripDetailsView", apiException.message.toString())

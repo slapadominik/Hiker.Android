@@ -17,9 +17,20 @@ class TripParticipantsRepositoryImpl(private val tripParticipantDao: TripPartici
 
     private val tripsService = TripsService.create()
 
+
+    override suspend fun removeTripParticipant(tripId: Int, userId: UUID) {
+        val response = tripsService.removeTripParticipant(tripId, userId.toString())
+        if (!response.isSuccessful){
+            throw ApiException(response.errorBody()?.string())
+        }
+        withContext(Dispatchers.IO){
+            tripParticipantDao.delete(TripParticipant(tripId, userId.toString()))
+        }
+    }
+
     override suspend fun addTripParticipant(tripId: Int, userId: UUID) {
         val response = tripsService.addTripParticipant(tripId,
-            com.hiker.data.remote.dto.TripParticipant(userId.toString(), tripId)
+            com.hiker.data.remote.dto.TripParticipant(userId.toString())
         )
         if (!response.isSuccessful){
             throw ApiException(response.errorBody()?.string())

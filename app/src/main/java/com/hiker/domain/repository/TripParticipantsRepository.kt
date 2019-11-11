@@ -7,5 +7,6 @@ import java.util.*
 
 interface TripParticipantsRepository{
     suspend fun addTripParticipant(tripId: Int, userId: UUID)
+    suspend fun removeTripParticipant(tripId: Int, userId: UUID)
     fun getTripParticipants(tripId: Int): LiveData<List<TripParticipant>>
 }

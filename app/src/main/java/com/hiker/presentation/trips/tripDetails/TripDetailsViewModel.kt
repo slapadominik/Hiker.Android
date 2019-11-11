@@ -37,4 +37,10 @@ class TripDetailsViewModel(private val tripParticipantsRepository: TripParticipa
             tripParticipantsRepository.addTripParticipant(tripId, userId)
         }
     }
+
+    fun removeTripParticipant(tripId: Int, userId: UUID){
+        viewModelScope.launch {
+            tripParticipantsRepository.removeTripParticipant(tripId, userId)
+        }
+    }
 }
