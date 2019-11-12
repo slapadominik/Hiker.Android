@@ -2,11 +2,12 @@ package com.hiker.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
-class Mountain(
+class MountainBrief(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("metersAboveSeaLevel") val metersAboveSeaLevel: Int,
-    @SerializedName("thumbnailId") val thumbnailId : String,
-    @SerializedName("trails") val trails : List<MountainTrail>,
-    @SerializedName("mountainImages") val mountainImages: List<Image>
+    @SerializedName("location") val location : Location,
+    @SerializedName("upcomingTripsCount") val upcomingTripsCount : Int,
+    @SerializedName("trails") val trails: MountainTrailBrief
 )
+

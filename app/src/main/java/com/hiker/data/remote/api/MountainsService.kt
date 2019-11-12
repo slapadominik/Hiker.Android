@@ -1,30 +1,26 @@
 package com.hiker.data.remote.api
 
-import android.database.Cursor
 import com.hiker.data.remote.dto.Mountain
+import com.hiker.data.remote.dto.MountainBrief
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
 
 
-interface MountainsSerivce {
+interface MountainsService {
 
-    @GET("mountains/location")
-    suspend fun getByLocation(
-        @Query("lat") latitude: Double,
-        @Query("long") longitude: Double,
-        @Query("radius") radius: Double
-    ): Response<Mountain>
+    @GET("mountains/{id}")
+    suspend fun getById(@Path("id") id: Int): Response<Mountain>
 
     @GET("mountains")
-    suspend fun getAll(): Response<List<Mountain>>
+    suspend fun getAll(): Response<List<MountainBrief>>
 
     companion object {
-        fun create(): MountainsSerivce {
+        fun create(): MountainsService {
             val client = OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
@@ -34,7 +30,7 @@ interface MountainsSerivce {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
-                .create(MountainsSerivce::class.java)
+                .create(MountainsService::class.java)
         }
     }
 }

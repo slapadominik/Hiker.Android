@@ -5,7 +5,7 @@ import com.hiker.data.remote.dto.MountainTrailBrief
 import com.hiker.domain.entities.*
 
 
-fun com.hiker.data.remote.dto.Mountain.asDomainModel() = Mountain(
+fun com.hiker.data.remote.dto.MountainBrief.asDomainModel() = Mountain(
     id = id,
     name = name,
     metersAboveSeaLevel = metersAboveSeaLevel,

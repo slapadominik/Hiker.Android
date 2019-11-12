@@ -99,10 +99,10 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
                 }
                 trip_details_description.text = trip.description
                 trip_destination_destinationsList.layoutManager = LinearLayoutManager(activity)
-                trip_destination_destinationsList.adapter = TripDestinationAdapter(trip.tripDestinations!!.mapIndexed { index, td -> TripDestination(index,td.type, td.mountain?.asDomainModel(), td.rock?.asDomainModel()) })
+                trip_destination_destinationsList.adapter = TripDestinationAdapter(trip.tripDestinations!!.mapIndexed { index, td -> TripDestination(index,td.type, td.mountainBrief?.asDomainModel(), td.rock?.asDomainModel()) })
                 val destinationsLocations = trip.tripDestinations.map { x ->
                     if (x.type == TripDestinationType.Mountain){
-                        LatLng(x.mountain!!.location.latitude, x.mountain.location.longitude)
+                        LatLng(x.mountainBrief!!.location.latitude, x.mountainBrief.location.longitude)
                     }
                     else if (x.type == TripDestinationType.Rock){
                         LatLng(x.rock!!.location.latitude, x.rock.location.longitude)

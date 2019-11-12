@@ -18,13 +18,24 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <ImageView
-                    android:id="@+id/illness_image"
+            <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/mountain_details_imageSlider"
                     android:layout_width="match_parent"
-                    android:layout_height="195dp"
-                    android:cropToPadding="true"
-                    android:src="@drawable/mountain_sample_img"
-                    android:contentDescription="Mountain image" android:scaleType="fitCenter"/>
+                    android:layout_height="210dp"
+                    app:sliderAnimationDuration="600"
+                    app:sliderAutoCycleDirection="back_and_forth"
+                    app:sliderAutoCycleEnabled="false"
+                    app:sliderCircularHandlerEnabled="true"
+                    app:sliderIndicatorAnimationDuration="600"
+                    app:sliderIndicatorGravity="center_horizontal|bottom"
+                    app:sliderIndicatorMargin="15dp"
+                    app:sliderIndicatorOrientation="horizontal"
+                    app:sliderIndicatorPadding="3dp"
+                    app:sliderIndicatorRadius="2dp"
+                    app:sliderIndicatorSelectedColor="#FFF"
+                    app:sliderIndicatorUnselectedColor="#5A5A5A"
+                    app:sliderScrollTimeInSec="1"
+                    app:sliderStartAutoCycle="false" />
 
             <LinearLayout
                     android:layout_width="match_parent"
