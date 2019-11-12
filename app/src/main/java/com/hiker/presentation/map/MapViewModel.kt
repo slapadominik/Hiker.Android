@@ -4,8 +4,8 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hiker.data.api.ApiConsts
-import com.hiker.data.dto.Mountain
+import com.hiker.data.remote.api.ApiConsts
+import com.hiker.domain.entities.Mountain
 import com.hiker.domain.repository.MountainsRepository
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -17,13 +17,19 @@ class MapViewModel(private val mountainsRepository : MountainsRepository) : View
     fun getAllMountains() : LiveData<List<Mountain>> {
         val result = MutableLiveData<List<Mountain>>()
 
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val mountains = mountainsRepository.getAll()
             if (mountains != null){
                 result.postValue(mountains)
             }
         }
         return result
+    }
+
+    fun addMountains(mountains: List<Mountain>){
+        CoroutineScope(Dispatchers.IO).launch {
+            mountainsRepository.addMountains(mountains)
+        }
     }
 
     fun setMountainThumbnail(imageView: ImageView, mountainId: Int){
