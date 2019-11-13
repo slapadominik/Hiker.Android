@@ -6,6 +6,6 @@ import com.hiker.data.remote.dto.Rock
 
 data class TripDestinationQuery(
     @SerializedName("type") val type: Int,
-    @SerializedName("mountainBrief") val mountainBrief: MountainBrief?,
+    @SerializedName("mountain") val mountainBrief: MountainBrief?,
     @SerializedName("rock") val rock: Rock?
 )

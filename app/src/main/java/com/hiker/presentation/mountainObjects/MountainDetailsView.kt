@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.hiker.R
+import com.hiker.data.remote.dto.MountainTrail
 import com.hiker.presentation.mountainObjects.detailsTabs.mountainInformation.MountainInformationTabView
 import com.hiker.presentation.mountainObjects.detailsTabs.mountainTrips.MountainTripsTabView
 import kotlinx.android.synthetic.main.fragment_mountain_details_view.*
@@ -33,14 +34,14 @@ class MountainDetailsView : Fragment() {
             val safeArgs = MountainDetailsViewArgs.fromBundle(it)
             val mountainId = safeArgs.mountainId
             setBasicMountainInfo(safeArgs.mountainName, safeArgs.regionName, safeArgs.metersAboveSea)
-            setUpTabs(safeArgs.regionName, safeArgs.metersAboveSea, MountainTripDestinationType, mountainId)
-            getMountainDetails(mountainId)
+            getMountainDetails(MountainTripDestinationType, mountainId)
         }
     }
 
-    private fun getMountainDetails(mountainId: Int){
+    private fun getMountainDetails(tripDestinationType: Int, mountainId: Int){
         mountainDetailsViewModel.getMountainDetails(mountainId).observe(this, Observer {
             mountain_details_imageSlider.sliderAdapter = SliderAdapter(requireContext(), it.mountainImages)
+            setUpTabs(ArrayList(it.trails),tripDestinationType,mountainId)
         })
     }
 
@@ -50,9 +51,9 @@ class MountainDetailsView : Fragment() {
         mountainDetailsView_metersAboveSea.text = metersAboveSeaLevel.toString()
     }
 
-    private fun setUpTabs(regionName: String, metersAboveSeaLevel: Int, tripDestinationType: Int, mountainId: Int){
+    private fun setUpTabs(trails: ArrayList<MountainTrail>, tripDestinationType: Int, mountainId: Int){
         val fragmentAdapter = MountainDetailsViewPagerAdapter(childFragmentManager)
-        fragmentAdapter.addFragment(MountainInformationTabView.create(regionName, metersAboveSeaLevel), "Informacje")
+        fragmentAdapter.addFragment(MountainInformationTabView.create(trails), "Informacje")
         fragmentAdapter.addFragment(MountainTripsTabView.create(tripDestinationType, mountainId, 0), "Wycieczki")
         mountain_details_viewpager.adapter = fragmentAdapter
         mountain_details_tablayout.setupWithViewPager(mountain_details_viewpager)
