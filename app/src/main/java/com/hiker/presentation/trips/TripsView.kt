@@ -38,6 +38,10 @@ class TripsView : Fragment() {
         return view
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         tripsView_viewPager.adapter = TripsViewPagerAdapter(childFragmentManager)
         tripsview_tablayout.setupWithViewPager(tripsView_viewPager)

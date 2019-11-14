@@ -1,6 +1,7 @@
 package com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip
 
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.hiker.R
@@ -35,13 +37,19 @@ class TripFormView : Fragment() {
     private val dateFormater = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
     private lateinit var tripFormViewModel: TripFormViewModel
     private lateinit var mountains: List<Mountain>
-    private val tripDestinations : MutableList<TripDestinationCommand> = mutableListOf()
+    private val tripDestinations : MutableMap<Int, TripDestinationCommand> = mutableMapOf()
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            showAlertDialog()
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_trip_form_view, container, false)
     }
 
@@ -52,16 +60,19 @@ class TripFormView : Fragment() {
         setupOnClickListeners()
     }
 
+    private fun showAlertDialog() : androidx.appcompat.app.AlertDialog{
+        return androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Uwaga")
+            .setMessage("Czy chcesz porzucić wprowadzone zmiany?")
+            .setPositiveButton("Tak") { _, _ ->
+                findNavController().popBackStack()
+            }
+            .setNegativeButton("Nie", /* listener = */ null)
+            .show()
+    }
     private fun setupOnClickListeners(){
         tipFormView_toolbar.setNavigationOnClickListener {
-            androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Uwaga")
-                .setMessage("Czy chcesz porzucić wprowadzone zmiany?")
-                .setPositiveButton("Tak") { _, _ ->
-                    findNavController().popBackStack()
-                }
-                .setNegativeButton("Nie", /* listener = */ null)
-                .show()
+            showAlertDialog()
         }
 
         upcomingTripsView_addDestination_button.setOnClickListener {
@@ -73,18 +84,20 @@ class TripFormView : Fragment() {
             )
             destinationRowView.tripForm_searchView_1.setAdapter(adapter)
             destinationRowView.trip_form_removeDestinationBtn.setOnClickListener{
+                val viewRowIndex = (destinationRowView.parent as ViewGroup).indexOfChild(destinationRowView)
+                tripDestinations.remove(viewRowIndex)
                 (destinationRowView.parent as ViewGroup).removeView(destinationRowView)
             }
             destinationRowView.tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
                 val selectedItem =  parent.getItemAtPosition(position) as Mountain
-                tripDestinations.add(
+                val viewRowIndex = (destinationRowView.parent as ViewGroup).indexOfChild(destinationRowView)
+                tripDestinations.put(viewRowIndex,
                     TripDestinationCommand(
                         type = 1,
                         mountainId = selectedItem.id,
                         rockId = null
                     )
                 )
-                Toast.makeText(requireContext(),"Selected nowe: ${selectedItem.id}",Toast.LENGTH_SHORT).show()
             }
             tripForm_destinations_layout.addView(destinationRowView, tripForm_destinations_layout.childCount)
         }
@@ -117,18 +130,18 @@ class TripFormView : Fragment() {
 
         tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
             val selectedItem =  parent.getItemAtPosition(position) as Mountain
-            tripDestinations.add(
+            tripDestinations.put(1,
                 TripDestinationCommand(
                     type = 1,
                     mountainId = selectedItem.id,
                     rockId = null
                 )
             )
-            Toast.makeText(requireContext(),"Selected : ${selectedItem.id}",Toast.LENGTH_SHORT).show()
         }
 
         trip_form_removeDestinationBtn.setOnClickListener{
             tripForm_destinations_layout.removeView(tripForm_destinationRowLayout)
+            tripDestinations.remove(1)
         }
 
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
@@ -142,7 +155,7 @@ class TripFormView : Fragment() {
                 dateFrom = beginTripCalendar.time,
                 dateTo = endTripCalendar.time,
                 description = fragment_trip_form_view_description.text.toString(),
-                tripDestinations = tripDestinations
+                tripDestinations = tripDestinations.values.toList()
             )
             Log.i("TripFormView",
                     "tripTitle: ${trip.tripTitle}, " +

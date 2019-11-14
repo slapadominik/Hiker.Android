@@ -12,15 +12,15 @@
 
     <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="81dp"
-            android:layout_height="95dp"
-            app:srcCompat="@mipmap/ic_launcher_foreground" />
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:srcCompat="@drawable/ic_mountains" />
 
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="25dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="10dp">
 
         <TextView
@@ -28,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nazwa wycieczki"
+                android:fontFamily="@font/roboto"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
@@ -40,6 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:fontFamily="@font/roboto"
                     android:layout_weight="1"
                     android:text="Data od"
                     android:textSize="12sp" />
@@ -52,6 +54,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:text="-"
+                    android:fontFamily="@font/roboto"
                     android:textSize="12sp" />
 
             <TextView
@@ -60,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
+                    android:fontFamily="@font/roboto"
                     android:layout_weight="1"
                     android:text="Data do"
                     android:textSize="12sp" />

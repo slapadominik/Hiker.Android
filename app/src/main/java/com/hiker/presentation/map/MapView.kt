@@ -20,9 +20,12 @@ import com.hiker.R
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.navigation.fragment.findNavController
 import com.facebook.AccessToken
 import com.google.android.gms.maps.model.*
@@ -33,6 +36,7 @@ import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_map_view.*
 import kotlinx.android.synthetic.main.fragment_mountain_trips_view.*
 
+const val MapViewBundleKey = "MapViewBundleKey"
 
 class MapView : Fragment(), OnMapReadyCallback {
 
@@ -46,6 +50,13 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var loginViewModel: LoginViewModel
     private val mountainsMarkers = HashMap<Marker, Mountain>()
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            finishAffinity(requireActivity())
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,15 +77,6 @@ class MapView : Fragment(), OnMapReadyCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initViewModels()
-
-        val navController = findNavController()
-        AccessToken.refreshCurrentAccessTokenAsync()
-        loginViewModel.isUserLoggedIn(AccessToken.getCurrentAccessToken()).observe(viewLifecycleOwner, Observer { result ->
-            Log.d("MapView", "Authentication state: ${result}")
-            if (result == false){
-                navController.navigate(R.id.loginView)
-            }
-        })
         bindMountainsToMap()
     }
 
@@ -153,23 +155,28 @@ class MapView : Fragment(), OnMapReadyCallback {
         }
     }
 
+
+
     override fun onPause() {
         super.onPause()
         googleMapView.onPause()
     }
+
+    override fun onDestroyView() {
+        googleMap.clear()
+        googleMapView.onDestroy()
+        super.onDestroyView()
+    }
     override fun onResume() {
         super.onResume()
         googleMapView.onResume()
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        googleMapView.onDestroy()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
         googleMapView.onLowMemory()
     }
+
 
     private fun initViewModels() {
         mapViewModel = ViewModelProviders.of(this, MapViewModelFactory(requireContext())).get(MapViewModel::class.java)
@@ -178,7 +185,6 @@ class MapView : Fragment(), OnMapReadyCallback {
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        fun newInstance() = MapView()
     }
 
     private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {

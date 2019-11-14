@@ -10,10 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -21,8 +21,6 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.hiker.R
 import com.hiker.data.converters.asUserBrief
-import com.hiker.data.db.entity.UserBrief
-import com.hiker.data.repository.UserRepositoryImpl
 import kotlinx.android.synthetic.main.fragment_login_view.*
 import java.lang.Exception
 
@@ -37,13 +35,20 @@ class LoginView : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login_view, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initMapViewModel()
+        initLoginViewModel()
+        AccessToken.refreshCurrentAccessTokenAsync()
+        loginViewModel.isUserLoggedIn(AccessToken.getCurrentAccessToken()).observe(viewLifecycleOwner, Observer { result ->
+            Log.d("LoginView", "Authentication state: ${result}")
+            if (result){
+                findNavController().navigate(R.id.mapView)
+            }
+        })
+
         initFacebookButton()
     }
 
@@ -69,7 +74,7 @@ class LoginView : Fragment() {
                                 }
                             }
                             loginViewModel.addUserToDatabase(user.asUserBrief())
-                            findNavController().popBackStack()
+                            findNavController().navigate(R.id.mapView)
                         }
                         else{
                             Log.i(TAG, "Facebook user does not exist")
@@ -78,7 +83,7 @@ class LoginView : Fragment() {
                                     loginViewModel.addUserToDatabase(user!!.asUserBrief())
                                 })
                             })
-                            findNavController().popBackStack()
+                            findNavController().navigate(R.id.mapView)
                         }
                     })
                 }
@@ -97,7 +102,7 @@ class LoginView : Fragment() {
         }
     }
 
-    private fun initMapViewModel() {
+    private fun initLoginViewModel() {
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(LoginViewModel::class.java)
     }
 }

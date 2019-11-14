@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
 import com.hiker.data.converters.asDomainModel
 import com.hiker.domain.consts.TripDestinationType
@@ -50,6 +51,8 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         googleMapView.onCreate(savedInstanceState)
         googleMapView.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        var bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigationView.visibility = View.INVISIBLE
         return view
     }
 
