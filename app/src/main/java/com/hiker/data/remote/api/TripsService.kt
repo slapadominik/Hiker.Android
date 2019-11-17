@@ -38,6 +38,9 @@ interface TripsService {
     @POST("trips")
     suspend fun addTrip(@Body tripCommand: TripCommand) : Response<Int>
 
+    @DELETE("trips/{tripId}")
+    suspend fun removeTrip(@Path("tripId") tripId: Int) : Response<Void>
+
     @POST("trips/{tripId}/tripParticipants")
     suspend fun addTripParticipant(@Path("tripId") tripId: Int,
                                    @Body tripParticipant: TripParticipant) : Response<Void>

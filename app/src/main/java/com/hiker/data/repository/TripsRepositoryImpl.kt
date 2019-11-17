@@ -24,9 +24,14 @@ class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
     private val tripsService = TripsService.create()
     private val dateFormater = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
 
+    override suspend fun deleteTrip(tripId: Int) {
+        val response = tripsService.removeTrip(tripId)
+        if (!response.isSuccessful){
+            throw ApiException(response.message().toString())
+        }
+    }
+
     override suspend fun getTrip(tripId: Int): TripQuery {
-
-
         val response = tripsService.getTripDetails(tripId)
         if (response.isSuccessful){
             val trip = response.body()!!

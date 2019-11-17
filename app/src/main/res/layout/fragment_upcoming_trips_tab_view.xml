@@ -4,10 +4,15 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
              tools:context=".presentation.trips.tabViews.upcomingTrips.UpcomingTripsTabView">
-
-    <!-- TODO: Update blank fragment layout -->
-
-
+    <TextView
+            android:id="@+id/upcomingTrips_emptyList_textView"
+            android:text="@string/empty_upcomingTrips_list"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/roboto"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/upcomingTripsView_recyclerView"
             android:layout_width="match_parent"

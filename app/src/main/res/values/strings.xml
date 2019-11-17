@@ -10,4 +10,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facebook_app_id">523791915096205</string>
     <string name="fb_login_protocol_scheme">fb523791915096205</string>
+    <string name="empty_history_list">Nie odbyłeś żadnej wycieczki.</string>
+    <string name="empty_upcomingTrips_list">Brak nadchodzących wycieczek</string>
+    <string name="delete">Usuń</string>
+    <string name="edit">Edytuj</string>
 </resources>

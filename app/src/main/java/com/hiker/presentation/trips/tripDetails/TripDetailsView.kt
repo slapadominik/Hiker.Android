@@ -6,14 +6,15 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -56,6 +57,11 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         return view
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
@@ -76,6 +82,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map!!
         googleMap.isMyLocationEnabled = true
+        googleMap.uiSettings.isMyLocationButtonEnabled = false
     }
 
     private fun getTripParticipants(tripId: Int){
@@ -94,6 +101,9 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     private fun getTripDetails(tripId: Int, userSystemId: UUID){
         try{
             tripsDetailsViewModel.getTrip(tripId).observe(this, Observer { trip ->
+                if (trip.author.id == userSystemId){
+                    showToolbarMenu(trip.id)
+                }
                 if (!trip.tripParticipants.any { x -> x.id ==  userSystemId} && trip.author.id != userSystemId){
                     trip_details_joinTripButton.visibility = View.VISIBLE
                 }
@@ -118,6 +128,31 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         catch (ex: Exception){
             Log.e("TripDetailsView", ex.message)
         }
+    }
+
+    private fun showToolbarMenu(tripId: Int){
+        val toolbar = view?.findViewById<Toolbar>(R.id.trip_details_toolbar)
+        toolbar?.inflateMenu(R.menu.trip_details_menu)
+        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_config_icon)
+        toolbar?.overflowIcon = drawable
+        toolbar?.setOnMenuItemClickListener {
+            when (it.itemId){
+                R.id.trip_details_menu_delete -> showDeleteAlertDialog(tripId)
+            }
+            false
+        }
+    }
+
+    private fun showDeleteAlertDialog(tripId: Int) : androidx.appcompat.app.AlertDialog{
+        return androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Uwaga")
+            .setMessage("Czy chcesz usunąć wycieczkę?")
+            .setPositiveButton("Tak") { _, _ ->
+                tripsDetailsViewModel.removeTrip(tripId)
+                findNavController().popBackStack()
+            }
+            .setNegativeButton("Nie", /* listener = */ null)
+            .show()
     }
 
     private fun setUpTextViews(tripTitle: String, tripDateFrom: String, tripDateTo: String)

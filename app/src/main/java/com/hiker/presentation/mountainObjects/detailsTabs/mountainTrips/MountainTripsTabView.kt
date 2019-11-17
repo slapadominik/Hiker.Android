@@ -47,28 +47,36 @@ class MountainTripsTabView : Fragment() {
             }
             mountainTripsTabViewModel.getUpcomingTripsForMountainObject(tripDestinationType, mountainId, rockId)
                 .observe(this, Observer { trips ->
-                    mountain_details_tripsList.layoutManager = LinearLayoutManager(activity)
-                    mountain_details_tripsList.adapter =
-                        TripAdapter(
-                            trips.map { tB ->
-                                Trip(
-                                    tB.id,
-                                    tB.tripTitle,
-                                    tB.dateFrom,
-                                    tB.dateTo
-                                )
-                            },
-                            requireContext()
-                        )
-                        { trip ->
-                            val action =
-                                MountainDetailsViewDirections.actionMountainDetailsViewToTripDetailsView()
-                            action.tripId = trip.id
-                            action.tripTitle = trip.title
-                            action.tripDateFrom = dateFormater.format(trip.dateFrom)
-                            action.tripDateTo = dateFormater.format(trip.dateTo)
-                            findNavController().navigate(action)
-                        }
+                    if (trips.isEmpty()){
+                        mountain_details_textView.visibility = View.VISIBLE
+                        mountain_details_tripsList.visibility = View.GONE
+                    }
+                    else{
+                        mountain_details_textView.visibility = View.GONE
+                        mountain_details_tripsList.visibility = View.VISIBLE
+                        mountain_details_tripsList.layoutManager = LinearLayoutManager(activity)
+                        mountain_details_tripsList.adapter =
+                            TripAdapter(
+                                trips.map { tB ->
+                                    Trip(
+                                        tB.id,
+                                        tB.tripTitle,
+                                        tB.dateFrom,
+                                        tB.dateTo
+                                    )
+                                },
+                                requireContext()
+                            )
+                            { trip ->
+                                val action =
+                                    MountainDetailsViewDirections.actionMountainDetailsViewToTripDetailsView()
+                                action.tripId = trip.id
+                                action.tripTitle = trip.title
+                                action.tripDateFrom = dateFormater.format(trip.dateFrom)
+                                action.tripDateTo = dateFormater.format(trip.dateTo)
+                                findNavController().navigate(action)
+                            }
+                    }
                 })
         }
     }

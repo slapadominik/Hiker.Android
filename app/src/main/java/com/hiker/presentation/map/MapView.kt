@@ -135,7 +135,7 @@ class MapView : Fragment(), OnMapReadyCallback {
                     marker_object_tripsCount.text = mountain.upcomingTripsCount.toString()
                 }
                 else{
-                    marker_object_tripsCount.text = "0";
+                    marker_object_tripsCount.text = "0"
                 }
                 mapViewModel.setMountainThumbnail(mountain_info_window_imageview, mountain.id)
             }
@@ -154,8 +154,6 @@ class MapView : Fragment(), OnMapReadyCallback {
             true
         }
     }
-
-
 
     override fun onPause() {
         super.onPause()
@@ -176,7 +174,6 @@ class MapView : Fragment(), OnMapReadyCallback {
         super.onLowMemory()
         googleMapView.onLowMemory()
     }
-
 
     private fun initViewModels() {
         mapViewModel = ViewModelProviders.of(this, MapViewModelFactory(requireContext())).get(MapViewModel::class.java)

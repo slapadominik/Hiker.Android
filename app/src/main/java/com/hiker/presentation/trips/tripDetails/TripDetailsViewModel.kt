@@ -43,4 +43,10 @@ class TripDetailsViewModel(private val tripParticipantsRepository: TripParticipa
             tripParticipantsRepository.removeTripParticipant(tripId, userId)
         }
     }
+
+    fun removeTrip(tripId: Int){
+        viewModelScope.launch {
+            tripsRepository.deleteTrip(tripId)
+        }
+    }
 }

@@ -49,23 +49,31 @@ class UpcomingTripsTabView : Fragment() {
         val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
 
         upcomingTripsTabViewModel.getUserUpcomingTripsBriefs(userSystemId!!).observe(this, Observer { tripsBriefs ->
-            upcomingTripsView_recyclerView.layoutManager = LinearLayoutManager(activity)
-            upcomingTripsView_recyclerView.adapter =
-                TripAdapter(tripsBriefs.map { x ->
-                    Trip(
-                        x.id,
-                        x.tripTitle,
-                        x.dateFrom,
-                        x.dateTo
-                    )
-                }, requireContext()) {
-                    val action = TripsViewDirections.actionTripsViewToTripDetailsView()
-                    action.tripId = it.id
-                    action.tripTitle = it.title
-                    action.tripDateFrom = dateFormater.format(it.dateFrom)
-                    action.tripDateTo = dateFormater.format(it.dateTo)
-                    findNavController().navigate(action)
-                }
+            if (tripsBriefs.isEmpty()){
+                upcomingTrips_emptyList_textView.visibility = View.VISIBLE
+                upcomingTripsView_recyclerView.visibility = View.GONE
+            }
+            else{
+                upcomingTrips_emptyList_textView.visibility = View.GONE
+                upcomingTripsView_recyclerView.visibility = View.VISIBLE
+                upcomingTripsView_recyclerView.layoutManager = LinearLayoutManager(activity)
+                upcomingTripsView_recyclerView.adapter =
+                    TripAdapter(tripsBriefs.map { x ->
+                        Trip(
+                            x.id,
+                            x.tripTitle,
+                            x.dateFrom,
+                            x.dateTo
+                        )
+                    }, requireContext()) {
+                        val action = TripsViewDirections.actionTripsViewToTripDetailsView()
+                        action.tripId = it.id
+                        action.tripTitle = it.title
+                        action.tripDateFrom = dateFormater.format(it.dateFrom)
+                        action.tripDateTo = dateFormater.format(it.dateTo)
+                        findNavController().navigate(action)
+                    }
+            }
         })
     }
 

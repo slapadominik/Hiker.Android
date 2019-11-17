@@ -13,4 +13,5 @@ interface TripsRepository {
     suspend fun getUpcomingTripsBriefsForMountainObject(tripDestinationType: Int, mountainId: Int?, rockId: Int?, dateFrom: Date) : List<TripBrief>
     suspend fun getTrip(tripId: Int) : TripQuery
     suspend fun addTrip(tripCommand: TripCommand) : Int
+    suspend fun deleteTrip(tripId: Int)
 }

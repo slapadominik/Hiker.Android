@@ -2,6 +2,7 @@ package com.hiker.presentation.trips.tabViews.historyTrips
 
 
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,23 +43,31 @@ class HistoryTripsTabView : Fragment() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
         historyTripsTabViewModel.getUserHistoryTripsBriefs(userSystemId!!).observe(this, Observer { tripsBriefs ->
-            historyTripsView_recyclerView.layoutManager = LinearLayoutManager(activity)
-            historyTripsView_recyclerView.adapter =
-                TripAdapter(tripsBriefs.map { x ->
-                    Trip(
-                        x.id,
-                        x.tripTitle,
-                        x.dateFrom,
-                        x.dateTo
-                    )
-                }, requireContext()) {
-                    val action = TripsViewDirections.actionTripsViewToTripDetailsView()
-                    action.tripId = it.id
-                    action.tripTitle = it.title
-                    action.tripDateFrom = dateFormater.format(it.dateFrom)
-                    action.tripDateTo = dateFormater.format(it.dateTo)
-                    findNavController().navigate(action)
-                }
+            if (tripsBriefs.isEmpty()){
+                historyTripsView_emptyList_textView.visibility = View.VISIBLE
+                historyTripsView_recyclerView.visibility = View.GONE
+            }
+            else{
+                historyTripsView_emptyList_textView.visibility = View.GONE
+                historyTripsView_recyclerView.visibility = View.VISIBLE
+                historyTripsView_recyclerView.layoutManager = LinearLayoutManager(activity)
+                historyTripsView_recyclerView.adapter =
+                    TripAdapter(tripsBriefs.map { x ->
+                        Trip(
+                            x.id,
+                            x.tripTitle,
+                            x.dateFrom,
+                            x.dateTo
+                        )
+                    }, requireContext()) {
+                        val action = TripsViewDirections.actionTripsViewToTripDetailsView()
+                        action.tripId = it.id
+                        action.tripTitle = it.title
+                        action.tripDateFrom = dateFormater.format(it.dateFrom)
+                        action.tripDateTo = dateFormater.format(it.dateTo)
+                        findNavController().navigate(action)
+                    }
+            }
         })
     }
 
