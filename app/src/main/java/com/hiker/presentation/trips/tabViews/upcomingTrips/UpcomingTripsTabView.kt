@@ -12,9 +12,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiker.R
+import com.hiker.domain.consts.OperationType
 import com.hiker.presentation.trips.TripsViewDirections
 import com.hiker.presentation.trips.tabViews.Trip
 import com.hiker.presentation.trips.tabViews.TripAdapter
+import com.hiker.presentation.trips.tripDetails.TripDetailsViewDirections
 import kotlinx.android.synthetic.main.fragment_upcoming_trips_tab_view.*
 import java.text.SimpleDateFormat
 
@@ -40,7 +42,8 @@ class UpcomingTripsTabView : Fragment() {
 
     private fun setupOnClicks(){
         upcomingTripsView_addTrip_button.setOnClickListener {
-            findNavController().navigate(R.id.tripFormView)
+            val action = TripsViewDirections.actionTripsViewToTripFormView(OperationType.Add, null, null, null, null, -1)
+            findNavController().navigate(action)
         }
     }
 

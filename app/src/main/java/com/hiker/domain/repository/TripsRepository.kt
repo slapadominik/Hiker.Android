@@ -1,6 +1,7 @@
 package com.hiker.domain.repository
 
 
+import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.query.TripQuery
 import com.hiker.domain.entities.TripBrief
@@ -14,4 +15,5 @@ interface TripsRepository {
     suspend fun getTrip(tripId: Int) : TripQuery
     suspend fun addTrip(tripCommand: TripCommand) : Int
     suspend fun deleteTrip(tripId: Int)
+    suspend fun editTrip(tripId: Int, editTripCommand: EditTripCommand)
 }

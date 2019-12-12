@@ -1,7 +1,5 @@
 package com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip
 
-
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
@@ -19,17 +17,16 @@ import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
+import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.command.TripDestinationCommand
-import com.hiker.data.remote.dto.query.UserBrief
+import com.hiker.domain.consts.OperationType
 import com.hiker.domain.entities.Mountain
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.tripForm_searchView_1
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class TripFormView : Fragment() {
 
     private val beginTripCalendar = Calendar.getInstance()
@@ -40,12 +37,6 @@ class TripFormView : Fragment() {
     private val tripDestinations : MutableMap<Int, TripDestinationCommand> = mutableMapOf()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            showAlertDialog()
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,8 +47,27 @@ class TripFormView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModels()
-        tipFormView_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_20dp)
-        setupOnClickListeners()
+        arguments?.let {
+            val safeArgs = TripFormViewArgs.fromBundle(it)
+            if (safeArgs.operationType == OperationType.Add){
+                tipFormView_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_20dp)
+                setupAddOnclickListeners()
+                requireActivity().onBackPressedDispatcher.addCallback(this) {
+                    showAlertDialog()
+                }
+            }
+            if (safeArgs.operationType == OperationType.Edit){
+                tipFormView_toolbar.title = "Edytuj wycieczkę"
+                setupEditOnclickListeners(safeArgs.tripId)
+                fillTextFields(safeArgs.tripTitle, safeArgs.tripDescription)
+            }
+            setupOnClickListeners()
+        }
+    }
+
+    private fun fillTextFields(tripTitle: String?, tripDescription: String?){
+        fragment_trip_form_view_tripTitle.setText(tripTitle)
+        fragment_trip_form_view_description.setText(tripDescription)
     }
 
     private fun showAlertDialog() : androidx.appcompat.app.AlertDialog{
@@ -70,11 +80,95 @@ class TripFormView : Fragment() {
             .setNegativeButton("Nie", /* listener = */ null)
             .show()
     }
-    private fun setupOnClickListeners(){
+
+    private fun setupAddOnclickListeners(){
         tipFormView_toolbar.setNavigationOnClickListener {
             showAlertDialog()
         }
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
+        upcomingTripsView_submit_button.setOnClickListener{
+            val trip = TripCommand(
+                tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
+                authorId = userSystemId!!,
+                dateFrom = beginTripCalendar.time,
+                dateTo = endTripCalendar.time,
+                description = fragment_trip_form_view_description.text.toString(),
+                tripDestinations = tripDestinations.values.toList()
+            )
+            Log.i("TripFormView",
+                "tripTitle: ${trip.tripTitle}, " +
+                        "authorId: ${trip.authorId}," +
+                        "dateFrom: ${trip.dateFrom}, " +
+                        "dateTo: ${trip.dateTo}," +
+                        "description: ${trip.description}")
+            try{
+                tripFormViewModel.addTrip(trip).observe(this, Observer { tripId -> findNavController().popBackStack()})
+            }
+            catch (ex: Exception){
+                Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
+    private fun setupEditOnclickListeners(tripId: Int){
+        upcomingTripsView_submit_button.setOnClickListener {
+            Log.d("TripFormView", "OperationType = EDIT")
+        }
+        upcomingTripsView_submit_button.setOnClickListener{
+            try{
+                tripFormViewModel.editTrip(
+                    tripId,
+                    EditTripCommand(fragment_trip_form_view_tripTitle.text.toString(),
+                        beginTripCalendar.time,
+                        endTripCalendar.time,
+                        description = fragment_trip_form_view_description.text.toString(),
+                        tripDestinations = tripDestinations.values.toList()))
+            }
+            catch (ex: Exception){
+                Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun setupOnClickListeners(){
+        tripForm_beginDate_editText.setOnClickListener{
+            DatePickerDialog(requireContext(), {view, year, month, day ->
+                beginTripCalendar.set(year, month, day)
+                tripForm_beginDate_editText.setText(dateFormater.format(beginTripCalendar.time))
+            }, beginTripCalendar.get(Calendar.YEAR), beginTripCalendar.get(Calendar.MONTH), beginTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+        tripForm_endDate_editText.setOnClickListener{
+            DatePickerDialog(requireContext(), {view, year, month, day ->
+                endTripCalendar.set(year, month, day)
+                val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
+                tripForm_endDate_editText.setText(sdf.format(endTripCalendar.time))
+            }, endTripCalendar.get(Calendar.YEAR), endTripCalendar.get(Calendar.MONTH), endTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+        tripFormViewModel.getMountains().observe(viewLifecycleOwner, Observer { mountains ->
+            this.mountains = mountains
+            val adapter = MountainArrayAdapter(
+                requireContext(), // Context
+                android.R.layout.simple_dropdown_item_1line, // Layout
+                mountains
+            )
+            tripForm_searchView_1.setAdapter(adapter)
+        })
+        tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
+            val selectedItem =  parent.getItemAtPosition(position) as Mountain
+            tripDestinations.put(1,
+                TripDestinationCommand(
+                    type = 1,
+                    mountainId = selectedItem.id,
+                    rockId = null
+                )
+            )
+        }
+
+        trip_form_removeDestinationBtn.setOnClickListener{
+            tripForm_destinations_layout.removeView(tripForm_destinationRowLayout)
+            tripDestinations.remove(1)
+        }
         upcomingTripsView_addDestination_button.setOnClickListener {
             val destinationRowView = requireActivity().layoutInflater.inflate(R.layout.upcoming_trips_destination_field, null)
             val adapter = MountainArrayAdapter(
@@ -100,75 +194,6 @@ class TripFormView : Fragment() {
                 )
             }
             tripForm_destinations_layout.addView(destinationRowView, tripForm_destinations_layout.childCount)
-        }
-
-        tripForm_beginDate_editText.setOnClickListener{
-            DatePickerDialog(requireContext(), {view, year, month, day ->
-                beginTripCalendar.set(year, month, day)
-                tripForm_beginDate_editText.setText(dateFormater.format(beginTripCalendar.time))
-            }, beginTripCalendar.get(Calendar.YEAR), beginTripCalendar.get(Calendar.MONTH), beginTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
-        }
-
-        tripForm_endDate_editText.setOnClickListener{
-            DatePickerDialog(requireContext(), {view, year, month, day ->
-                endTripCalendar.set(year, month, day)
-                val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
-                tripForm_endDate_editText.setText(sdf.format(endTripCalendar.time))
-            }, endTripCalendar.get(Calendar.YEAR), endTripCalendar.get(Calendar.MONTH), endTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
-        }
-
-        tripFormViewModel.getMountains().observe(viewLifecycleOwner, Observer { mountains ->
-            this.mountains = mountains
-            val adapter = MountainArrayAdapter(
-                requireContext(), // Context
-                android.R.layout.simple_dropdown_item_1line, // Layout
-                mountains
-            )
-            tripForm_searchView_1.setAdapter(adapter)
-        })
-
-
-        tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
-            val selectedItem =  parent.getItemAtPosition(position) as Mountain
-            tripDestinations.put(1,
-                TripDestinationCommand(
-                    type = 1,
-                    mountainId = selectedItem.id,
-                    rockId = null
-                )
-            )
-        }
-
-        trip_form_removeDestinationBtn.setOnClickListener{
-            tripForm_destinations_layout.removeView(tripForm_destinationRowLayout)
-            tripDestinations.remove(1)
-        }
-
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
-
-        upcomingTripsView_submit_button.setOnClickListener{
-
-            val trip = TripCommand(
-                tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
-                authorId = userSystemId!!,
-                dateFrom = beginTripCalendar.time,
-                dateTo = endTripCalendar.time,
-                description = fragment_trip_form_view_description.text.toString(),
-                tripDestinations = tripDestinations.values.toList()
-            )
-            Log.i("TripFormView",
-                    "tripTitle: ${trip.tripTitle}, " +
-                    "authorId: ${trip.authorId}," +
-                    "dateFrom: ${trip.dateFrom}, " +
-                    "dateTo: ${trip.dateTo}," +
-                    "description: ${trip.description}")
-            try{
-                tripFormViewModel.addTrip(trip).observe(this, Observer { tripId -> findNavController().popBackStack()})
-            }
-            catch (ex: Exception){
-                Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
-            }
         }
     }
 

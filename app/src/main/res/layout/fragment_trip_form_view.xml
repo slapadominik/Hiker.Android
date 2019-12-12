@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:minHeight="?attr/actionBarSize"
-            app:title="Utwórz wycieczkę"
+            app:title="@string/toolbar_add_trip_title"
             android:elevation="2dp">
 
     </androidx.appcompat.widget.Toolbar>

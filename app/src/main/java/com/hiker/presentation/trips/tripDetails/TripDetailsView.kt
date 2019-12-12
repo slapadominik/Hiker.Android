@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
 import com.hiker.data.converters.asDomainModel
+import com.hiker.domain.consts.OperationType
 import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.exceptions.TypeNotSupportedException
@@ -102,7 +103,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         try{
             tripsDetailsViewModel.getTrip(tripId).observe(this, Observer { trip ->
                 if (trip.author.id == userSystemId){
-                    showToolbarMenu(trip.id)
+                    showToolbarMenu(trip.id, trip.tripTitle, trip.description)
                 }
                 if (!trip.tripParticipants.any { x -> x.id ==  userSystemId} && trip.author.id != userSystemId){
                     trip_details_joinTripButton.visibility = View.VISIBLE
@@ -130,7 +131,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun showToolbarMenu(tripId: Int){
+    private fun showToolbarMenu(tripId: Int, tripTitle: String, tripDescription: String){
         val toolbar = view?.findViewById<Toolbar>(R.id.trip_details_toolbar)
         toolbar?.inflateMenu(R.menu.trip_details_menu)
         val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_config_icon)
@@ -138,6 +139,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId){
                 R.id.trip_details_menu_delete -> showDeleteAlertDialog(tripId)
+                R.id.trip_details_menu_edit -> showEditTripView(tripId, tripTitle, tripDescription)
             }
             false
         }
@@ -153,6 +155,11 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
             }
             .setNegativeButton("Nie", /* listener = */ null)
             .show()
+    }
+
+    private fun showEditTripView(tripId: Int, tripTitle: String, tripDescription: String){
+        val action = TripDetailsViewDirections.actionTripDetailsViewToTripFormView(OperationType.Edit, tripTitle, tripDescription, null, null, tripId)
+        findNavController().navigate(action)
     }
 
     private fun setUpTextViews(tripTitle: String, tripDateFrom: String, tripDateTo: String)

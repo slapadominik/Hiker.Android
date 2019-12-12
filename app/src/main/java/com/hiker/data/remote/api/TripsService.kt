@@ -5,6 +5,7 @@ import com.hiker.BuildConfig
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.TripBrief
 import com.hiker.data.remote.dto.TripParticipant
+import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.query.TripQuery
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -44,6 +45,9 @@ interface TripsService {
     @POST("trips/{tripId}/tripParticipants")
     suspend fun addTripParticipant(@Path("tripId") tripId: Int,
                                    @Body tripParticipant: TripParticipant) : Response<Void>
+
+    @PATCH("trips/{tripId}")
+    suspend fun editTrip(@Path("tripId") tripId: Int, @Body editTripCommand: EditTripCommand) : Response<Void>
 
     @DELETE("trips/{tripId}/tripParticipants")
     suspend fun removeTripParticipant(@Path("tripId") tripId: Int, @Query("userId") userId: String) : Response<Void>

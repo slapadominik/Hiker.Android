@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.domain.entities.Mountain
 import com.hiker.domain.repository.MountainsRepository
@@ -24,5 +25,11 @@ class TripFormViewModel(private val mountainsRepository: MountainsRepository, pr
             tripId.value = tripsRepository.addTrip(tripCommand)
         }
         return tripId
+    }
+
+    fun editTrip(tripId: Int, editTripCommand: EditTripCommand){
+        viewModelScope.launch {
+            tripsRepository.editTrip(tripId, editTripCommand)
+        }
     }
 }

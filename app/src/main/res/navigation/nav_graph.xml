@@ -22,6 +22,9 @@
         <action
                 android:id="@+id/action_tripsView_to_tripDetailsView"
                 app:destination="@id/tripDetailsView" />
+        <action
+                android:id="@+id/action_tripsView_to_tripFormView"
+                app:destination="@id/tripFormView" />
     </fragment>
     <fragment
             android:id="@+id/mountainDetailsView"
@@ -63,7 +66,30 @@
             android:id="@+id/tripFormView"
             android:name="com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip.TripFormView"
             android:label="fragment_trip_form_view"
-            tools:layout="@layout/fragment_trip_form_view" />
+            tools:layout="@layout/fragment_trip_form_view" >
+        <argument
+                android:name="operationType"
+                app:argType="integer" />
+        <argument
+                android:name="tripTitle"
+                app:argType="string"
+                app:nullable="true" />
+        <argument
+                android:name="tripDateFrom"
+                app:argType="string"
+                app:nullable="true" />
+        <argument
+                android:name="tripDateTo"
+                app:argType="string"
+                app:nullable="true" />
+        <argument
+                android:name="tripDescription"
+                app:argType="string"
+                app:nullable="true" />
+        <argument
+                android:name="tripId"
+                app:argType="integer" />
+    </fragment>
     <fragment
             android:id="@+id/tripDetailsView"
             android:name="com.hiker.presentation.trips.tripDetails.TripDetailsView"
@@ -85,5 +111,8 @@
                 android:name="tripDateTo"
                 android:defaultValue="0"
                 app:argType="string" />
+        <action
+                android:id="@+id/action_tripDetailsView_to_tripFormView"
+                app:destination="@id/tripFormView" />
     </fragment>
 </navigation>

@@ -7,6 +7,7 @@ import com.hiker.data.db.dao.TripParticipantDao
 import com.hiker.data.db.dao.UserBriefDao
 import com.hiker.data.remote.api.TripsService
 import com.hiker.data.remote.dto.TripParticipant
+import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.query.TripQuery
 import com.hiker.domain.entities.TripBrief
@@ -20,7 +21,6 @@ import java.util.concurrent.TimeUnit
 
 class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
                           private val userBriefDao: UserBriefDao) : TripsRepository {
-
     private val tripsService = TripsService.create()
     private val dateFormater = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
 
@@ -29,6 +29,14 @@ class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
         if (!response.isSuccessful){
             throw ApiException(response.message().toString())
         }
+    }
+
+    override suspend fun editTrip(tripId: Int, editTripCommand: EditTripCommand) {
+        val response = tripsService.editTrip(tripId, editTripCommand)
+        if (!response.isSuccessful){
+            throw ApiException(response.message().toString())
+        }
+
     }
 
     override suspend fun getTrip(tripId: Int): TripQuery {
