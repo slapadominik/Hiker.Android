@@ -88,25 +88,33 @@ class TripFormView : Fragment() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
         upcomingTripsView_submit_button.setOnClickListener{
-            val trip = TripCommand(
-                tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
-                authorId = userSystemId!!,
-                dateFrom = beginTripCalendar.time,
-                dateTo = endTripCalendar.time,
-                description = fragment_trip_form_view_description.text.toString(),
-                tripDestinations = tripDestinations.values.toList()
-            )
-            Log.i("TripFormView",
-                "tripTitle: ${trip.tripTitle}, " +
-                        "authorId: ${trip.authorId}," +
-                        "dateFrom: ${trip.dateFrom}, " +
-                        "dateTo: ${trip.dateTo}," +
-                        "description: ${trip.description}")
-            try{
-                tripFormViewModel.addTrip(trip).observe(this, Observer { tripId -> findNavController().popBackStack()})
+            if (fragment_trip_form_view_tripTitle.text.toString().isEmpty()) {
+                fragment_trip_form_view_tripTitle.error = "Nazwa jest wymagana"
             }
-            catch (ex: Exception){
-                Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
+            else if (tripDestinations.isEmpty()){
+
+            }
+            else{
+                val trip = TripCommand(
+                    tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
+                    authorId = userSystemId!!,
+                    dateFrom = beginTripCalendar.time,
+                    dateTo = endTripCalendar.time,
+                    description = fragment_trip_form_view_description.text.toString(),
+                    tripDestinations = tripDestinations.values.toList()
+                )
+                Log.i("TripFormView",
+                    "tripTitle: ${trip.tripTitle}, " +
+                            "authorId: ${trip.authorId}," +
+                            "dateFrom: ${trip.dateFrom}, " +
+                            "dateTo: ${trip.dateTo}," +
+                            "description: ${trip.description}")
+                try{
+                    tripFormViewModel.addTrip(trip).observe(this, Observer { tripId -> findNavController().popBackStack()})
+                }
+                catch (ex: Exception){
+                    Toast.makeText(requireContext(),ex.message,Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

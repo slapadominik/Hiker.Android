@@ -10,7 +10,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:fontFamily="@font/roboto" />
 
     <TextView
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="."
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:fontFamily="@font/roboto"/>
 
     <TextView
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:text="Nazwa celu"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:fontFamily="@font/roboto" />
 
     <TextView
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=","
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:fontFamily="@font/roboto"/>
 
     <TextView
@@ -44,6 +44,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:text="szczegóły celu"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:fontFamily="@font/roboto" />
 </LinearLayout>
