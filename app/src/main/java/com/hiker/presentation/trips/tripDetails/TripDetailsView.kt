@@ -33,6 +33,7 @@ import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.exceptions.TypeNotSupportedException
 import kotlinx.android.synthetic.main.fragment_trip_details_view.*
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -102,7 +103,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     private fun getTripDetails(tripId: Int, userSystemId: UUID){
         try{
             tripsDetailsViewModel.getTrip(tripId).observe(this, Observer { trip ->
-                if (trip.author.id == userSystemId){
+                if (trip.author.id == userSystemId && trip.dateTo > Calendar.getInstance().time){
                     showToolbarMenu(trip.id, trip.tripTitle, trip.description)
                 }
                 if (!trip.tripParticipants.any { x -> x.id ==  userSystemId} && trip.author.id != userSystemId){

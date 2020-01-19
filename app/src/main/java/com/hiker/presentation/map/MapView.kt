@@ -2,13 +2,11 @@ package com.hiker.presentation.map
 
 
 import android.Manifest
+import android.app.SearchManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
+import android.database.MatrixCursor
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,22 +17,25 @@ import com.google.android.gms.maps.*
 import com.hiker.R
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.util.Log
-import androidx.activity.OnBackPressedCallback
+import android.provider.BaseColumns
+import android.view.*
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.annotation.DrawableRes
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.cursoradapter.widget.CursorAdapter
+import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.navigation.fragment.findNavController
-import com.facebook.AccessToken
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.domain.entities.Mountain
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_map_view.*
-import kotlinx.android.synthetic.main.fragment_mountain_trips_view.*
 
 const val MapViewBundleKey = "MapViewBundleKey"
 
@@ -42,7 +43,6 @@ class MapView : Fragment(), OnMapReadyCallback {
 
     private lateinit var googleMapView: com.google.android.gms.maps.MapView
     private lateinit var googleMap : GoogleMap
-    private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mapViewModel : MapViewModel
     private lateinit var mountainCustomInfoWindow : ConstraintLayout
@@ -76,6 +76,7 @@ class MapView : Fragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        showToolbarMenu()
         initViewModels()
         bindMountainsToMap()
     }
@@ -113,12 +114,35 @@ class MapView : Fragment(), OnMapReadyCallback {
         googleMap.isMyLocationEnabled = true
         fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity()) { location ->
             if (location != null) {
-                lastLocation = location
-                val currentLatLng = LatLng(location.latitude, location.longitude)
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 7.5f))
+                val currentLocation = CameraUpdateFactory.newLatLngZoom( LatLng(location.latitude, location.longitude), 7.5f)
+                googleMap.moveCamera(currentLocation)
             }
         }
     }
+
+    private fun showToolbarMenu() {
+        val toolbar = view?.findViewById<Toolbar>(R.id.mapview_toolbar)
+        toolbar?.inflateMenu(R.menu.search_menu)
+        val searchView =  toolbar?.menu?.findItem(R.id.action_search)?.actionView as SearchView
+        val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
+        val to = intArrayOf(R.id.item_label)
+        val cursorAdapter = SimpleCursorAdapter(context, R.layout.search_item, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+        val suggestions = listOf("Apple", "Blueberry", "Carrot", "Daikon")
+        searchView.suggestionsAdapter = cursorAdapter
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Toast.makeText(requireContext(), "Siema", Toast.LENGTH_LONG).show()
+                return false
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                Toast.makeText(requireContext(), "Siema", Toast.LENGTH_LONG).show()
+                return true
+            }
+        })
+    }
+
 
     private fun setUpMountainInfoWindow(map : GoogleMap){
         map.setOnMapClickListener {

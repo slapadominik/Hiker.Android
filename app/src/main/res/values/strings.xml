@@ -15,4 +15,5 @@
     <string name="delete">Usuń</string>
     <string name="edit">Edytuj</string>
     <string name="toolbar_add_trip_title">Utwórz wycieczkę</string>
+    <string name="search_mountains">Szukaj celu...</string>
 </resources>
