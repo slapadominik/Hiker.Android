@@ -1,33 +1,18 @@
 package com.hiker.data.converters
 
 import com.hiker.data.db.entity.UserBrief
-import com.hiker.data.remote.dto.MountainTrailBrief
 import com.hiker.domain.entities.*
 
 
-fun com.hiker.data.remote.dto.MountainBrief.asDomainModel() = Mountain(
+fun com.hiker.data.remote.dto.MountainBrief.asDbModel() = com.hiker.data.db.entity.Mountain(
     id = id,
     name = name,
     metersAboveSeaLevel = metersAboveSeaLevel,
-    location = Location(location.latitude, location.longitude, location.regionName),
-    trails = MountainTrailBrief(trails.href, trails.count),
-    upcomingTripsCount = upcomingTripsCount
-)
-
-fun com.hiker.data.db.entity.Mountain.asDomainModel() = Mountain(
-    id = id,
-    name = name,
-    metersAboveSeaLevel = metersAboveSeaLevel,
-    location = null,
-    trails = null,
-    upcomingTripsCount = null
-)
-
-fun Mountain.asDatabaseModel() = com.hiker.data.db.entity.Mountain(
-    id = id,
-    name = name,
-    metersAboveSeaLevel = metersAboveSeaLevel
-)
+    latitude = location.latitude,
+    longitude = location.longitude,
+    upcomingTripsCount = upcomingTripsCount,
+    regionName = location.regionName,
+    lastModified = null)
 
 fun com.hiker.data.remote.dto.User.asDomainModel() = User(
     id = id.toString(),

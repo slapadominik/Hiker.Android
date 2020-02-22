@@ -30,38 +30,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/corner_radius_shape"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.466"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp">
+            tools:visibility="visible">
 
         <Button
                 android:id="@+id/mountain_details_button"
-                android:text="Szczegóły"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_weight="1"
-                android:textSize="10sp"
-                android:color="@color/colorPrimary" android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="8dp"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout" app:layout_constraintVertical_bias="1.0"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorPrimary"
+                android:color="@color/colorPrimary"
+                android:text="Szczegóły"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="1.0" />
+
         <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp">
+                app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                     android:id="@+id/marker_object_name"
@@ -69,31 +77,37 @@
                     android:layout_height="wrap_content"
                     android:text="Giewont"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                 <TextView
                         android:id="@+id/marker_object_regionName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tatry"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
+
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=", "/>
+                        android:text=", " />
+
                 <TextView
                         android:id="@+id/marker_object_metersAboveSeaLevel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1000" android:textSize="13sp"/>
+                        android:text="1000"
+                        android:textSize="13sp" />
+
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" m. n.p.m." android:textSize="13sp"/>
+                        android:text=" m. n.p.m."
+                        android:textSize="13sp" />
             </LinearLayout>
 
 
@@ -101,10 +115,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nadchodzące wycieczki: " android:textSize="13sp"/>
+                        android:text="Nadchodzące wycieczki: "
+                        android:textSize="13sp" />
 
                 <TextView
                         android:id="@+id/marker_object_tripsCount"
@@ -129,5 +145,20 @@
                 app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/mapview_search_trip_button"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/mapview_toolbar"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="21dp"
+            android:layout_marginBottom="81dp"
+            android:backgroundTint="@color/colorPrimary"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+            app:srcCompat="@drawable/ic_track_changes_white_28dp" />
 
 </RelativeLayout>

@@ -17,11 +17,11 @@ import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
+import com.hiker.data.db.entity.Mountain
 import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.command.TripDestinationCommand
 import com.hiker.domain.consts.OperationType
-import com.hiker.domain.entities.Mountain
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.tripForm_searchView_1

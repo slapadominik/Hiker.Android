@@ -7,7 +7,6 @@ class MountainBrief(
     @SerializedName("name") val name: String,
     @SerializedName("metersAboveSeaLevel") val metersAboveSeaLevel: Int,
     @SerializedName("location") val location : Location,
-    @SerializedName("upcomingTripsCount") val upcomingTripsCount : Int,
-    @SerializedName("trails") val trails: MountainTrailBrief
+    @SerializedName("upcomingTripsCount") val upcomingTripsCount : Int
 )
 

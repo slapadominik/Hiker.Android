@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
+import com.hiker.data.converters.asDbModel
 import com.hiker.data.converters.asDomainModel
 import com.hiker.domain.consts.OperationType
 import com.hiker.domain.consts.TripDestinationType
@@ -114,7 +115,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
                 }
                 trip_details_description.text = trip.description
                 trip_destination_destinationsList.layoutManager = LinearLayoutManager(activity)
-                trip_destination_destinationsList.adapter = TripDestinationAdapter(trip.tripDestinations!!.mapIndexed { index, td -> TripDestination(index,td.type, td.mountainBrief?.asDomainModel(), td.rock?.asDomainModel()) })
+                trip_destination_destinationsList.adapter = TripDestinationAdapter(trip.tripDestinations!!.mapIndexed { index, td -> TripDestination(index,td.type, td.mountainBrief?.asDbModel(), td.rock?.asDomainModel()) })
                 val destinationsLocations = trip.tripDestinations.map { x ->
                     if (x.type == TripDestinationType.Mountain){
                         LatLng(x.mountainBrief!!.location.latitude, x.mountainBrief.location.longitude)

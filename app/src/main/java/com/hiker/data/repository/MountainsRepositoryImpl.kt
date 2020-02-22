@@ -1,19 +1,21 @@
 package com.hiker.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.hiker.data.converters.asDatabaseModel
+import com.hiker.data.converters.asDbModel
 import com.hiker.data.converters.asDomainModel
 import com.hiker.data.db.dao.MountainsDao
+import com.hiker.data.db.entity.Mountain
 import com.hiker.data.remote.api.MountainsService
-import com.hiker.domain.entities.Mountain
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.repository.MountainsRepository
+import java.util.concurrent.TimeUnit
 
 class MountainsRepositoryImpl(private val mountainsDao: MountainsDao) : MountainsRepository{
 
     private val mountainsService = MountainsService.create()
-
 
     override suspend fun getById(mountainId: Int) : com.hiker.data.remote.dto.Mountain {
         val response = mountainsService.getById(mountainId)
@@ -22,24 +24,23 @@ class MountainsRepositoryImpl(private val mountainsDao: MountainsDao) : Mountain
         else throw ApiException(response.errorBody()?.string())
     }
 
-    override fun getAllFromDb(): LiveData<List<Mountain>> {
-        return Transformations.map(mountainsDao.getMountains()) {
-            it.map { m -> m.asDomainModel() }
+    override suspend fun getAll(fetchFromRemote: Boolean): LiveData<List<Mountain>> {
+        if (fetchFromRemote){
+            val response = mountainsService.getAll()
+            if (response.isSuccessful){
+                val dbModels = response.body()!!.map { m -> m.asDbModel()}
+                mountainsDao.addMountains(dbModels)
+            }
+            else{
+                Log.i("MountainsRepositoryImpl", "not respond")
+            }
         }
-    }
-
-    override suspend fun getAll(): List<Mountain>? {
-       val response = mountainsService.getAll()
-        return if (response.isSuccessful)
-            response.body()!!.map { m -> m.asDomainModel() }
-        else null
-    }
-
-    override suspend fun addMountains(mountains: List<Mountain>) {
-        mountainsDao.addMountains(mountains.map { m -> m.asDatabaseModel()})
+        return mountainsDao.getMountains()
     }
 
     companion object {
+        val FRESH_TIMEOUT = TimeUnit.DAYS.toMillis(1)
+
         private var instance: MountainsRepositoryImpl? = null
 
         @Synchronized

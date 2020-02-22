@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6b23b8fdad4456741c1205d6619dc069",
+    "identityHash": "8fd18e43559f29795812293306faf846",
     "entities": [
       {
         "tableName": "User",
@@ -56,7 +56,7 @@
       },
       {
         "tableName": "Mountain",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `metersAboveSeaLevel` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `metersAboveSeaLevel` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `upcomingTripsCount` INTEGER NOT NULL, `regionName` TEXT NOT NULL, `last_modified` INTEGER DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -75,6 +75,37 @@
             "columnName": "metersAboveSeaLevel",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "upcomingTripsCount",
+            "columnName": "upcomingTripsCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "regionName",
+            "columnName": "regionName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastModified",
+            "columnName": "last_modified",
+            "affinity": "INTEGER",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
           }
         ],
         "primaryKey": {
@@ -155,7 +186,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b23b8fdad4456741c1205d6619dc069')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8fd18e43559f29795812293306faf846')"
     ]
   }
 }

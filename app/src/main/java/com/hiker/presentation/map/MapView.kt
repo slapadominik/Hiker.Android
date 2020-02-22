@@ -19,6 +19,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.provider.BaseColumns
 import android.view.*
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
@@ -32,7 +33,7 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.hiker.domain.entities.Mountain
+import com.hiker.data.db.entity.Mountain
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_map_view.*
@@ -90,16 +91,15 @@ class MapView : Fragment(), OnMapReadyCallback {
     }
 
     private fun bindMountainsToMap(){
-        mapViewModel.getAllMountains().observe(this, Observer { mountains ->
+        mapViewModel.getMountains().observe(this, Observer { mountains ->
             mountains.forEach { mountain -> setUpMarker(mountain) }
-            mapViewModel.addMountains(mountains)
         })
     }
 
 
     private fun setUpMarker(mountain: Mountain){
         val marker = googleMap.addMarker(MarkerOptions()
-            .position(LatLng(mountain.location!!.latitude, mountain.location.longitude))
+            .position(LatLng(mountain.latitude, mountain.longitude))
             .title(mountain.name)
             .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips)))
         mountainsMarkers[marker] = mountain
@@ -124,20 +124,28 @@ class MapView : Fragment(), OnMapReadyCallback {
         val toolbar = view?.findViewById<Toolbar>(R.id.mapview_toolbar)
         toolbar?.inflateMenu(R.menu.search_menu)
         val searchView =  toolbar?.menu?.findItem(R.id.action_search)?.actionView as SearchView
+        searchView.findViewById<AutoCompleteTextView>(R.id.search_src_text).threshold = 1
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
-        val to = intArrayOf(R.id.item_label)
-        val cursorAdapter = SimpleCursorAdapter(context, R.layout.search_item, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+        val to = intArrayOf(android.R.id.text1)
+        val cursorAdapter = SimpleCursorAdapter(context, android.R.layout.simple_dropdown_item_1line, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
         val suggestions = listOf("Apple", "Blueberry", "Carrot", "Daikon")
         searchView.suggestionsAdapter = cursorAdapter
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Toast.makeText(requireContext(), "Siema", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Siema elo", Toast.LENGTH_LONG).show()
                 return false
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
-                Toast.makeText(requireContext(), "Siema", Toast.LENGTH_LONG).show()
+                if (query != null && query.length > 2){
+                    val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+                    suggestions.forEachIndexed { index, suggestion ->
+                        if (suggestion.contains(query, true))
+                            cursor.addRow(arrayOf(index, suggestion))
+                    }
+                    cursorAdapter.changeCursor(cursor)
+                }
                 return true
             }
         })
@@ -148,19 +156,15 @@ class MapView : Fragment(), OnMapReadyCallback {
         map.setOnMapClickListener {
             mountainCustomInfoWindow.visibility = View.INVISIBLE
             bottomNavigationView.visibility = View.VISIBLE
+            mapview_search_trip_button.show()
         }
         map.setOnMarkerClickListener { marker ->
             val mountain = mountainsMarkers[marker]
             if (mountain != null) {
                 marker_object_name.text = mountain.name
-                marker_object_regionName.text = mountain.location!!.regionName
+                marker_object_regionName.text = mountain.regionName
                 marker_object_metersAboveSeaLevel.text = mountain.metersAboveSeaLevel.toString()
-                if (mountain.upcomingTripsCount != null){
-                    marker_object_tripsCount.text = mountain.upcomingTripsCount.toString()
-                }
-                else{
-                    marker_object_tripsCount.text = "0"
-                }
+                marker_object_tripsCount.text = mountain.upcomingTripsCount.toString()
                 mapViewModel.setMountainThumbnail(mountain_info_window_imageview, mountain.id)
             }
             mountain_details_button.setOnClickListener {
@@ -168,13 +172,14 @@ class MapView : Fragment(), OnMapReadyCallback {
                 if (mountain != null) {
                     action.mountainId = mountain.id
                     action.mountainName = mountain.name
-                    action.regionName = mountain.location!!.regionName
+                    action.regionName = mountain.regionName
                     action.metersAboveSea = mountain.metersAboveSeaLevel
                 }
                 findNavController().navigate(action)
             }
             mountainCustomInfoWindow.visibility = View.VISIBLE
             bottomNavigationView.visibility = View.INVISIBLE
+            mapview_search_trip_button.hide()
             true
         }
     }

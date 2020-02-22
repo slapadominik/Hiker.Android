@@ -9,7 +9,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import androidx.annotation.LayoutRes
-import com.hiker.domain.entities.Mountain
+import com.hiker.data.db.entity.Mountain
 
 class MountainArrayAdapter(context: Context,
                            @LayoutRes private val layoutResource: Int,

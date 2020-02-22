@@ -19,4 +19,7 @@ interface MountainsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMountains(mountains: List<Mountain>)
+
+    @Query("SELECT EXISTS (SELECT * FROM Mountain WHERE id == :mountainId AND last_modified >= :refreshTime)")
+    fun hasMountain(mountainId: Int, refreshTime: Long) : Boolean
 }

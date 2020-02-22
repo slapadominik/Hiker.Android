@@ -15,7 +15,7 @@ import com.hiker.data.db.entity.TripParticipant
 import com.hiker.data.db.entity.User
 import com.hiker.data.db.entity.UserBrief
 
-@Database(entities = arrayOf(User::class, Mountain::class, TripParticipant::class, UserBrief::class), version = 1)
+@Database(entities = arrayOf(User::class, Mountain::class, TripParticipant::class, UserBrief::class), version = 2)
 @TypeConverters(DateConverter::class)
 abstract class ApplicationDatabase: RoomDatabase() {
 
@@ -38,7 +38,7 @@ abstract class ApplicationDatabase: RoomDatabase() {
                     context.applicationContext,
                     ApplicationDatabase::class.java,
                     "HikeDatabase.db"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }
