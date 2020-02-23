@@ -17,6 +17,10 @@ class MountainsRepositoryImpl(private val mountainsDao: MountainsDao) : Mountain
 
     private val mountainsService = MountainsService.create()
 
+    override fun getMountainsByName(queryText: String): LiveData<List<Mountain>> {
+        return mountainsDao.getMountainsByName(queryText)
+    }
+
     override suspend fun getById(mountainId: Int) : com.hiker.data.remote.dto.Mountain {
         val response = mountainsService.getById(mountainId)
         return if (response.isSuccessful)

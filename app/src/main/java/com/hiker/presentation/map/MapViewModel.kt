@@ -23,6 +23,10 @@ class MapViewModel(private val mountainsRepository : MountainsRepository) : View
             .into(imageView)
     }
 
+    fun getMountainsByName(queryText: String) : LiveData<List<Mountain>>{
+        return mountainsRepository.getMountainsByName(queryText)
+    }
+
     private fun buildThumbnailUri(mountainId: Int) : String {
         return ApiConsts.HikerAPI+"mountains/$mountainId/thumbnail";
     }

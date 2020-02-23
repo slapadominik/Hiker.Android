@@ -128,23 +128,26 @@ class MapView : Fragment(), OnMapReadyCallback {
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(android.R.id.text1)
         val cursorAdapter = SimpleCursorAdapter(context, android.R.layout.simple_dropdown_item_1line, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
-        val suggestions = listOf("Apple", "Blueberry", "Carrot", "Daikon")
         searchView.suggestionsAdapter = cursorAdapter
+        //val suggestions = listOf("Apple", "Blueberry", "Carrot", "Daikon")
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Toast.makeText(requireContext(), "Siema elo", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), query, Toast.LENGTH_LONG).show()
                 return false
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
-                if (query != null && query.length > 2){
-                    val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
-                    suggestions.forEachIndexed { index, suggestion ->
-                        if (suggestion.contains(query, true))
-                            cursor.addRow(arrayOf(index, suggestion))
-                    }
-                    cursorAdapter.changeCursor(cursor)
+                if (query != null){
+                    val searchText = "%$query%"
+                    mapViewModel.getMountainsByName(searchText).observe(requireActivity(), Observer {
+                        val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+                        it.forEachIndexed { index, mountain ->
+                            if (mountain.name.contains(query, true))
+                                cursor.addRow(arrayOf(index, mountain))
+                        }
+                        cursorAdapter.changeCursor(cursor)
+                    })
                 }
                 return true
             }

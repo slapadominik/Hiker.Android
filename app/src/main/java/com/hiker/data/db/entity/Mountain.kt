@@ -14,4 +14,8 @@ data class Mountain(@PrimaryKey val id: Int,
                     val longitude: Double,
                     val upcomingTripsCount : Int,
                     val regionName: String,
-                    @ColumnInfo(name = "last_modified", defaultValue = "CURRENT_TIMESTAMP") val lastModified: Long?)
+                    @ColumnInfo(name = "last_modified", defaultValue = "CURRENT_TIMESTAMP") val lastModified: Long?){
+    override fun toString(): String {
+        return "$name, $metersAboveSeaLevel m n.p.m."
+    }
+}
