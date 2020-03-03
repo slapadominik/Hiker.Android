@@ -10,10 +10,10 @@ import kotlinx.coroutines.launch
 
 class MountainDetailsViewModel(private val mountainsRepository: MountainsRepository) : ViewModel(){
 
-    fun getMountainDetails(mountainId: Int) : LiveData<Mountain> {
-        val mountain = MutableLiveData<Mountain>()
+    fun getMountainDetails(mountainId: Int) : LiveData<com.hiker.data.remote.dto.Mountain> {
+        val mountain = MutableLiveData<com.hiker.data.remote.dto.Mountain>()
         viewModelScope.launch {
-            mountain.value = mountainsRepository.getById(mountainId)
+            mountain.value = mountainsRepository.getByIdRemote(mountainId)
         }
         return mountain
     }

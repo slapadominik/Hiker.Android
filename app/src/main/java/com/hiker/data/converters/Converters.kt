@@ -14,6 +14,16 @@ fun com.hiker.data.remote.dto.MountainBrief.asDbModel() = com.hiker.data.db.enti
     regionName = location.regionName,
     lastModified = null)
 
+fun com.hiker.data.remote.dto.Mountain.asDbModel() = com.hiker.data.db.entity.Mountain(
+    id = id,
+    name = name,
+    metersAboveSeaLevel = metersAboveSeaLevel,
+    latitude = location.latitude,
+    longitude = location.longitude,
+    upcomingTripsCount = 0,
+    regionName = location.regionName,
+    lastModified = null)
+
 fun com.hiker.data.remote.dto.User.asDomainModel() = User(
     id = id.toString(),
     firstName = firstName,
