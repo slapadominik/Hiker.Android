@@ -68,6 +68,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        setUpToolbarNavigationClick()
         trip_details_participantsList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         trip_details_participantsList.adapter = userBriefAdapter
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
@@ -105,7 +106,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         try{
             tripsDetailsViewModel.getTrip(tripId).observe(this, Observer { trip ->
                 if (trip.author.id == userSystemId && trip.dateTo > Calendar.getInstance().time){
-                    showToolbarMenu(trip.id, trip.tripTitle, trip.description)
+                   setUpToolbarMenu(trip.id, trip.tripTitle, trip.description)
                 }
                 if (!trip.tripParticipants.any { x -> x.id ==  userSystemId} && trip.author.id != userSystemId){
                     trip_details_joinTripButton.visibility = View.VISIBLE
@@ -133,17 +134,22 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun showToolbarMenu(tripId: Int, tripTitle: String, tripDescription: String){
+    private fun setUpToolbarMenu(tripId: Int, tripTitle: String, tripDescription: String){
         val toolbar = view?.findViewById<Toolbar>(R.id.trip_details_toolbar)
         toolbar?.inflateMenu(R.menu.trip_details_menu)
-        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_config_icon)
-        toolbar?.overflowIcon = drawable
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId){
                 R.id.trip_details_menu_delete -> showDeleteAlertDialog(tripId)
                 R.id.trip_details_menu_edit -> showEditTripView(tripId, tripTitle, tripDescription)
             }
             false
+        }
+    }
+
+    private fun setUpToolbarNavigationClick(){
+        val toolbar = view?.findViewById<Toolbar>(R.id.trip_details_toolbar)
+        toolbar?.setNavigationOnClickListener{
+            findNavController().popBackStack()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.hiker.presentation.user
 
+import android.graphics.Color
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +11,12 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.util.*
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.makeramen.roundedimageview.RoundedTransformationBuilder
+
 
 class UserViewModel(private val userRepository: UserRepository) : ViewModel(){
+
 
     fun getUser(userSystemId: UUID) : LiveData<User?> = runBlocking(Dispatchers.IO) {
         userRepository.getUserBySystemId(userSystemId)
@@ -19,8 +24,13 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel(){
 
     fun setMountainThumbnail(imageView: ImageView, userFacebookId: String?){
         if (userFacebookId != null){
+            val transformation = RoundedTransformationBuilder()
+                .cornerRadiusDp(40f)
+                .oval(true)
+                .build()
             Picasso.get()
-                .load(buildImageUri(userFacebookId))
+                .load(buildImageUri(userFacebookId)).fit()
+                .transform(transformation)
                 .into(imageView)
         }
     }

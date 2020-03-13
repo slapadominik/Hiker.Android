@@ -37,6 +37,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.data.db.entity.Mountain
+import com.hiker.data.remote.dto.MountainBrief
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_map_view.*
@@ -53,7 +54,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var searchView: SearchView
-    private val mountainsMarkers = HashMap<Marker, Mountain>()
+    private val mountainsMarkers = HashMap<Marker, MountainBrief>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +84,6 @@ class MapView : Fragment(), OnMapReadyCallback {
         super.onActivityCreated(savedInstanceState)
         showToolbarMenu()
         initViewModels()
-        bindMountainsToMap()
     }
 
 
@@ -97,13 +97,14 @@ class MapView : Fragment(), OnMapReadyCallback {
     private fun bindMountainsToMap(){
         mapViewModel.getMountains().observe(this, Observer { mountains ->
             mountains.forEach { mountain -> setUpMarker(mountain) }
+            mapViewModel.cacheMountains(mountains)
         })
     }
 
 
-    private fun setUpMarker(mountain: Mountain){
+    private fun setUpMarker(mountain: MountainBrief){
         val marker = googleMap.addMarker(MarkerOptions()
-            .position(LatLng(mountain.latitude, mountain.longitude))
+            .position(LatLng(mountain.location.latitude, mountain.location.longitude))
             .title(mountain.name)
             .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips)))
         mountainsMarkers[marker] = mountain
@@ -195,15 +196,15 @@ class MapView : Fragment(), OnMapReadyCallback {
         map.setOnMarkerClickListener { marker ->
             val mountain = mountainsMarkers[marker]
             if (mountain != null) {
-                setMountainWindowData(mountain.id, mountain.name, mountain.regionName, mountain.metersAboveSeaLevel, mountain.upcomingTripsCount)
-                animateCamera(mountain.latitude, mountain.longitude, 9f)
+                setMountainWindowData(mountain.id, mountain.name, mountain.location.regionName, mountain.metersAboveSeaLevel, mountain.upcomingTripsCount)
+                animateCamera(mountain.location.latitude, mountain.location.longitude, 9f)
             }
             mountain_details_button.setOnClickListener {
                 val action = MapViewDirections.actionMapViewToMountainDetailsView()
                 if (mountain != null) {
                     action.mountainId = mountain.id
                     action.mountainName = mountain.name
-                    action.regionName = mountain.regionName
+                    action.regionName = mountain.location.regionName
                     action.metersAboveSea = mountain.metersAboveSeaLevel
                 }
                 findNavController().navigate(action)
@@ -227,11 +228,13 @@ class MapView : Fragment(), OnMapReadyCallback {
     }
 
     private fun setMountainWindowData(mountainId: Int, name: String, regionName: String, metersAboveSeaLevel: Int, upcomingTripsCount: Int){
-        marker_object_name.text = name
-        marker_object_regionName.text = regionName
-        marker_object_metersAboveSeaLevel.text = metersAboveSeaLevel.toString()
-        marker_object_tripsCount.text = upcomingTripsCount.toString()
-        mapViewModel.setMountainThumbnail(mountain_info_window_imageview, mountainId)
+        if (marker_object_name != null && marker_object_regionName != null && marker_object_metersAboveSeaLevel != null){
+            marker_object_name.text = name
+            marker_object_regionName.text = regionName
+            marker_object_metersAboveSeaLevel.text = metersAboveSeaLevel.toString()
+            marker_object_tripsCount.text = upcomingTripsCount.toString()
+            mapViewModel.setMountainThumbnail(mountain_info_window_imageview, mountainId)
+        }
     }
 
     private fun animateCamera(latitude: Double, longitude: Double, zoom: Float){
