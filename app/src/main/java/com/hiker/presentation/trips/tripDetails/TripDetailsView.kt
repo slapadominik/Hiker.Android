@@ -34,6 +34,7 @@ import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.exceptions.TypeNotSupportedException
 import kotlinx.android.synthetic.main.fragment_trip_details_view.*
+import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -137,6 +138,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     private fun setUpToolbarMenu(tripId: Int, tripTitle: String, tripDescription: String){
         val toolbar = view?.findViewById<Toolbar>(R.id.trip_details_toolbar)
         toolbar?.inflateMenu(R.menu.trip_details_menu)
+        toolbar?.overflowIcon= ContextCompat.getDrawable(context!!, R.drawable.ic_more_vert_white_24dp)
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId){
                 R.id.trip_details_menu_delete -> showDeleteAlertDialog(tripId)

@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/trip_details_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:title="Wycieczka"
+            app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:menu="@menu/trip_details_menu"
+            android:elevation="2dp"/>
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -14,16 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/trip_details_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:minHeight="?attr/actionBarSize"
-                    app:title="Wycieczka"
-                    app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
-                    app:menu="@menu/trip_details_menu"
-                    android:elevation="2dp"/>
+
 
             <com.google.android.gms.maps.MapView
                     android:id="@+id/trip_details_mapView"
@@ -152,5 +155,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-</FrameLayout>
+</LinearLayout>
 

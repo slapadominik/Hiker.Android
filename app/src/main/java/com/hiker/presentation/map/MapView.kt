@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.data.db.entity.Mountain
 import com.hiker.data.remote.dto.MountainBrief
+import com.hiker.domain.extensions.setUpMarker
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_map_view.*
@@ -96,18 +97,12 @@ class MapView : Fragment(), OnMapReadyCallback {
 
     private fun bindMountainsToMap(){
         mapViewModel.getMountains().observe(this, Observer { mountains ->
-            mountains.forEach { mountain -> setUpMarker(mountain) }
+            mountains.forEach { mountain ->
+                val marker = googleMap.setUpMarker(mountain.location.latitude, mountain.location.longitude, mountain.name, requireContext())
+                mountainsMarkers[marker] = mountain
+            }
             mapViewModel.cacheMountains(mountains)
         })
-    }
-
-
-    private fun setUpMarker(mountain: MountainBrief){
-        val marker = googleMap.addMarker(MarkerOptions()
-            .position(LatLng(mountain.location.latitude, mountain.location.longitude))
-            .title(mountain.name)
-            .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips)))
-        mountainsMarkers[marker] = mountain
     }
 
     private fun setUpMap() {
@@ -218,13 +213,18 @@ class MapView : Fragment(), OnMapReadyCallback {
     private fun hideMountainWindow(){
         mountainCustomInfoWindow.visibility = View.INVISIBLE
         bottomNavigationView.visibility = View.VISIBLE
-        mapview_search_trip_button.show()
+        if (mapview_search_trip_button != null){
+            mapview_search_trip_button.show()
+        }
     }
 
     private fun showMountainWindow(){
         mountainCustomInfoWindow.visibility = View.VISIBLE
         bottomNavigationView.visibility = View.INVISIBLE
-        mapview_search_trip_button.hide()
+        if ( mapview_search_trip_button != null){
+            mapview_search_trip_button.hide()
+        }
+
     }
 
     private fun setMountainWindowData(mountainId: Int, name: String, regionName: String, metersAboveSeaLevel: Int, upcomingTripsCount: Int){
@@ -240,15 +240,6 @@ class MapView : Fragment(), OnMapReadyCallback {
     private fun animateCamera(latitude: Double, longitude: Double, zoom: Float){
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), zoom)
         googleMap.animateCamera(cameraUpdate)
-    }
-
-    private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {
-        val background = ContextCompat.getDrawable(context, vectorDrawableResourceId)
-        background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
-        val bitmap = Bitmap.createBitmap(background.intrinsicWidth, background.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        background.draw(canvas)
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
     private fun initViewModels() {

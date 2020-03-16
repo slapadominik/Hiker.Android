@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.hiker.R
@@ -17,17 +18,27 @@ import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.hiker.data.db.entity.Mountain
+import com.hiker.data.remote.dto.MountainBrief
 import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.command.TripDestinationCommand
 import com.hiker.domain.consts.OperationType
+import com.hiker.domain.extensions.setUpMarker
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.tripForm_searchView_1
 
 
-class TripFormView : Fragment() {
+class TripFormView : Fragment(), OnMapReadyCallback {
+
 
     private val beginTripCalendar = Calendar.getInstance()
     private val endTripCalendar = Calendar.getInstance()
@@ -35,13 +46,33 @@ class TripFormView : Fragment() {
     private lateinit var tripFormViewModel: TripFormViewModel
     private lateinit var mountains: List<Mountain>
     private val tripDestinations : MutableMap<Int, TripDestinationCommand> = mutableMapOf()
-
+    private lateinit var googleMapView: com.google.android.gms.maps.MapView
+    private lateinit var googleMap : GoogleMap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val markersMap : MutableMap<Int, Marker> = mutableMapOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_trip_form_view, container, false)
+        val view = inflater.inflate(R.layout.fragment_trip_form_view, container, false)
+        googleMapView = view.findViewById(R.id.mapView3)
+        googleMapView.onCreate(savedInstanceState)
+        googleMapView.getMapAsync(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        return view;
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        googleMap.isMyLocationEnabled = true
+        googleMap.uiSettings.isMyLocationButtonEnabled = false
+        fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity()) { location ->
+            if (location != null) {
+                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 7.5f)
+                googleMap.animateCamera(cameraUpdate)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +81,6 @@ class TripFormView : Fragment() {
         arguments?.let {
             val safeArgs = TripFormViewArgs.fromBundle(it)
             if (safeArgs.operationType == OperationType.Add){
-                tipFormView_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_20dp)
                 setupAddOnclickListeners()
                 requireActivity().onBackPressedDispatcher.addCallback(this) {
                     showAlertDialog()
@@ -164,18 +194,24 @@ class TripFormView : Fragment() {
         })
         tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
             val selectedItem =  parent.getItemAtPosition(position) as Mountain
-            tripDestinations.put(1,
-                TripDestinationCommand(
-                    type = 1,
-                    mountainId = selectedItem.id,
-                    rockId = null
-                )
+            val index = 1
+            tripDestinations[index] = TripDestinationCommand(
+                type = 1,
+                mountainId = selectedItem.id,
+                rockId = null
             )
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(selectedItem.latitude, selectedItem.longitude),7.5f))
+            val marker = googleMap.setUpMarker(selectedItem.latitude, selectedItem.longitude, selectedItem.name, requireContext())
+            markersMap[index] = marker
         }
 
         trip_form_removeDestinationBtn.setOnClickListener{
             tripForm_destinations_layout.removeView(tripForm_destinationRowLayout)
-            tripDestinations.remove(1)
+            val index = 1
+            tripDestinations.remove(index)
+            val marker = markersMap[index]
+            marker?.remove()
+            markersMap.remove(index)
         }
         upcomingTripsView_addDestination_button.setOnClickListener {
             val destinationRowView = requireActivity().layoutInflater.inflate(R.layout.upcoming_trips_destination_field, null)
@@ -189,17 +225,21 @@ class TripFormView : Fragment() {
                 val viewRowIndex = (destinationRowView.parent as ViewGroup).indexOfChild(destinationRowView)
                 tripDestinations.remove(viewRowIndex)
                 (destinationRowView.parent as ViewGroup).removeView(destinationRowView)
+                val marker = markersMap[viewRowIndex]
+                marker?.remove()
+                markersMap.remove(viewRowIndex)
             }
             destinationRowView.tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
                 val selectedItem =  parent.getItemAtPosition(position) as Mountain
                 val viewRowIndex = (destinationRowView.parent as ViewGroup).indexOfChild(destinationRowView)
-                tripDestinations.put(viewRowIndex,
-                    TripDestinationCommand(
-                        type = 1,
-                        mountainId = selectedItem.id,
-                        rockId = null
-                    )
+                tripDestinations[viewRowIndex] = TripDestinationCommand(
+                    type = 1,
+                    mountainId = selectedItem.id,
+                    rockId = null
                 )
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(selectedItem.latitude, selectedItem.longitude),7.5f))
+                val marker = googleMap.setUpMarker(selectedItem.latitude, selectedItem.longitude, selectedItem.name, requireContext())
+                markersMap[viewRowIndex] = marker
             }
             tripForm_destinations_layout.addView(destinationRowView, tripForm_destinations_layout.childCount)
         }
@@ -207,5 +247,23 @@ class TripFormView : Fragment() {
 
     private fun initViewModels() {
         tripFormViewModel = ViewModelProviders.of(this, TripFormViewModelFactory(requireContext())).get(TripFormViewModel::class.java)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        googleMapView.onPause()
+    }
+    override fun onResume() {
+        super.onResume()
+        googleMapView.onResume()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        googleMapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        googleMapView.onLowMemory()
     }
 }
