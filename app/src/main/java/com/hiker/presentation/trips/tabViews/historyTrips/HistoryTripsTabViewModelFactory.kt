@@ -10,7 +10,7 @@ class HistoryripsTabViewModelFactory(private val context: Context) : ViewModelPr
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val db = ApplicationDatabase.getDatabase(context)
         return HistoryTripsTabViewModel(
-            TripsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao())
+            TripsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao(), db.tripDao())
         ) as T
     }
 

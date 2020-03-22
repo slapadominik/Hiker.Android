@@ -14,7 +14,7 @@ class TripFormViewModelFactory(private val context: Context) : ViewModelProvider
         return modelClass.getConstructor(MountainLocalRepository::class.java, TripsRepository::class.java)
             .newInstance(
                 MountainLocalRepository.getInstance(db.mountainsDao()),
-                TripsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao())
+                TripsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao(), db.tripDao())
             )
     }
 }

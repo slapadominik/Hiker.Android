@@ -63,7 +63,6 @@ class UserView : Fragment() {
 
     private fun setUpToolbarMenu(){
         val toolbar = view?.findViewById<Toolbar>(R.id.user_profile_toolbar)
-        toolbar?.inflateMenu(R.menu.user_profile_menu)
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId){
                 R.id.nav_first_signout -> logoutDialogShow()

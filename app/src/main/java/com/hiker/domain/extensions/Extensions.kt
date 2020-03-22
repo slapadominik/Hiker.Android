@@ -35,3 +35,9 @@ private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDraw
     background.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bitmap)
 }
+
+fun isNullOrEmpty(str: String?): Boolean {
+    if (str != null && !str.trim().isEmpty())
+        return false
+    return true
+}

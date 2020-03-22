@@ -1,6 +1,8 @@
 package com.hiker.data.converters
 
+import com.hiker.data.db.entity.Trip
 import com.hiker.data.db.entity.UserBrief
+import com.hiker.data.remote.dto.query.TripQuery
 import com.hiker.domain.entities.*
 
 
@@ -77,3 +79,10 @@ fun User.asUserBrief() = UserBrief(
     profilePictureUrl = "https://graph.facebook.com/${facebookId}/picture?width=300&height=300"
 )
 
+fun TripQuery.asDbModel() = Trip(
+    id = id,
+    title = tripTitle,
+    dateFrom = dateFrom,
+    dateTo = dateTo,
+    description = description
+)
