@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -44,7 +45,7 @@ class UserView : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initMapViewModel()
-        setupOnClicks()
+        setUpToolbarMenu()
         setupObservers()
     }
 
@@ -60,18 +61,26 @@ class UserView : Fragment() {
         })
     }
 
-    private fun setupOnClicks(){
-        logoutButton.setOnClickListener {
-            androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Uwaga")
-                .setMessage("Czy chcesz się się wylogować z aplikacji?")
-                .setPositiveButton("Tak") { _, _ ->
-                    LoginManager.getInstance().logOut()
-                    finishAffinity(requireActivity())
-                }
-                .setNegativeButton("Nie", /* listener = */ null)
-                .show()
+    private fun setUpToolbarMenu(){
+        val toolbar = view?.findViewById<Toolbar>(R.id.user_profile_toolbar)
+        toolbar?.setOnMenuItemClickListener {
+            when (it.itemId){
+                R.id.nav_first_signout -> logoutDialogShow()
+            }
+            false
         }
+    }
+
+    private fun logoutDialogShow(){
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Uwaga")
+            .setMessage("Czy chcesz się się wylogować z aplikacji?")
+            .setPositiveButton("Tak") { _, _ ->
+                LoginManager.getInstance().logOut()
+                finishAffinity(requireActivity())
+            }
+            .setNegativeButton("Nie", /* listener = */ null)
+            .show()
     }
     private fun initMapViewModel() {
         userViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(UserViewModel::class.java)

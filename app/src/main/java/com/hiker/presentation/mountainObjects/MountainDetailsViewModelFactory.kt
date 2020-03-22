@@ -1,16 +1,13 @@
 package com.hiker.presentation.mountainObjects
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hiker.data.db.ApplicationDatabase
-import com.hiker.data.repository.MountainsRepositoryImpl
+import com.hiker.data.remote.repository.MountainRemoteRepository
 
-class MountainDetailsViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class MountainDetailsViewModelFactory() : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val db = ApplicationDatabase.getDatabase(context)
         return MountainDetailsViewModel(
-            MountainsRepositoryImpl.getInstance(db.mountainsDao())
+            MountainRemoteRepository.getInstance()
         ) as T
     }
 

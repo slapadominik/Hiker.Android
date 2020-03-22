@@ -27,12 +27,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
+import com.hiker.data.converters.asDbModel
 import com.hiker.data.converters.asDomainModel
 import com.hiker.domain.consts.OperationType
 import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.exceptions.TypeNotSupportedException
 import kotlinx.android.synthetic.main.fragment_trip_details_view.*
+import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -67,6 +69,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        setUpToolbarNavigationClick()
         trip_details_participantsList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         trip_details_participantsList.adapter = userBriefAdapter
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
@@ -104,7 +107,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         try{
             tripsDetailsViewModel.getTrip(tripId).observe(this, Observer { trip ->
                 if (trip.author.id == userSystemId && trip.dateTo > Calendar.getInstance().time){
-                    showToolbarMenu(trip.id, trip.tripTitle, trip.description)
+                   setUpToolbarMenu(trip.id, trip.tripTitle, trip.description)
                 }
                 if (!trip.tripParticipants.any { x -> x.id ==  userSystemId} && trip.author.id != userSystemId){
                     trip_details_joinTripButton.visibility = View.VISIBLE
@@ -114,7 +117,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
                 }
                 trip_details_description.text = trip.description
                 trip_destination_destinationsList.layoutManager = LinearLayoutManager(activity)
-                trip_destination_destinationsList.adapter = TripDestinationAdapter(trip.tripDestinations!!.mapIndexed { index, td -> TripDestination(index,td.type, td.mountainBrief?.asDomainModel(), td.rock?.asDomainModel()) })
+                trip_destination_destinationsList.adapter = TripDestinationAdapter(trip.tripDestinations!!.mapIndexed { index, td -> TripDestination(index,td.type, td.mountainBrief?.asDbModel(), td.rock?.asDomainModel()) })
                 val destinationsLocations = trip.tripDestinations.map { x ->
                     if (x.type == TripDestinationType.Mountain){
                         LatLng(x.mountainBrief!!.location.latitude, x.mountainBrief.location.longitude)
@@ -132,17 +135,23 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun showToolbarMenu(tripId: Int, tripTitle: String, tripDescription: String){
+    private fun setUpToolbarMenu(tripId: Int, tripTitle: String, tripDescription: String){
         val toolbar = view?.findViewById<Toolbar>(R.id.trip_details_toolbar)
         toolbar?.inflateMenu(R.menu.trip_details_menu)
-        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_config_icon)
-        toolbar?.overflowIcon = drawable
+        toolbar?.overflowIcon= ContextCompat.getDrawable(context!!, R.drawable.ic_more_vert_white_24dp)
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId){
                 R.id.trip_details_menu_delete -> showDeleteAlertDialog(tripId)
                 R.id.trip_details_menu_edit -> showEditTripView(tripId, tripTitle, tripDescription)
             }
             false
+        }
+    }
+
+    private fun setUpToolbarNavigationClick(){
+        val toolbar = view?.findViewById<Toolbar>(R.id.trip_details_toolbar)
+        toolbar?.setNavigationOnClickListener{
+            findNavController().popBackStack()
         }
     }
 

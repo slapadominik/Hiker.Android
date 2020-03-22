@@ -6,16 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.hiker.data.db.converters.DateConverter
-import com.hiker.data.db.dao.MountainsDao
-import com.hiker.data.db.dao.TripParticipantDao
-import com.hiker.data.db.dao.UserBriefDao
-import com.hiker.data.db.dao.UserDao
-import com.hiker.data.db.entity.Mountain
-import com.hiker.data.db.entity.TripParticipant
-import com.hiker.data.db.entity.User
-import com.hiker.data.db.entity.UserBrief
+import com.hiker.data.db.dao.*
+import com.hiker.data.db.entity.*
 
-@Database(entities = arrayOf(User::class, Mountain::class, TripParticipant::class, UserBrief::class), version = 1)
+@Database(entities = arrayOf(User::class, Mountain::class, TripParticipant::class, UserBrief::class, Trip::class), version = 3)
 @TypeConverters(DateConverter::class)
 abstract class ApplicationDatabase: RoomDatabase() {
 
@@ -23,6 +17,7 @@ abstract class ApplicationDatabase: RoomDatabase() {
     abstract fun mountainsDao() : MountainsDao
     abstract fun userBriefDao(): UserBriefDao
     abstract fun tripParticipantDao(): TripParticipantDao
+    abstract fun tripDao() : TripDao
 
     companion object {
         @Volatile
@@ -38,7 +33,7 @@ abstract class ApplicationDatabase: RoomDatabase() {
                     context.applicationContext,
                     ApplicationDatabase::class.java,
                     "HikeDatabase.db"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }

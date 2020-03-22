@@ -1,6 +1,6 @@
 package com.hiker.presentation.trips.tripDetails
 
-import com.hiker.domain.entities.Mountain
+import com.hiker.data.db.entity.Mountain
 import com.hiker.domain.entities.Rock
 
 data class TripDestination(

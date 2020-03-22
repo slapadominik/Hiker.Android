@@ -60,7 +60,7 @@ class MountainDetailsView : Fragment() {
     }
 
     private fun initViewModel(){
-        mountainDetailsViewModel = ViewModelProviders.of(this, MountainDetailsViewModelFactory(requireContext())).get(MountainDetailsViewModel::class.java)
+        mountainDetailsViewModel = ViewModelProviders.of(this, MountainDetailsViewModelFactory()).get(MountainDetailsViewModel::class.java)
     }
 
 
