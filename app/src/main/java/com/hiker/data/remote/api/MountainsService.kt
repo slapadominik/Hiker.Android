@@ -8,6 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 
@@ -18,6 +19,11 @@ interface MountainsService {
 
     @GET("mountains")
     suspend fun getAll(): Response<List<MountainBrief>>
+
+    @GET("mountains/upcomingTripsByRadius")
+    suspend fun getMountainsWithUpcomingTripsByRadius(@Query("latitude") latitude: Double,
+                       @Query("longitude")longitude: Double,
+                       @Query("radiusKilometers") radius: Int): Response<List<MountainBrief>>
 
     companion object {
         fun create(): MountainsService {

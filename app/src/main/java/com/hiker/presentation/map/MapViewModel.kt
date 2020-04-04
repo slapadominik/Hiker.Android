@@ -32,6 +32,14 @@ class MapViewModel(private val mountainsRemoteRepository: MountainRemoteReposito
         return mountains
     }
 
+    fun getMountaintsWithUpcomingTripsByRadius(latitude: Double, longitude: Double, radius: Int) : LiveData<List<MountainBrief>> {
+        val mountains = MutableLiveData<List<MountainBrief>>()
+        viewModelScope.launch {
+            mountains.postValue(mountainsRemoteRepository.getMountainsWithUpcomingTripsByRadius(latitude, longitude, radius))
+        }
+        return mountains
+    }
+
     fun setMountainThumbnail(imageView: ImageView, mountainId: Int){
         Picasso.get()
             .load(buildThumbnailUri(mountainId))

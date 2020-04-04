@@ -37,11 +37,12 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import com.hiker.data.remote.dto.MountainBrief
-import com.hiker.domain.extensions.hideKeyboard
-import com.hiker.domain.extensions.setUpMarker
+import com.hiker.domain.extensions.*
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_scan_map_trips.*
 import kotlinx.android.synthetic.main.fragment_map_view.*
 import kotlin.math.log
@@ -61,6 +62,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     private var userLocation: Location? = null
     private var circle: Circle? = null
     private val mountainsMarkers = HashMap<Marker, MountainBrief>()
+    private val markersMountainIds = HashMap<Int, Marker>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,15 +101,16 @@ class MapView : Fragment(), OnMapReadyCallback {
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         setUpMap()
-        fetchMountaints()
+        fetchMountains()
         setUpMountainInfoWindow(googleMap)
     }
 
-    private fun fetchMountaints(){
+    private fun fetchMountains(){
         mapViewModel.getMountains().observe(this, Observer { mountains ->
             mountains.forEach { mountain ->
                 val marker = googleMap.setUpMarker(mountain.location.latitude, mountain.location.longitude, mountain.name, requireContext())
                 mountainsMarkers[marker] = mountain
+                markersMountainIds[mountain.id] = marker
             }
             mapViewModel.cacheMountains(mountains)
         })
@@ -135,14 +138,32 @@ class MapView : Fragment(), OnMapReadyCallback {
                     if (circle != null){
                         circle!!.remove()
                     }
-                    val radiusKilometers = slider.value*1000.0
+                    mountainsMarkers.keys.forEach{marker -> marker.setNormalStyle(requireContext())}
+                    val radiusKilometers = slider.value
                     val circleOptions = CircleOptions()
                         .center(LatLng(userLocation!!.latitude, userLocation!!.longitude))
-                        .radius(radiusKilometers)
+                        .radius(radiusKilometers*1000.0)
                         .strokeWidth(2.0f)
                         .strokeColor(Color.BLUE)
                         .fillColor(Color.parseColor("#400084d3"))
+
                     circle = googleMap.addCircle(circleOptions)
+                    mapViewModel.getMountaintsWithUpcomingTripsByRadius(
+                        userLocation!!.latitude,
+                        userLocation!!.longitude,
+                        radiusKilometers.toInt()).observe(requireActivity(),Observer {
+                        it.forEach{mountain ->
+                            val marker = markersMountainIds[mountain.id]
+                            marker!!.setFilteredStyle(requireContext())
+                        }
+                        var text = "Brak szczytów z wycieczkami"
+                        if (!it.isEmpty()){
+                            text = "Znaleziono ${it.count()} szczyty z wycieczkami"
+                        }
+                        Snackbar.make(relativeLayout,text, Snackbar.LENGTH_LONG)
+                            .setAnchorView(coordinatorLayout)
+                            .show();
+                    })
                     dialog.hide()
                 }
 
@@ -268,7 +289,6 @@ class MapView : Fragment(), OnMapReadyCallback {
             marker_object_regionName.text = regionName
             marker_object_metersAboveSeaLevel.text = metersAboveSeaLevel.toString()
             marker_object_tripsCount.text = upcomingTripsCount.toString()
-            mapViewModel.setMountainThumbnail(mountain_info_window_imageview, mountainId)
         }
     }
 

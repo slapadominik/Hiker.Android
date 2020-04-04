@@ -9,11 +9,21 @@ import java.util.concurrent.TimeUnit
 interface IMountainRemoteRepository {
     suspend fun getAll() : List<MountainBrief>
     suspend fun getById(mountainId: Int) : Mountain
+    suspend fun getMountainsWithUpcomingTripsByRadius(latitude: Double, longitude: Double, radius: Int) : List<MountainBrief>
 }
 
 class MountainRemoteRepository() : IMountainRemoteRepository {
-
     private val mountainsService = MountainsService.create()
+
+    override suspend fun getMountainsWithUpcomingTripsByRadius(latitude: Double, longitude: Double, radius: Int): List<MountainBrief> {
+        val response = mountainsService.getMountainsWithUpcomingTripsByRadius(latitude, longitude, radius)
+        if (response.isSuccessful){
+            return response.body()!!
+        }
+        else{
+            throw ApiException("Request network failed: GET Mountains.")
+        }
+    }
 
     override suspend fun getAll(): List<MountainBrief> {
         val response = mountainsService.getAll()

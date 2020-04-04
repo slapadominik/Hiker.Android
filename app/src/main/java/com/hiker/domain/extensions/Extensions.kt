@@ -30,6 +30,28 @@ fun GoogleMap.setUpMarker(latitude: Double, longitude: Double, title: String, co
     return marker
 }
 
+fun Marker.setIcon(context: Context, @DrawableRes iconLayout: Int){
+    this.setIcon(bitmapDescriptorFromVector(context, iconLayout))
+
+}
+
+fun Marker.setNormalStyle(context: Context){
+    this.setIcon(bitmapDescriptorFromVector(context, R.drawable.ic_marker_pin_0_trips))
+}
+
+fun Marker.setFilteredStyle(context: Context){
+    this.setIcon(bitmapDescriptorFromVectorSize(context, R.drawable.ic_marker_pin_0_trips_red, 90, 90))
+}
+
+private fun bitmapDescriptorFromVectorSize(context: Context, @DrawableRes vectorDrawableResourceId: Int, width: Int, height: Int): BitmapDescriptor {
+    val background = ContextCompat.getDrawable(context, vectorDrawableResourceId)
+    background!!.setBounds(0, 0, width, height)
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    background.draw(canvas)
+    return BitmapDescriptorFactory.fromBitmap(bitmap)
+}
+
 private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {
     val background = ContextCompat.getDrawable(context, vectorDrawableResourceId)
     background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
