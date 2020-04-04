@@ -7,7 +7,7 @@ import com.hiker.domain.entities.*
 
 
 fun com.hiker.data.remote.dto.MountainBrief.asDbModel() = com.hiker.data.db.entity.Mountain(
-    id = id,
+    mountainId = id,
     name = name,
     metersAboveSeaLevel = metersAboveSeaLevel,
     latitude = location.latitude,
@@ -17,7 +17,7 @@ fun com.hiker.data.remote.dto.MountainBrief.asDbModel() = com.hiker.data.db.enti
     lastModified = null)
 
 fun com.hiker.data.remote.dto.Mountain.asDbModel() = com.hiker.data.db.entity.Mountain(
-    id = id,
+    mountainId = id,
     name = name,
     metersAboveSeaLevel = metersAboveSeaLevel,
     latitude = location.latitude,
@@ -80,7 +80,7 @@ fun User.asUserBrief() = UserBrief(
 )
 
 fun TripQuery.asDbModel() = Trip(
-    id = id,
+    tripId = id,
     title = tripTitle,
     dateFrom = dateFrom,
     dateTo = dateTo,

@@ -29,7 +29,7 @@ class MountainArrayAdapter(context: Context,
 
     override fun getItemId(p0: Int): Long {
         // Or just return p0
-        return filterableMountains.get(p0).id.toLong()
+        return filterableMountains.get(p0).mountainId.toLong()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {

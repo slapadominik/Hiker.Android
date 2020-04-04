@@ -7,7 +7,7 @@ import androidx.room.ColumnInfo
 
 
 @Entity(tableName = "Mountain")
-data class Mountain(@PrimaryKey val id: Int,
+data class Mountain(@PrimaryKey val mountainId: Int,
                     val name: String,
                     val metersAboveSeaLevel: Int,
                     val latitude: Double,

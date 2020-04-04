@@ -11,7 +11,7 @@ import com.hiker.data.db.entity.Mountain
 @Dao
 interface MountainsDao {
 
-    @Query("SELECT * FROM Mountain WHERE id == :mountainId")
+    @Query("SELECT * FROM Mountain WHERE mountainId == :mountainId")
     fun getMountainById(mountainId: Int) : LiveData<Mountain>
 
     @Query("SELECT * FROM Mountain WHERE name LIKE :searchText")
@@ -26,6 +26,6 @@ interface MountainsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMountain(mountain: Mountain)
 
-    @Query("SELECT EXISTS (SELECT * FROM Mountain WHERE id == :mountainId AND last_modified >= :refreshTime)")
+    @Query("SELECT EXISTS (SELECT * FROM Mountain WHERE mountainId == :mountainId AND last_modified >= :refreshTime)")
     fun hasMountain(mountainId: Int, refreshTime: Long) : Boolean
 }

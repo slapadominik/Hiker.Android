@@ -2,11 +2,14 @@ package com.hiker.presentation.map
 
 
 import android.Manifest
+import android.app.Dialog
 import android.app.SearchManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.MatrixCursor
+import android.graphics.Color
+import android.location.Location
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -16,16 +19,12 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.hiker.R
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.provider.BaseColumns
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.AutoCompleteTextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
-import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -36,12 +35,16 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.hiker.data.db.entity.Mountain
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.slider.Slider
 import com.hiker.data.remote.dto.MountainBrief
+import com.hiker.domain.extensions.hideKeyboard
 import com.hiker.domain.extensions.setUpMarker
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
+import kotlinx.android.synthetic.main.dialog_scan_map_trips.*
 import kotlinx.android.synthetic.main.fragment_map_view.*
+import kotlin.math.log
 
 const val MapViewBundleKey = "MapViewBundleKey"
 
@@ -55,6 +58,8 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var searchView: SearchView
+    private var userLocation: Location? = null
+    private var circle: Circle? = null
     private val mountainsMarkers = HashMap<Marker, MountainBrief>()
 
 
@@ -78,6 +83,8 @@ class MapView : Fragment(), OnMapReadyCallback {
         bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
         mountainCustomInfoWindow.visibility = View.INVISIBLE
         bottomNavigationView.visibility = View.VISIBLE
+
+
         return view
     }
 
@@ -85,17 +92,18 @@ class MapView : Fragment(), OnMapReadyCallback {
         super.onActivityCreated(savedInstanceState)
         showToolbarMenu()
         initViewModels()
+        setUpOnFilterButtonClick()
     }
 
 
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         setUpMap()
-        bindMountainsToMap()
+        fetchMountaints()
         setUpMountainInfoWindow(googleMap)
     }
 
-    private fun bindMountainsToMap(){
+    private fun fetchMountaints(){
         mapViewModel.getMountains().observe(this, Observer { mountains ->
             mountains.forEach { mountain ->
                 val marker = googleMap.setUpMarker(mountain.location.latitude, mountain.location.longitude, mountain.name, requireContext())
@@ -103,6 +111,43 @@ class MapView : Fragment(), OnMapReadyCallback {
             }
             mapViewModel.cacheMountains(mountains)
         })
+    }
+
+    private fun setUpOnFilterButtonClick(){
+        mapview_search_trip_button.setOnClickListener{
+            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_scan_map_trips, null)
+            val dialog = Dialog(requireContext())
+            dialog.setContentView(dialogView)
+            dialog.show()
+            val slider = dialog.findViewById<Slider>(R.id.dialog_slider_radius)
+            val radiusText = dialog.findViewById<TextView>(R.id.dialog_radius_text)
+            val cancelButton = dialog.findViewById<Button>(R.id.dialog_cancel_button)
+            val submitButton = dialog.findViewById<Button>(R.id.dialog_submit_button)
+            slider.setOnChangeListener{slider1, value ->
+                radiusText.text = value.toInt().toString() +" km"
+            }
+            cancelButton.setOnClickListener{
+                dialog.hide()
+            }
+
+            submitButton.setOnClickListener{
+                if (userLocation!=null){
+                    if (circle != null){
+                        circle!!.remove()
+                    }
+                    val radiusKilometers = slider.value*1000.0
+                    val circleOptions = CircleOptions()
+                        .center(LatLng(userLocation!!.latitude, userLocation!!.longitude))
+                        .radius(radiusKilometers)
+                        .strokeWidth(2.0f)
+                        .strokeColor(Color.BLUE)
+                        .fillColor(Color.parseColor("#400084d3"))
+                    circle = googleMap.addCircle(circleOptions)
+                    dialog.hide()
+                }
+
+            }
+        }
     }
 
     private fun setUpMap() {
@@ -113,6 +158,7 @@ class MapView : Fragment(), OnMapReadyCallback {
         googleMap.isMyLocationEnabled = true
         fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity()) { location ->
             if (location != null) {
+                userLocation = location
                 animateCamera(location.latitude, location.longitude, 7.5f)
             }
         }
@@ -141,7 +187,7 @@ class MapView : Fragment(), OnMapReadyCallback {
                 searchView.setQuery(mountainName, false)
                 mapViewModel.getMountain(mountainId).observe(requireActivity(), Observer {
                     animateCamera(it.latitude, it.longitude, 9f)
-                    setMountainWindowData(it.id, it.name, it.regionName, it.metersAboveSeaLevel, it.upcomingTripsCount)
+                    setMountainWindowData(it.mountainId, it.name, it.regionName, it.metersAboveSeaLevel, it.upcomingTripsCount)
                     showMountainWindow()
                 })
                 hideKeyboard()
@@ -160,7 +206,7 @@ class MapView : Fragment(), OnMapReadyCallback {
                         val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
                         it.forEach{  mountain ->
                             if (mountain.name.contains(query, true))
-                                cursor.addRow(arrayOf(mountain.id, mountain))
+                                cursor.addRow(arrayOf(mountain.mountainId, mountain))
                         }
                         cursorAdapter.changeCursor(cursor)
                     })
@@ -168,17 +214,6 @@ class MapView : Fragment(), OnMapReadyCallback {
                 return true
             }
         })
-    }
-
-    fun Fragment.hideKeyboard() {
-        view?.let {
-            activity?.hideKeyboard(it)
-        }
-    }
-
-    fun Context.hideKeyboard(view: View) {
-        val inputMethodManager = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun setUpMountainInfoWindow(map : GoogleMap){

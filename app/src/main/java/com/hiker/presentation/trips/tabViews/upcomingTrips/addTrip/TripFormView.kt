@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.hiker.R
@@ -26,7 +25,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.hiker.data.db.entity.Mountain
-import com.hiker.data.remote.dto.MountainBrief
 import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.command.TripDestinationCommand
@@ -83,7 +81,7 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                 tipFormView_toolbar.title = "Edytuj wycieczkę"
                 viewModel.getTripFromDb(safeArgs.tripId).observe(this, Observer {
                     if (it != null){
-                        setUpFields(it.title, it.description, it.dateFrom, it.dateTo)
+                        setUpTextFields(it.trip.title, it.trip.description, it.trip.dateFrom, it.trip.dateTo, it.mountains[0].name)
                     }
                     else{
                         Toast.makeText(requireContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show()
@@ -108,13 +106,18 @@ class TripFormView : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpFields(tripTitle: String?, tripDescription: String?, dateFrom: Date, dateTo: Date){
+    private fun setUpTextFields(tripTitle: String?,
+                                tripDescription: String?,
+                                dateFrom: Date,
+                                dateTo: Date,
+                                mountainName: String){
         this.dateFrom = dateFrom
         this.dateTo = dateTo
         fragment_trip_form_view_tripTitle.setText(tripTitle)
         fragment_trip_form_view_description.setText(tripDescription)
         tripForm_beginDate_editText.setText(dateFormater.format(dateFrom))
         tripForm_endDate_editText.setText(dateFormater.format(dateTo))
+        tripForm_searchView_1.setText(mountainName)
     }
 
     private fun showAlertDialog() : androidx.appcompat.app.AlertDialog{
@@ -248,7 +251,7 @@ class TripFormView : Fragment(), OnMapReadyCallback {
             val index = 1
             tripDestinations[index] = TripDestinationCommand(
                 type = 1,
-                mountainId = selectedItem.id,
+                mountainId = selectedItem.mountainId,
                 rockId = null
             )
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(selectedItem.latitude, selectedItem.longitude),7.5f))
@@ -285,7 +288,7 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                 val viewRowIndex = (destinationRowView.parent as ViewGroup).indexOfChild(destinationRowView)
                 tripDestinations[viewRowIndex] = TripDestinationCommand(
                     type = 1,
-                    mountainId = selectedItem.id,
+                    mountainId = selectedItem.mountainId,
                     rockId = null
                 )
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(selectedItem.latitude, selectedItem.longitude),7.5f))

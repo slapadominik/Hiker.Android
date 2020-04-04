@@ -6,9 +6,12 @@ import android.graphics.Canvas
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.hiker.R
@@ -40,4 +43,21 @@ fun isNullOrEmpty(str: String?): Boolean {
     if (str != null && !str.trim().isEmpty())
         return false
     return true
+}
+
+val Any.TAG: String
+    get() {
+        val tag = javaClass.simpleName
+        return if (tag.length <= 23) tag else tag.substring(0, 23)
+    }
+
+fun Fragment.hideKeyboard() {
+    view?.let {
+        activity?.hideKeyboard(it)
+    }
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }

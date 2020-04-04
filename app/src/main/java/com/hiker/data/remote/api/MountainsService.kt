@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit
 
 interface MountainsService {
 
-    @GET("mountains/{id}")
-    suspend fun getById(@Path("id") id: Int): Response<Mountain>
+    @GET("mountains/{mountainId}")
+    suspend fun getById(@Path("mountainId") id: Int): Response<Mountain>
 
     @GET("mountains")
     suspend fun getAll(): Response<List<MountainBrief>>

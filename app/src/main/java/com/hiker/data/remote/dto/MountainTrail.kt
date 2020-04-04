@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class MountainTrail(
-    @SerializedName("id") val id: Int,
+    @SerializedName("mountainId") val id: Int,
     @SerializedName("timeToTopMinutes") val timeToTopMinutes: Float,
     @SerializedName("color") val color: String
 ) : Parcelable

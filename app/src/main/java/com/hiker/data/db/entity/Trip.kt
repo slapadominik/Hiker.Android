@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "Trip")
-data class Trip(@PrimaryKey val id: Int,
+data class Trip(@PrimaryKey val tripId: Int,
                 val title: String,
                 val description: String,
                 val dateFrom: Date,

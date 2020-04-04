@@ -5,9 +5,11 @@ import com.hiker.data.converters.asDatabaseModel
 import com.hiker.data.converters.asDbModel
 import com.hiker.data.converters.asDomainModel
 import com.hiker.data.db.dao.TripDao
+import com.hiker.data.db.dao.TripMountainCrossRefDao
 import com.hiker.data.db.dao.TripParticipantDao
 import com.hiker.data.db.dao.UserBriefDao
 import com.hiker.data.db.entity.Trip
+import com.hiker.data.db.entity.TripMountainCrossRef
 import com.hiker.data.remote.api.TripsService
 import com.hiker.data.remote.dto.TripParticipant
 import com.hiker.data.remote.dto.command.EditTripCommand
@@ -24,7 +26,8 @@ import java.util.concurrent.TimeUnit
 
 class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
                           private val userBriefDao: UserBriefDao,
-                          private val tripDao : TripDao) : TripsRepository {
+                          private val tripDao : TripDao,
+                          private val tripMountainCrossRefDao: TripMountainCrossRefDao) : TripsRepository {
 
     private val tripsService = TripsService.create()
     private val dateFormater = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
@@ -57,6 +60,7 @@ class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
                 tripParticipantDao.addMany(trip.tripParticipants.map { userBrief -> com.hiker.data.db.entity.TripParticipant(trip.id, userBrief.id.toString())}
                         + com.hiker.data.db.entity.TripParticipant(trip.id, trip.author.id.toString()))
                 tripDao.add(trip.asDbModel())
+                tripMountainCrossRefDao.add(trip.tripDestinations.map { x -> TripMountainCrossRef(trip.id, x.mountainBrief!!.id) })
             }
             return response.body()!!
         } else throw ApiException(response.errorBody()?.string())
@@ -97,10 +101,13 @@ class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
     companion object {
         private var instance: TripsRepositoryImpl? = null
         @Synchronized
-        fun getInstance(tripParticipantDao: TripParticipantDao, userBriefDao: UserBriefDao, tripDao: TripDao): TripsRepositoryImpl{
+        fun getInstance(tripParticipantDao: TripParticipantDao,
+                        userBriefDao: UserBriefDao,
+                        tripDao: TripDao,
+                        tripMountainCrossRefDao: TripMountainCrossRefDao): TripsRepositoryImpl{
             if (instance == null)
                 instance =
-                    TripsRepositoryImpl(tripParticipantDao, userBriefDao, tripDao)
+                    TripsRepositoryImpl(tripParticipantDao, userBriefDao, tripDao, tripMountainCrossRefDao)
             return instance as TripsRepositoryImpl
         }
     }
