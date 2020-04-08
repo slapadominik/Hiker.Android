@@ -7,8 +7,8 @@ import com.hiker.data.db.ApplicationDatabase
 import com.hiker.data.db.repository.MountainLocalRepository
 import com.hiker.data.db.repository.TripMountainCrossRefRepository
 import com.hiker.data.db.repository.TripMountainCrossRefRepositoryImpl
+import com.hiker.data.repository.TripsRepository
 import com.hiker.data.repository.TripsRepositoryImpl
-import com.hiker.domain.repository.TripsRepository
 
 class TripFormViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

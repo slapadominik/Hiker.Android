@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".presentation.user.edit.UserEditView">
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/user_edit_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:title="Edytuj profil"
+            app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            android:elevation="2dp"/>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/user_edit_firstName"
+                            android:layout_width="match_parent"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                            android:layout_height="wrap_content"
+                            android:hint="Imię"
+                            app:errorEnabled="true"
+                            android:layout_marginTop="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/user_edit_firstNameInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto"
+                                android:maxLength="20"
+                                android:maxLines="1"
+                                android:textSize="16sp"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/user_edit_lastName"
+                            android:layout_width="match_parent"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                            android:layout_height="wrap_content"
+                            android:hint="Nazwisko"
+                            app:errorEnabled="true"
+                            android:layout_marginTop="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/user_edit_lastNameInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto"
+                                android:maxLength="20"
+                                android:maxLines="1"
+                                android:textSize="16sp"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/user_edit_birthday"
+                            android:layout_width="match_parent"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                            android:layout_height="wrap_content"
+                            android:hint="Data urodzenia"
+                            app:errorEnabled="true"
+                            app:startIconDrawable="@drawable/ic_date_range_grey_20dp"
+                            app:startIconContentDescription="elp"
+                            android:layout_marginTop="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/user_edit_birthdayInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto"
+                                android:maxLength="20"
+                                android:maxLines="1"
+                                android:textSize="16sp"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/user_edit_phoneNumber"
+                            android:layout_width="match_parent"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                            android:layout_height="wrap_content"
+                            android:hint="Numer telefonu"
+                            app:errorEnabled="true"
+                            app:startIconDrawable="@drawable/ic_phone_black_24dp"
+                            app:startIconContentDescription="elp"
+                            android:layout_marginTop="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/user_edit_phoneNumberInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto"
+                                android:maxLength="20"
+                                android:maxLines="1"
+                                android:textSize="16sp"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/user_edit_aboutMe"
+                            android:layout_width="match_parent"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                            android:layout_height="wrap_content"
+                            android:hint="O mnie"
+                            app:errorEnabled="true"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="250"
+                            app:startIconDrawable="@drawable/ic_chat_black_24dp"
+                            app:startIconContentDescription="elp"
+                            android:layout_marginTop="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/user_edit_aboutMeInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto"
+                                android:maxLength="250"
+                                android:textSize="16sp"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/user_edit_submitButton"
+                        android:layout_width="177dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="16dp"
+                        android:backgroundTint="@color/colorPrimary"
+                        app:borderWidth="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+                        app:srcCompat="@drawable/ic_done_white_24dp" />
+            </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
+

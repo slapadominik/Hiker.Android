@@ -13,4 +13,5 @@ data class User(@PrimaryKey val id: String,
                  val lastName: String,
                  val birthday: Date,
                  val facebookId: String,
-                 val gender: Char)
+                 val phoneNumber: String?,
+                 val aboutMe: String?)

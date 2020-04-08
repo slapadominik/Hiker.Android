@@ -7,7 +7,6 @@ import com.hiker.data.db.ApplicationDatabase
 import com.hiker.data.repository.TripParticipantsRepositoryImpl
 import com.hiker.data.repository.TripsRepositoryImpl
 import com.hiker.data.repository.UserRepositoryImpl
-import com.hiker.domain.repository.TripsRepository
 
 class TripDetailsViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

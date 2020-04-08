@@ -2,6 +2,7 @@ package com.hiker.data.converters
 
 import com.hiker.data.db.entity.Trip
 import com.hiker.data.db.entity.UserBrief
+import com.hiker.data.remote.dto.command.EditUserCommand
 import com.hiker.data.remote.dto.query.TripQuery
 import com.hiker.domain.entities.*
 
@@ -31,7 +32,9 @@ fun com.hiker.data.remote.dto.User.asDomainModel() = User(
     firstName = firstName,
     lastName = lastName,
     birthday = birthday,
-    facebookId = facebookId
+    facebookId = facebookId,
+    aboutMe = aboutMe,
+    phoneNumber = phoneNumber
 )
 
 fun com.hiker.data.remote.dto.User.asDatabaseModel() = com.hiker.data.db.entity.User(
@@ -39,8 +42,16 @@ fun com.hiker.data.remote.dto.User.asDatabaseModel() = com.hiker.data.db.entity.
     birthday = birthday,
     lastName = lastName,
     firstName = firstName,
-    gender = gender,
-    facebookId = facebookId
+    facebookId = facebookId,
+    aboutMe = aboutMe,
+    phoneNumber = phoneNumber
+)
+fun User.toEditUserCommand() = EditUserCommand(
+    firstName = firstName,
+    lastName = lastName,
+    phoneNumber =phoneNumber,
+    birthday = birthday,
+    aboutMe = aboutMe
 )
 
 fun com.hiker.data.db.entity.User.asDomainModel() = User(
@@ -48,7 +59,20 @@ fun com.hiker.data.db.entity.User.asDomainModel() = User(
     facebookId = facebookId,
     birthday = birthday,
     firstName = firstName,
-    lastName = lastName
+    lastName = lastName,
+    aboutMe = aboutMe,
+    phoneNumber = phoneNumber
+)
+
+
+fun User.asDbModel() =com.hiker.data.db.entity.User(
+    id = id,
+    facebookId = facebookId,
+    birthday = birthday,
+    firstName = firstName,
+    lastName = lastName,
+    aboutMe = aboutMe,
+    phoneNumber = phoneNumber
 )
 
 fun com.hiker.data.remote.dto.TripBrief.asDomainModel() = TripBrief(

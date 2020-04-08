@@ -1,28 +1,21 @@
-package com.hiker.presentation.user
+package com.hiker.presentation.user.edit
 
-import android.graphics.Color
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import com.hiker.domain.entities.User
-import com.hiker.data.remote.api.ApiConsts
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import java.util.*
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hiker.data.converters.asDbModel
+import com.hiker.data.remote.api.ApiConsts
 import com.hiker.data.repository.UserRepository
+import com.hiker.domain.entities.User
 import com.makeramen.roundedimageview.RoundedTransformationBuilder
-import kotlinx.android.synthetic.main.fragment_user_view.*
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
+import java.util.*
 
+class UserEditViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-class UserViewModel(private val userRepository: UserRepository) : ViewModel(){
-
-    fun getUser(userSystemId: UUID) : LiveData<User> {
+    fun getUsersData(userSystemId: UUID) : LiveData<User>{
         val liveData = MutableLiveData<User>()
         viewModelScope.launch {
             liveData.postValue(userRepository.getUserBySystemId(userSystemId))
@@ -30,8 +23,12 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel(){
         return liveData
     }
 
-    fun cacheUser(user: User){
-        viewModelScope.launch { userRepository.cacheUser(user.asDbModel())}
+    fun editUser(user: User) : LiveData<UUID>{
+        val viewModel = MutableLiveData<UUID>()
+        viewModelScope.launch {
+            viewModel.postValue(userRepository.editUser(user))
+        }
+        return viewModel
     }
 
     fun setUserThumbnail(imageView: ImageView, userFacebookId: String?){
@@ -46,7 +43,6 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel(){
                 .into(imageView)
         }
     }
-
     private fun buildImageUri(userFacebookId: String):String{
         return ApiConsts.FacebookAPI+ "$userFacebookId/picture?width=500&height=500";
     }

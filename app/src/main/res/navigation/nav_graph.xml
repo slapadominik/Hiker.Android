@@ -61,7 +61,11 @@
             android:id="@+id/userView"
             android:name="com.hiker.presentation.user.UserView"
             android:label="fragment_user_view"
-            tools:layout="@layout/fragment_user_view" />
+            tools:layout="@layout/fragment_user_view" >
+        <action
+                android:id="@+id/action_userView_to_userEditView"
+                app:destination="@id/userEditView" />
+    </fragment>
     <fragment
             android:id="@+id/tripFormView"
             android:name="com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip.TripFormView"
@@ -114,5 +118,14 @@
         <action
                 android:id="@+id/action_tripDetailsView_to_tripFormView"
                 app:destination="@id/tripFormView" />
+    </fragment>
+    <fragment
+            android:id="@+id/userEditView"
+            android:name="com.hiker.presentation.user.edit.UserEditView"
+            android:label="fragment_user_edit_view"
+            tools:layout="@layout/fragment_user_edit_view">
+        <argument
+                android:name="userId"
+                app:argType="string" />
     </fragment>
 </navigation>

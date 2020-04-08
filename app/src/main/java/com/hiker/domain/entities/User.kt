@@ -7,5 +7,7 @@ data class User(
      val firstName: String,
      val lastName: String,
      val birthday: Date,
-     val facebookId: String
+     val facebookId: String,
+     val aboutMe: String?,
+     val phoneNumber: String?
 )

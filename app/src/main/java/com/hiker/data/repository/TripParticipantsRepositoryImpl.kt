@@ -7,10 +7,15 @@ import com.hiker.data.db.entity.TripParticipant
 import com.hiker.data.db.entity.UserBrief
 import com.hiker.data.remote.api.TripsService
 import com.hiker.domain.exceptions.ApiException
-import com.hiker.domain.repository.TripParticipantsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
+
+interface TripParticipantsRepository{
+    suspend fun addTripParticipant(tripId: Int, userId: UUID)
+    suspend fun removeTripParticipant(tripId: Int, userId: UUID)
+    fun getTripParticipants(tripId: Int): LiveData<List<TripParticipant>>
+}
 
 class TripParticipantsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
                                      private val userBriefDao: UserBriefDao) : TripParticipantsRepository{

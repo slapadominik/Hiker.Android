@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hiker.data.repository.TripsRepository
 import com.hiker.domain.entities.TripBrief
-import com.hiker.domain.repository.TripsRepository
 import kotlinx.coroutines.launch
 import java.util.*
 

@@ -12,7 +12,7 @@ import com.hiker.data.db.repository.TripMountainCrossRefRepository
 import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.query.TripQuery
-import com.hiker.domain.repository.TripsRepository
+import com.hiker.data.repository.TripsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

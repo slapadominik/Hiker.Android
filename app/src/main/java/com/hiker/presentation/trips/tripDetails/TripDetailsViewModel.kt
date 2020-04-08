@@ -4,15 +4,16 @@ import androidx.lifecycle.*
 import com.hiker.data.remote.dto.TripParticipant
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.query.TripQuery
-import com.hiker.domain.repository.TripParticipantsRepository
-import com.hiker.domain.repository.TripsRepository
-import com.hiker.domain.repository.UserRepository
+import com.hiker.data.repository.TripParticipantsRepository
+import com.hiker.data.repository.TripsRepository
+import com.hiker.data.repository.UserRepository
 import kotlinx.coroutines.launch
 import java.util.*
 
 class TripDetailsViewModel(private val tripParticipantsRepository: TripParticipantsRepository,
                            private val tripsRepository: TripsRepository,
-                           private val userRepository: UserRepository) : ViewModel(){
+                           private val userRepository: UserRepository
+) : ViewModel(){
 
     fun getTrip(tripId: Int) : LiveData<TripQuery> {
         val trip = MutableLiveData<TripQuery>()

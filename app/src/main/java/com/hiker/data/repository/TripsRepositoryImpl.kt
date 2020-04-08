@@ -11,18 +11,27 @@ import com.hiker.data.db.dao.UserBriefDao
 import com.hiker.data.db.entity.Trip
 import com.hiker.data.db.entity.TripMountainCrossRef
 import com.hiker.data.remote.api.TripsService
-import com.hiker.data.remote.dto.TripParticipant
 import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.query.TripQuery
 import com.hiker.domain.entities.TripBrief
 import com.hiker.domain.exceptions.ApiException
-import com.hiker.domain.repository.TripsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+
+interface TripsRepository {
+    suspend fun getUserUpcomingTripsBriefs(userId: String, dateFrom: Date) : List<TripBrief>
+    suspend fun getUserHistoryTripsBriefs(userId: String, dateTo: Date) : List<TripBrief>
+    suspend fun getUpcomingTripsBriefsForMountainObject(tripDestinationType: Int, mountainId: Int?, rockId: Int?, dateFrom: Date) : List<TripBrief>
+    suspend fun getTrip(tripId: Int) : TripQuery
+    fun getTripFromDb(tripId: Int) : LiveData<Trip?>
+    suspend fun addTrip(tripCommand: TripCommand) : Int
+    suspend fun deleteTrip(tripId: Int)
+    suspend fun editTrip(tripId: Int, editTripCommand: EditTripCommand)
+}
 
 class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
                           private val userBriefDao: UserBriefDao,

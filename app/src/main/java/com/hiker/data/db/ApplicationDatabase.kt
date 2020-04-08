@@ -9,7 +9,7 @@ import com.hiker.data.db.converters.DateConverter
 import com.hiker.data.db.dao.*
 import com.hiker.data.db.entity.*
 
-@Database(entities = [User::class, Mountain::class, TripParticipant::class, UserBrief::class, Trip::class, TripMountainCrossRef::class], version = 4)
+@Database(entities = [User::class, Mountain::class, TripParticipant::class, UserBrief::class, Trip::class, TripMountainCrossRef::class], version = 7)
 @TypeConverters(DateConverter::class)
 abstract class ApplicationDatabase: RoomDatabase() {
 

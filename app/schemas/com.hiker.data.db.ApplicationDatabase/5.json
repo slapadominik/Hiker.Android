@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 4,
-    "identityHash": "fad91ef5345f202788a504474295e4a8",
+    "version": 5,
+    "identityHash": "6f428fd1705a0f8f547c39613a5dc2d8",
     "entities": [
       {
         "tableName": "User",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `facebookId` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `facebookId` TEXT NOT NULL, `phoneNumber` TEXT NOT NULL, `aboutMe` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -35,6 +35,18 @@
           {
             "fieldPath": "facebookId",
             "columnName": "facebookId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phoneNumber",
+            "columnName": "phoneNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "aboutMe",
+            "columnName": "aboutMe",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -251,7 +263,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fad91ef5345f202788a504474295e4a8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6f428fd1705a0f8f547c39613a5dc2d8')"
     ]
   }
 }

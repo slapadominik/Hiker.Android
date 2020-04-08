@@ -3,6 +3,7 @@ package com.hiker.data.remote.api
 import com.hiker.BuildConfig
 import com.hiker.data.remote.dto.FacebookToken
 import com.hiker.data.remote.dto.User
+import com.hiker.data.remote.dto.command.EditUserCommand
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -26,6 +27,9 @@ interface UserService {
 
     @POST("authentication/register/facebook")
     suspend fun addUser(@Body facebookToken: FacebookToken) : Response<UUID>
+
+    @PUT("users/{userId}")
+    suspend fun editUser(@Path("userId") userSystemId: String, @Body editUserCommand: EditUserCommand) : Response<UUID>
 
     companion object {
         fun create(): UserService {
