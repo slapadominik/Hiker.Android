@@ -54,23 +54,29 @@ class UserEditView : Fragment() {
             }
         })
         user_edit_submitButton.setOnClickListener{
-            val firstName = user_edit_firstNameInput.text.toString()
-            val lastName = user_edit_lastNameInput.text.toString()
+            val firstNameValid = IsFirstNameValid()
+            val lastNameValid = IsLastNameValid()
+            val birthdayValid= IsBirthdayValid()
 
-            val phoneNumber = user_edit_phoneNumberInput.text.toString()
-            val aboutMe = user_edit_aboutMeInput.text.toString()
-            val user = User(
-                id = userSystemId,
-                firstName = firstName,
-                lastName = lastName,
-                phoneNumber = phoneNumber,
-                birthday = birthday,
-                aboutMe = aboutMe,
-                facebookId = ""
-            )
-            viewModel.editUser(user).observe(requireActivity(), Observer {
-                findNavController().popBackStack()
-            })
+            if (firstNameValid && birthdayValid && lastNameValid){
+                val firstName = user_edit_firstNameInput.text.toString()
+                val lastName = user_edit_lastNameInput.text.toString()
+                val phoneNumber = user_edit_phoneNumberInput.text.toString()
+                val aboutMe = user_edit_aboutMeInput.text.toString()
+                val user = User(
+                    id = userSystemId,
+                    firstName = firstName,
+                    lastName = lastName,
+                    phoneNumber = phoneNumber,
+                    birthday = birthday,
+                    aboutMe = aboutMe,
+                    facebookId = ""
+                )
+                viewModel.editUser(user).observe(requireActivity(), Observer {
+                    findNavController().popBackStack()
+                })
+            }
+
         }
 
         user_edit_birthday.setOnFocusChangeListener{x, hasFocus ->
@@ -82,6 +88,42 @@ class UserEditView : Fragment() {
                 }, birthdayCalendar.get(Calendar.YEAR), birthdayCalendar.get(Calendar.MONTH), birthdayCalendar.get(Calendar.DAY_OF_MONTH)).show()
             }
         }
+    }
+
+    private fun IsFirstNameValid() : Boolean{
+        var result = false
+        if (user_edit_firstNameInput.text.toString().length < 3) {
+            user_edit_firstName.error = "Imię jest wymagane"
+        }
+        else{
+            result = true
+            user_edit_firstName.error = null;
+        }
+        return result
+    }
+
+    private fun IsBirthdayValid() : Boolean{
+        var result = false
+        if (birthday >= Calendar.getInstance().time){
+            user_edit_birthday.error = "Data jest wymagana";
+        }
+        else{
+            result = true
+            user_edit_birthday.error = null
+        }
+        return result
+    }
+
+    private fun IsLastNameValid() : Boolean{
+        var result = false
+        if (user_edit_lastNameInput.text.toString().length < 3){
+            user_edit_lastName.error = "Nazwisko jest wymagane";
+        }
+        else{
+            result = true
+            user_edit_lastName.error = null
+        }
+        return result
     }
 
     private fun initViewModel() {
