@@ -85,7 +85,8 @@ class MapView : Fragment(), OnMapReadyCallback {
         bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
         mountainCustomInfoWindow.visibility = View.INVISIBLE
         bottomNavigationView.visibility = View.VISIBLE
-
+        mountainsMarkers.clear()
+        markersMountainIds.clear()
 
         return view
     }
@@ -180,7 +181,7 @@ class MapView : Fragment(), OnMapReadyCallback {
         fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity()) { location ->
             if (location != null) {
                 userLocation = location
-                animateCamera(location.latitude, location.longitude, 7.5f)
+                moveCamera(location.latitude, location.longitude, 7.5f)
             }
         }
     }
@@ -295,6 +296,11 @@ class MapView : Fragment(), OnMapReadyCallback {
     private fun animateCamera(latitude: Double, longitude: Double, zoom: Float){
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), zoom)
         googleMap.animateCamera(cameraUpdate)
+    }
+
+    private fun moveCamera(latitude: Double, longitude: Double, zoom: Float){
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), zoom)
+        googleMap.moveCamera(cameraUpdate)
     }
 
     private fun initViewModels() {
