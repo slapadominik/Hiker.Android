@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -38,6 +39,15 @@ class UserEditView : Fragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            showAlertDialog()
+        }
+        user_edit_toolbar.setNavigationOnClickListener {
+            showAlertDialog()
+        }
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initViewModel()
@@ -88,6 +98,17 @@ class UserEditView : Fragment() {
                 }, birthdayCalendar.get(Calendar.YEAR), birthdayCalendar.get(Calendar.MONTH), birthdayCalendar.get(Calendar.DAY_OF_MONTH)).show()
             }
         }
+    }
+
+    private fun showAlertDialog() : androidx.appcompat.app.AlertDialog{
+        return androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Uwaga")
+            .setMessage("Czy chcesz porzucić wprowadzone zmiany?")
+            .setPositiveButton("Tak") { _, _ ->
+                findNavController().popBackStack()
+            }
+            .setNegativeButton("Nie", /* listener = */ null)
+            .show()
     }
 
     private fun IsFirstNameValid() : Boolean{

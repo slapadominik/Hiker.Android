@@ -1,217 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context=".presentation.user.UserView">
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/user_profile_toolbar"
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            app:title=""
-            app:menu="@menu/user_profile_menu" />
-    <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <LinearLayout
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".presentation.user.UserView">
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/user_profile_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@color/colorPrimary"/>
-        <LinearLayout
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                app:title=""
+                app:menu="@menu/user_profile_menu" />
+        <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp">
-
-            <!-- TODO: Update blank fragment layout -->
-
-
-            <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                <ImageView
-                        android:id="@+id/userView_imageView"
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                        android:layout_gravity="center"
-                        android:layout_centerInParent="true"
-                        android:backgroundTint="@color/colorPrimary"
-                        app:srcCompat="@drawable/ic_user_solid"
-                        tools:src="@tools:sample/avatars"
-                        android:visibility="invisible"/>
-                <ProgressBar
-                        android:id="@+id/imgProgress"
-                        style="?android:attr/progressBarStyleLarge"
-                        android:layout_width="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_height="wrap_content" />
-
-            </RelativeLayout>
-
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="30dp">
-
-                <TextView
-                        android:id="@+id/userView_firstName_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto"
-                        android:text=""
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                <TextView
-                        android:id="@+id/userView_lastName_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:fontFamily="@font/roboto"
-                        android:text=""
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-            </LinearLayout>
+                android:layout_height="match_parent">
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="120dp"
+                    android:background="@color/colorPrimary"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
                     android:orientation="vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp">
-                <LinearLayout
-                        android:layout_width="match_parent"
+                    android:layout_marginTop="20dp">
+
+                <!-- TODO: Update blank fragment layout -->
+
+
+                <RelativeLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_gravity="center">
+
+                    <ImageView
+                            android:id="@+id/userView_imageView"
+                            android:layout_width="160dp"
+                            android:layout_height="160dp"
+                            android:layout_gravity="center"
+                            android:layout_centerInParent="true"
+                            android:backgroundTint="@color/colorPrimary"
+                            app:srcCompat="@drawable/ic_user_solid"
+                            tools:src="@tools:sample/avatars"
+                            android:visibility="invisible"/>
+                    <ProgressBar
+                            android:id="@+id/imgProgress"
+                            style="?android:attr/progressBarStyleLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="30dp">
 
                     <TextView
-                            android:id="@+id/textView8"
+                            android:id="@+id/userView_firstName_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0"
-                            android:text="Wiek:"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp" />
-
-                    <TextView
-                            android:id="@+id/userView_age_textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="0"
+                            android:fontFamily="@font/roboto"
                             android:text=""
-                            android:textSize="16sp"   />
-                </LinearLayout>
-                <View
-                        android:layout_marginTop="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"/>
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="15dp">
-
-                    <TextView
-                            android:id="@+id/textview17"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0"
-                            android:text="Telefon:"
                             android:textColor="@android:color/black"
-                            android:textSize="16sp" />
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                     <TextView
-                            android:id="@+id/userView_phoneNumber_textView"
+                            android:id="@+id/userView_lastName_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:layout_weight="0"
-                            android:text="Brak informacji"
-                            android:textSize="16sp"  />
-                </LinearLayout>
-                <View
-                        android:layout_marginTop="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"/>
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="15dp">
-
-                    <TextView
-                            android:id="@+id/textView11"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0"
-                            android:text="Wycieczki:"
+                            android:fontFamily="@font/roboto"
+                            android:text=""
                             android:textColor="@android:color/black"
-                            android:textSize="16sp"  />
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                            android:id="@+id/userView_tripsCount_textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="0"
-                            android:text="0"
-                            android:textSize="16sp"   />
                 </LinearLayout>
-                <View
-                        android:layout_marginTop="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"/>
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginTop="15dp">
-
-                    <TextView
-                            android:id="@+id/textview15"
-                            android:layout_width="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp">
+                    <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0"
-                            android:text="O mnie"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"  />
+                            android:orientation="horizontal">
 
-                    <TextView
-                            android:id="@+id/userView_aboutMe_textView"
-                            android:layout_width="wrap_content"
+                        <TextView
+                                android:id="@+id/textView8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0"
+                                android:text="Wiek:"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/userView_age_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="0"
+                                android:text=""
+                                android:textSize="16sp"   />
+                    </LinearLayout>
+                    <View
+                            android:layout_marginTop="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"/>
+                    <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0"
-                            android:layout_marginTop="2dp"
-                            android:text="Brak informacji"
-                            android:textSize="16sp"  />
+                            android:orientation="horizontal"
+                            android:layout_marginTop="15dp">
+
+                        <TextView
+                                android:id="@+id/textview17"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0"
+                                android:text="Telefon:"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/userView_phoneNumber_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="0"
+                                android:text="Brak informacji"
+                                android:textSize="16sp"  />
+                    </LinearLayout>
+                    <View
+                            android:layout_marginTop="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"/>
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="15dp">
+
+                        <TextView
+                                android:id="@+id/textView11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0"
+                                android:text="Wycieczki:"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp"  />
+
+                        <TextView
+                                android:id="@+id/userView_tripsCount_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="0"
+                                android:text="0"
+                                android:textSize="16sp"   />
+                    </LinearLayout>
+                    <View
+                            android:layout_marginTop="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"/>
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="15dp">
+
+                        <TextView
+                                android:id="@+id/textview15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0"
+                                android:text="O mnie"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp"  />
+
+                        <TextView
+                                android:id="@+id/userView_aboutMe_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0"
+                                android:layout_marginTop="2dp"
+                                android:text="Brak informacji"
+                                android:textSize="16sp"  />
+                    </LinearLayout>
+                    <View
+                            android:layout_marginTop="1dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"/>
                 </LinearLayout>
-                <View
-                        android:layout_marginTop="1dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"/>
+
             </LinearLayout>
+        </FrameLayout>
 
-        </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
+</ScrollView>
 
-</LinearLayout>
 
