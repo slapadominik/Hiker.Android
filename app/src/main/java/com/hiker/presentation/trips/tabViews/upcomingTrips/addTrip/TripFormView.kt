@@ -131,37 +131,53 @@ class TripFormView : Fragment(), OnMapReadyCallback {
             .show()
     }
 
-    private fun DisplayInputErrors(){
+    private fun ValidateTripTitle() : Boolean{
         if (isNullOrEmpty(fragment_trip_form_view_tripTitle.text.toString())) {
             fragment_trip_form_view_tripInput.error = "Nazwa jest wymagana"
+            return false
         }
         else{
             fragment_trip_form_view_tripInput.error = null;
+            return true
         }
-        if (tripDestinations.isEmpty()){
+    }
 
-        }
+    private fun ValidateDateFrom() : Boolean {
         if (dateFrom == null){
             tripForm_beginDate_editInput.error = "Data jest wymagana";
+            return false
         }
         else if (dateFrom!! < Calendar.getInstance().time){
             tripForm_beginDate_editInput.error = "Wycieczka nie może zaczynać się w przeszłości"
+            return false
         }
         else{
             tripForm_beginDate_editInput.error = null
+            return true
         }
+    }
+
+    private fun ValidateDateTo() : Boolean {
         if (dateTo == null){
             tripForm_endDate_editInput.error = "Data jest wymagana"
+            return false
         }
         else if (dateTo!! < Calendar.getInstance().time){
             tripForm_endDate_editInput.error = "Wycieczka nie może kończyć się w przeszłości"
+            return false
         }
         else{
             tripForm_endDate_editInput.error = null
+            return true
         }
+    }
+
+    private fun ValidateDateToDateFrom() : Boolean {
         if (dateFrom != null && dateTo != null && dateFrom!!>dateTo!!){
             tripForm_beginDate_editInput.error = "Data początkowa musi być wcześniejsza od daty końcowej";
+            return false
         }
+        return true
     }
 
     private fun setupAddTripOnClickListeners(){
@@ -171,8 +187,12 @@ class TripFormView : Fragment(), OnMapReadyCallback {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
         upcomingTripsView_submit_button.setOnClickListener{
-            DisplayInputErrors()
-            if (!isNullOrEmpty(fragment_trip_form_view_tripTitle.text.toString()) && tripDestinations.isNotEmpty() && dateFrom != null && dateTo != null){
+            val tripTitleValid = ValidateTripTitle()
+            val dateFromValid = ValidateDateFrom()
+            val dateToValid = ValidateDateTo()
+            val dateFromDateToValid = ValidateDateToDateFrom()
+
+            if (tripTitleValid && dateFromValid && dateToValid && dateFromDateToValid){
                 val trip = TripCommand(
                     tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
                     authorId = userSystemId!!,
@@ -199,8 +219,11 @@ class TripFormView : Fragment(), OnMapReadyCallback {
 
     private fun setupEditOnclickListeners(tripId: Int){
         upcomingTripsView_submit_button.setOnClickListener{
-            DisplayInputErrors()
-            if (!isNullOrEmpty(fragment_trip_form_view_tripTitle.text.toString()) && tripDestinations.isNotEmpty() && dateFrom != null && dateTo != null){
+            val tripTitleValid = ValidateTripTitle()
+            val dateFromValid = ValidateDateFrom()
+            val dateToValid = ValidateDateTo()
+            val dateFromDateToValid = ValidateDateToDateFrom()
+            if (tripTitleValid && dateFromValid && dateToValid && dateFromDateToValid){
                 try{
                     viewModel.editTrip(
                         tripId,

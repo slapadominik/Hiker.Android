@@ -10,40 +10,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
-            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             android:fontFamily="@font/roboto" />
 
-    <TextView
-            android:id="@+id/textView6"
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="."
-            android:textSize="15sp"
-            android:fontFamily="@font/roboto"/>
+            android:orientation="vertical">
+        <TextView
+                android:id="@+id/trip_destination_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text="Nazwa celu"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto" />
+        <TextView
+                android:id="@+id/trip_destination_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text="szczegóły celu"
+                android:fontFamily="@font/roboto" />
+    </LinearLayout>
 
-    <TextView
-            android:id="@+id/trip_destination_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:text="Nazwa celu"
-            android:textSize="15sp"
-            android:fontFamily="@font/roboto" />
-
-    <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=","
-            android:textSize="15sp"
-            android:fontFamily="@font/roboto"/>
-
-    <TextView
-            android:id="@+id/trip_destination_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:text="szczegóły celu"
-            android:textSize="15sp"
-            android:fontFamily="@font/roboto" />
 </LinearLayout>

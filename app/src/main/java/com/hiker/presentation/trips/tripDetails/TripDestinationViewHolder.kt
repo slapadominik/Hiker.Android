@@ -14,7 +14,7 @@ class TripDestinationViewHolder(inflater: LayoutInflater, parent: ViewGroup) : R
     private var destinationIndexTxtView: TextView = itemView.findViewById(R.id.trip_destination_index)
 
     fun bind(tripDestination: TripDestination){
-        destinationIndexTxtView.text = (tripDestination.index+1).toString()
+        destinationIndexTxtView.text = (tripDestination.index+1).toString()+"."
         if (tripDestination.type == 1){
             destinationNameTxtView.text = tripDestination.mountain!!.name
             destinationDetailsTxtView.text = "${tripDestination.mountain.metersAboveSeaLevel} m n.p.m."

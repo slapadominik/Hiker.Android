@@ -34,123 +34,164 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp">
-
-                <TextView
-                        android:id="@+id/trip_details_view_tripTitle_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tytuł wycieczki"
-                        android:fontFamily="@font/roboto"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                    android:orientation="vertical">
 
                 <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:background="@color/colorPrimary">
+
                     <TextView
-                            android:id="@+id/trip_details_view_dateFrom_textView"
+                            android:id="@+id/trip_details_view_tripTitle_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Data od"
-                            android:textSize="16sp"
+                            android:text="Tytuł wycieczki"
+                            android:fontFamily="@font/roboto"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="15dp"/>
+
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="15dp">
+                        <TextView
+                                android:id="@+id/trip_details_view_dateFrom_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Data od"
+                                android:textSize="16sp"
+                                android:layout_marginBottom="15dp"
+                                android:textColor="@color/white"
+                                android:fontFamily="@font/roboto"/>
+                        <TextView
+                                android:id="@+id/textView10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="-"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                android:fontFamily="@font/roboto"/>
+                        <TextView
+                                android:id="@+id/trip_details_view_dateTo_textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="Data do"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"/>
+                    </LinearLayout>
+                    <Button
+                            android:id="@+id/trip_details_joinTripButton"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/colorAccent"
+                            android:layout_marginLeft="10dp"
+                            android:visibility="gone"
+                            android:text="Dołącz"
+                            android:textColor="@color/white"
                             android:fontFamily="@font/roboto"/>
-                    <TextView
-                            android:id="@+id/textView10"
-                            android:layout_width="wrap_content"
+
+                    <Button
+                            android:id="@+id/trip_details_quitTripButton"
+                            android:layout_width="120dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="-"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/roboto"/>
-                    <TextView
-                            android:id="@+id/trip_details_view_dateTo_textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="Data do"
-                            android:textSize="16sp"/>
+                            android:backgroundTint="@color/colorAccent"
+                            android:visibility="gone"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="Rezygnuj"
+                            android:textColor="@color/white" />
                 </LinearLayout>
 
-                <Button
-                        android:id="@+id/trip_details_joinTripButton"
+
+
+
+
+
+                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:layout_marginTop="10dp"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:visibility="gone"
-                        android:text="Dołącz"
-                        android:textColor="@color/white"
-                        android:fontFamily="@font/roboto"/>
+                        android:layout_marginLeft="15dp">
+                    <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cele"
+                            android:fontFamily="@font/roboto"
+                            android:textSize="15sp" />
 
-                <Button
-                        android:id="@+id/trip_details_quitTripButton"
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:layout_marginTop="5dp"
+                            android:id="@+id/trip_destination_destinationsList"
+                            android:layout_width="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_height="wrap_content" />
+                </LinearLayout>
+                <View
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:visibility="gone"
-                        android:text="Rezygnuj"
-                        android:textColor="@color/white" />
-
-                <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="1dp"
                         android:layout_marginTop="15dp"
-                        android:text="Cele"
-                        android:fontFamily="@font/roboto"
-                        android:textColor="@android:color/black"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
+                        android:background="@color/lighter_gray"/>
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                        android:layout_marginTop="5dp"
-                        android:id="@+id/trip_destination_destinationsList"
+                <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                <TextView
-                        android:id="@+id/textView4"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:layout_marginTop="10dp"
-                        android:text="Uczestnicy"
-                        android:fontFamily="@font/roboto"
-                        android:textColor="@android:color/black"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-                <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/trip_details_participantsList"
+                        android:layout_marginLeft="15dp">
+                    <TextView
+                            android:id="@+id/textView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Uczestnicy"
+                            android:fontFamily="@font/roboto"
+                            android:textSize="15sp" />
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/trip_details_participantsList"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="5dp"/>
+                </LinearLayout>
+
+                <View
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="5dp"/>
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/lighter_gray"/>
 
-                <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="wrap_content"
+                <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:layout_marginTop="10dp"
-                        android:text="Opis"
-                        android:textColor="@android:color/black"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-                <TextView
-                        android:id="@+id/trip_details_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="Treść opisu"
-                        android:textSize="15sp"
-                        android:fontFamily="@font/roboto"/>
-
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp">
+                    <TextView
+                            android:id="@+id/textView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Opis"
+                            android:textSize="15sp" />
+                    <TextView
+                            android:id="@+id/trip_details_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="5dp"
+                            android:textSize="16sp"
+                            android:text="Treść opisu"
+                            android:fontFamily="@font/roboto"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
