@@ -118,12 +118,24 @@
         <action
                 android:id="@+id/action_tripDetailsView_to_tripFormView"
                 app:destination="@id/tripFormView" />
+        <action
+                android:id="@+id/action_tripDetailsView_to_tripParticipantView"
+                app:destination="@id/tripParticipantView" />
     </fragment>
     <fragment
             android:id="@+id/userEditView"
             android:name="com.hiker.presentation.user.edit.UserEditView"
             android:label="fragment_user_edit_view"
             tools:layout="@layout/fragment_user_edit_view">
+        <argument
+                android:name="userId"
+                app:argType="string" />
+    </fragment>
+    <fragment
+            android:id="@+id/tripParticipantView"
+            android:name="com.hiker.presentation.user.tripParticipant.TripParticipantView"
+            android:label="fragment_trip_participant_view"
+            tools:layout="@layout/fragment_trip_participant_view">
         <argument
                 android:name="userId"
                 app:argType="string" />

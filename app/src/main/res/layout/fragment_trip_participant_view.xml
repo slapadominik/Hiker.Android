@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.user.UserView">
+        tools:context=".presentation.user.tripParticipant.TripParticipantView">
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
         <androidx.appcompat.widget.Toolbar
-                android:id="@+id/user_profile_toolbar"
+                android:id="@+id/trip_participant_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-                app:title=""
-                app:menu="@menu/user_profile_menu" />
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                app:title="" />
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -43,7 +42,7 @@
                         android:layout_gravity="center">
 
                     <ImageView
-                            android:id="@+id/userView_imageView"
+                            android:id="@+id/tripParticipant_imageView"
                             android:layout_width="160dp"
                             android:layout_height="160dp"
                             android:layout_gravity="center"
@@ -70,7 +69,7 @@
                         android:layout_marginBottom="30dp">
 
                     <TextView
-                            android:id="@+id/userView_firstName_textView"
+                            android:id="@+id/tripParticipant_firstName_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto"
@@ -80,7 +79,7 @@
                             android:textStyle="bold" />
 
                     <TextView
-                            android:id="@+id/userView_lastName_textView"
+                            android:id="@+id/tripParticipant_lastName_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
@@ -112,7 +111,7 @@
                                 android:textSize="16sp" />
 
                         <TextView
-                                android:id="@+id/userView_age_textView"
+                                android:id="@+id/tripParticipant_age_textView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
@@ -141,7 +140,7 @@
                                 android:textSize="16sp" />
 
                         <TextView
-                                android:id="@+id/userView_phoneNumber_textView"
+                                android:id="@+id/tripParticipant_phoneNumber_textView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
@@ -199,7 +198,7 @@
                                 android:textSize="16sp"  />
 
                         <TextView
-                                android:id="@+id/userView_aboutMe_textView"
+                                android:id="@+id/tripParticipant_aboutMe_textView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0"
@@ -219,5 +218,3 @@
 
     </LinearLayout>
 </ScrollView>
-
-

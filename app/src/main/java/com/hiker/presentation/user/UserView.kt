@@ -52,7 +52,7 @@ class UserView : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
-        initMapViewModel()
+        initViewModel()
         setUpToolbarMenu(userSystemId!!)
         setupObservers(userSystemId)
     }
@@ -106,7 +106,7 @@ class UserView : Fragment() {
             .setNegativeButton("Nie", /* listener = */ null)
             .show()
     }
-    private fun initMapViewModel() {
+    private fun initViewModel() {
         userViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(UserViewModel::class.java)
     }
 }

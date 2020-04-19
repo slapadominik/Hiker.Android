@@ -17,7 +17,7 @@ class TripDestinationViewHolder(inflater: LayoutInflater, parent: ViewGroup) : R
         destinationIndexTxtView.text = (tripDestination.index+1).toString()+"."
         if (tripDestination.type == 1){
             destinationNameTxtView.text = tripDestination.mountain!!.name
-            destinationDetailsTxtView.text = "${tripDestination.mountain.metersAboveSeaLevel} m n.p.m."
+            destinationDetailsTxtView.text = "${tripDestination.mountain.regionName}, ${tripDestination.mountain.metersAboveSeaLevel} m n.p.m."
         }
         else if(tripDestination.type == 2) {
             destinationNameTxtView.text = tripDestination.rock!!.name

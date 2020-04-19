@@ -33,6 +33,7 @@ import com.hiker.domain.consts.OperationType
 import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.exceptions.TypeNotSupportedException
+import com.hiker.presentation.user.tripParticipant.TripParticipantViewArgs
 import kotlinx.android.synthetic.main.fragment_trip_details_view.*
 import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.time.LocalDateTime
@@ -44,7 +45,10 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMapView : com.google.android.gms.maps.MapView
     private lateinit var tripsDetailsViewModel: TripDetailsViewModel
-    private val userBriefAdapter =  UserBriefAdapter()
+    private val userBriefAdapter =  UserBriefAdapter {
+        val action = TripDetailsViewDirections.actionTripDetailsViewToTripParticipantView(it.id)
+        findNavController().navigate(action)
+    }
     private lateinit var googleMap: GoogleMap
 
     override fun onCreateView(
@@ -70,7 +74,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         setUpToolbarNavigationClick()
-        trip_details_participantsList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        trip_details_participantsList.layoutManager = LinearLayoutManager(activity)
         trip_details_participantsList.adapter = userBriefAdapter
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userSystemId = UUID.fromString(sharedPref.getString(getString(R.string.preferences_userSystemId), null))
@@ -211,7 +215,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
             .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips))}
         markers.forEach{map.addMarker(it)}
         if (locations.isNotEmpty()){
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(locations[0], 7.5f))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(locations[0], 7.5f))
         }
     }
 
