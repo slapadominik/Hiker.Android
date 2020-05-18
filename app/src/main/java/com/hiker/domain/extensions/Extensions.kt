@@ -16,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.hiker.R
 import java.util.*
+import java.util.regex.Pattern
 
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
@@ -84,3 +85,8 @@ fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
+
+
+const val REG = "^(\\+91[\\-\\s]?)?[0]?(91)?[789]\\d{9}\$"
+var PATTERN: Pattern = Pattern.compile(REG)
+fun CharSequence.isPhoneNumber() : Boolean = PATTERN.matcher(this).find()

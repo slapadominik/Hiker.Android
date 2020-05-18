@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
 import com.hiker.domain.entities.User
+import com.hiker.domain.extensions.isPhoneNumber
 import com.hiker.presentation.login.LoginViewModelFactory
 import com.hiker.presentation.user.UserViewModel
 import kotlinx.android.synthetic.main.fragment_user_edit_view.*
@@ -25,7 +26,7 @@ class UserEditView : Fragment() {
     private lateinit var viewModel: UserEditViewModel
     private lateinit var bottomNavigationView: BottomNavigationView
     private val dateFormater = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
-    private lateinit var birthday : Date
+    private var birthday : Date? = null
     private val birthdayCalendar = Calendar.getInstance()
 
     override fun onCreateView(
@@ -67,8 +68,9 @@ class UserEditView : Fragment() {
             val firstNameValid = IsFirstNameValid()
             val lastNameValid = IsLastNameValid()
             val birthdayValid= IsBirthdayValid()
+            val isPhoneNumberValid = IsPhoneNumberValid()
 
-            if (firstNameValid && birthdayValid && lastNameValid){
+            if (firstNameValid && birthdayValid && lastNameValid && isPhoneNumberValid){
                 val firstName = user_edit_firstNameInput.text.toString()
                 val lastName = user_edit_lastNameInput.text.toString()
                 val phoneNumber = user_edit_phoneNumberInput.text.toString()
@@ -125,13 +127,16 @@ class UserEditView : Fragment() {
 
     private fun IsBirthdayValid() : Boolean{
         var result = false
-        if (birthday >= Calendar.getInstance().time){
-            user_edit_birthday.error = "Data jest wymagana";
+        if (birthday != null){
+            if (birthday!! >= Calendar.getInstance().time){
+                user_edit_birthday.error = "Data jest wymagana";
+            }
+            else{
+                result = true
+                user_edit_birthday.error = null
+            }
         }
-        else{
-            result = true
-            user_edit_birthday.error = null
-        }
+
         return result
     }
 
@@ -145,6 +150,16 @@ class UserEditView : Fragment() {
             user_edit_lastName.error = null
         }
         return result
+    }
+
+
+    private fun IsPhoneNumberValid() : Boolean{
+        val phoneNumber = user_edit_phoneNumberInput.toString()
+        if (phoneNumber.length != 9 || !phoneNumber.isPhoneNumber()){
+            user_edit_phoneNumber.error = "Numer telefonu musi mieć 9 cyfr"
+            return false
+        }
+        return true
     }
 
     private fun initViewModel() {

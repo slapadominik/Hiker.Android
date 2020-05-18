@@ -45,7 +45,9 @@ class TripParticipantView : Fragment() {
             if (it != null){
                 tripParticipant_firstName_textView.text = it.firstName
                 tripParticipant_lastName_textView.text = it.lastName
-                tripParticipant_age_textView.text =  com.hiker.domain.extensions.Period.between(it.birthday, Calendar.getInstance().time).toString()
+                if (it.birthday != null){
+                    tripParticipant_age_textView.text =  com.hiker.domain.extensions.Period.between(it.birthday, Calendar.getInstance().time).toString()
+                }
                 tripParticipant_imageView.visibility = View.VISIBLE
                 imgProgress.visibility = View.GONE
                 userViewModel.setUserThumbnail(tripParticipant_imageView, it.facebookId)

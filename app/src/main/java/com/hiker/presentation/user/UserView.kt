@@ -63,7 +63,9 @@ class UserView : Fragment() {
                 userViewModel.cacheUser(it)
                 userView_firstName_textView.text = it.firstName
                 userView_lastName_textView.text = it.lastName
-                userView_age_textView.text =  com.hiker.domain.extensions.Period.between(it.birthday, Calendar.getInstance().time).toString()
+                if (it.birthday != null){
+                    userView_age_textView.text =  com.hiker.domain.extensions.Period.between(it.birthday, Calendar.getInstance().time).toString()
+                }
                 userView_imageView.visibility = View.VISIBLE
                 imgProgress.visibility = View.GONE
                 userViewModel.setUserThumbnail(userView_imageView, it.facebookId)

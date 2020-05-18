@@ -11,6 +11,6 @@ import java.util.*
 data class UserBrief(@PrimaryKey val id: String,
                      val firstName: String,
                      val lastName: String,
-                     val birthday: Date,
+                     val birthday: Date?,
                      val profilePictureUrl: String
 )

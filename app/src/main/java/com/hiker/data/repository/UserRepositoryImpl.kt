@@ -2,10 +2,7 @@ package com.hiker.data.repository
 
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.hiker.data.converters.asDatabaseModel
 import com.hiker.data.converters.asDomainModel
 import com.hiker.data.converters.toEditUserCommand
 import com.hiker.data.db.ApplicationDatabase
@@ -21,7 +18,7 @@ import java.util.*
 const val TAG : String = "UserRepositoryImpl"
 
 interface UserRepository {
-    suspend fun getRemoteUserByFacebookId(facebookId: String) : User
+    suspend fun getRemoteUserByFacebookId(facebookId: String) : User?
     suspend fun registerFacebookUser(facebookToken: String) : UUID
     suspend fun getUserBySystemId(userSystemId: UUID): User
     fun getUserBriefs(userIds: List<String>) : LiveData<List<UserBrief>>
@@ -54,11 +51,11 @@ class UserRepositoryImpl(context: Context) : UserRepository {
         return database.userBriefDao().getMany(userIds)
     }
 
-    override suspend fun getRemoteUserByFacebookId(facebookId: String): User {
+    override suspend fun getRemoteUserByFacebookId(facebookId: String): User? {
         val response = userService.getUserByFacebookId(facebookId)
         return if (response.isSuccessful)
             response.body()!!.asDomainModel()
-        else throw ApiException("wtf")
+        else null
     }
 
     override suspend fun addUserToLocalDb(userBrief: UserBrief) {

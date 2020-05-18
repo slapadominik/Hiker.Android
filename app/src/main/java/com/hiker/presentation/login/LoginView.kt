@@ -82,8 +82,8 @@ class LoginView : Fragment() {
                                 loginViewModel.getUserBySystemId(it).observe(this@LoginView, Observer { user ->
                                     loginViewModel.addUserToDatabase(user!!.asUserBrief())
                                 })
+                                findNavController().navigate(R.id.mapView)
                             })
-                            findNavController().navigate(R.id.mapView)
                         }
                     })
                 }

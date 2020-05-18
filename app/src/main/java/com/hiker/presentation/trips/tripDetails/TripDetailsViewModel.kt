@@ -26,7 +26,13 @@ class TripDetailsViewModel(private val tripParticipantsRepository: TripParticipa
 
     fun getUsersBriefs(userIds: List<String>) : LiveData<List<UserBrief>> {
         return Transformations.map(userRepository.getUserBriefs(userIds)){
-            it.map { x -> UserBrief(x.id, x.firstName, x.lastName, Period.between(x.birthday, Calendar.getInstance().time).toString(), x.profilePictureUrl) }
+            it.map { x ->
+                if (x.birthday != null){
+                    UserBrief(x.id, x.firstName, x.lastName, Period.between(x.birthday, Calendar.getInstance().time).toString(), x.profilePictureUrl)
+                }
+            else{
+                    UserBrief(x.id, x.firstName, x.lastName, "", x.profilePictureUrl)
+                }}
         }
     }
 

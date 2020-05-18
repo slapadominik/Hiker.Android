@@ -11,7 +11,7 @@ import java.util.*
 data class User(@PrimaryKey val id: String,
                  val firstName: String,
                  val lastName: String,
-                 val birthday: Date,
+                 val birthday: Date?,
                  val facebookId: String,
                  val phoneNumber: String?,
                  val aboutMe: String?)
