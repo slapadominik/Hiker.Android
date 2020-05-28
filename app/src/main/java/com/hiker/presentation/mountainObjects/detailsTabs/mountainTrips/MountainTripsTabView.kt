@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiker.R
+import com.hiker.domain.extensions.empty
 import com.hiker.presentation.mountainObjects.MountainDetailsViewDirections
 import com.hiker.presentation.trips.tabViews.Trip
 import com.hiker.presentation.trips.tabViews.TripAdapter
@@ -74,7 +75,8 @@ class MountainTripsTabView : Fragment() {
                                 action.tripId = trip.id
                                 action.tripTitle = trip.title
                                 action.tripDateFrom = dateFormater.format(trip.dateFrom)
-                                action.tripDateTo = dateFormater.format(trip.dateTo)
+                                action.tripDateTo = if (trip.dateTo != null) dateFormater.format(trip.dateTo) else String.empty()
+                                action.isOneDay = trip.isOneDay
                                 findNavController().navigate(action)
                             }
                     }

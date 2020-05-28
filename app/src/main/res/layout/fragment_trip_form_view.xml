@@ -63,21 +63,17 @@
                             android:textColor="#555555"
                             android:textSize="16sp"
                             android:layout_marginBottom="5dp"/>
+                    <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/trip_form_chipGroup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
+                    </com.google.android.material.chip.ChipGroup>
 
                     <include layout="@layout/upcoming_trips_destination_main_field"/>
                 </LinearLayout>
 
-                <Button
-                        android:id="@+id/upcomingTripsView_addDestination_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="-8dp"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        app:icon="@drawable/ic_add_black_20dp"
-                        android:text="Dodaj nowy cel"
-                        android:textSize="13sp"
-                        android:textColor="@color/colorPrimary" />
+
             </LinearLayout>
 
             <LinearLayout
