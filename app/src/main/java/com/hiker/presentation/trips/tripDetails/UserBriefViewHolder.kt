@@ -15,7 +15,6 @@ class UserBriefViewHolder(inflater: LayoutInflater, parent: ViewGroup) : Recycle
     private var profilePictureImageView: ImageView = itemView.findViewById(R.id.trips_details_profile_image)
     private var firstNameTextView: TextView = itemView.findViewById(R.id.user_item_userFirstName)
     private var lastNameTextView: TextView = itemView.findViewById(R.id.user_item_userLastName)
-    private var ageTextView: TextView = itemView.findViewById(R.id.user_item_age)
     private var itemLayout: LinearLayout = itemView.findViewById(R.id.user_item_layout)
 
     fun bind(userBrief: UserBrief, clickListener: (UserBrief) -> Unit){
@@ -25,7 +24,6 @@ class UserBriefViewHolder(inflater: LayoutInflater, parent: ViewGroup) : Recycle
 
         firstNameTextView.text = userBrief.firstName
         lastNameTextView.text = userBrief.lastName
-        ageTextView.text = userBrief.age
         itemLayout.setOnClickListener{clickListener(userBrief)}
     }
 }

@@ -62,7 +62,8 @@ class MountainTripsTabView : Fragment() {
                                         tB.id,
                                         tB.tripTitle,
                                         tB.dateFrom,
-                                        tB.dateTo
+                                        tB.dateTo,
+                                        tB.isOneDay
                                     )
                                 },
                                 requireContext()

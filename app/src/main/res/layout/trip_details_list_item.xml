@@ -8,20 +8,16 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/trips_details_profile_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:src="@drawable/ic_user_solid"
                 android:layout_marginStart="5dp"/>
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp">
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
                         android:orientation="horizontal">
                         <TextView
                                 android:id="@+id/user_item_userFirstName"
@@ -40,24 +36,6 @@
                                 android:textSize="16sp"
                                 android:text="Nazwisko" />
 
-                </LinearLayout>
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                                android:id="@+id/user_item_ageText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Wiek: " />
-
-                        <TextView
-                                android:id="@+id/user_item_age"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0" />
-
-                </LinearLayout>
 
 
         </LinearLayout>

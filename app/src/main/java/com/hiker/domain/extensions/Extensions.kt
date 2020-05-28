@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.hiker.R
+import com.hiker.domain.exceptions.InvalidDateException
 import java.util.*
 import java.util.regex.Pattern
 
@@ -84,6 +85,26 @@ fun Fragment.hideKeyboard() {
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+fun String.Companion.empty(): String {
+    return ""
+}
+
+fun Date.getWeekDayName() : String {
+    val calendar = Calendar.getInstance();
+    calendar.time = this
+    val day = calendar.get(Calendar.DAY_OF_WEEK);
+
+    when (day) {
+        Calendar.MONDAY -> return "Poniedziałek"
+        Calendar.TUESDAY -> return "Wtorek"
+        Calendar.WEDNESDAY -> return "Środa"
+        Calendar.THURSDAY -> return "Czwartek"
+        Calendar.FRIDAY -> return "Piątek"
+        Calendar.SATURDAY -> return "Sobota"
+        Calendar.SUNDAY -> return "Niedziela"
+        else -> throw InvalidDateException("Niepoprawna data")
+    }
 }
 
 

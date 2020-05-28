@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiker.R
 import com.hiker.domain.consts.OperationType
+import com.hiker.domain.extensions.empty
 import com.hiker.presentation.trips.TripsViewDirections
 import com.hiker.presentation.trips.tabViews.Trip
 import com.hiker.presentation.trips.tabViews.TripAdapter
@@ -66,14 +67,16 @@ class UpcomingTripsTabView : Fragment() {
                             x.id,
                             x.tripTitle,
                             x.dateFrom,
-                            x.dateTo
+                            x.dateTo,
+                            x.isOneDay
                         )
                     }, requireContext()) {
                         val action = TripsViewDirections.actionTripsViewToTripDetailsView()
                         action.tripId = it.id
                         action.tripTitle = it.title
                         action.tripDateFrom = dateFormater.format(it.dateFrom)
-                        action.tripDateTo = dateFormater.format(it.dateTo)
+                        action.tripDateTo = if (it.dateTo != null) dateFormater.format(it.dateTo) else String.empty()
+                        action.isOneDay = it.isOneDay
                         findNavController().navigate(action)
                     }
             }

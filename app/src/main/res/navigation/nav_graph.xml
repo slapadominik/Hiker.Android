@@ -121,6 +121,10 @@
         <action
                 android:id="@+id/action_tripDetailsView_to_tripParticipantView"
                 app:destination="@id/tripParticipantView" />
+        <argument
+                android:name="isOneDay"
+                app:argType="boolean"
+                android:defaultValue="false" />
     </fragment>
     <fragment
             android:id="@+id/userEditView"

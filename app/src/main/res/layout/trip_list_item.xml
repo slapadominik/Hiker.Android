@@ -47,7 +47,7 @@
                     android:textSize="12sp" />
 
             <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/trip_list_item_minus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"

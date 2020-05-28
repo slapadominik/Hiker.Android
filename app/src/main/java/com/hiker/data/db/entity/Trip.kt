@@ -9,4 +9,5 @@ data class Trip(@PrimaryKey val tripId: Int,
                 val title: String,
                 val description: String,
                 val dateFrom: Date,
-                val dateTo: Date)
+                val dateTo: Date?,
+                val isOneDay: Boolean)

@@ -8,7 +8,8 @@ data class TripQuery(
     @SerializedName("tripTitle") val tripTitle: String,
     @SerializedName("author") val author: UserBrief,
     @SerializedName("dateFrom") val dateFrom: Date,
-    @SerializedName("dateTo") val dateTo: Date,
+    @SerializedName("dateTo") val dateTo: Date?,
+    @SerializedName("isOneDay") val isOneDay: Boolean,
     @SerializedName("description") val description: String,
     @SerializedName("tripDestinations")  val tripDestinations: List<TripDestinationQuery>,
     @SerializedName("tripParticipants")  val tripParticipants: List<UserBrief>

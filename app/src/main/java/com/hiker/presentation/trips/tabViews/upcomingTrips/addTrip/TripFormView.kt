@@ -32,8 +32,10 @@ import com.hiker.domain.consts.OperationType
 import com.hiker.domain.extensions.isNullOrEmpty
 import com.hiker.domain.extensions.setUpMarker
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.*
+import kotlinx.android.synthetic.main.upcoming_trips_destination_field.tripForm_destinationRowLayout
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_field.view.tripForm_searchView_1
+import kotlinx.android.synthetic.main.upcoming_trips_destination_main_field.*
 
 
 class TripFormView : Fragment(), OnMapReadyCallback {
@@ -47,6 +49,7 @@ class TripFormView : Fragment(), OnMapReadyCallback {
 
     private var dateFrom: Date? = null
     private var dateTo: Date? = null
+    private var isOneDay = true
     private val tripDestinations : MutableMap<Int, TripDestinationCommand> = mutableMapOf()
     private lateinit var googleMapView: com.google.android.gms.maps.MapView
     private lateinit var googleMap : GoogleMap
@@ -72,6 +75,8 @@ class TripFormView : Fragment(), OnMapReadyCallback {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             showAlertDialog()
         }
+
+
         arguments?.let {
             val safeArgs = TripFormViewArgs.fromBundle(it)
             if (safeArgs.operationType == OperationType.Add){
@@ -109,7 +114,7 @@ class TripFormView : Fragment(), OnMapReadyCallback {
     private fun setUpTextFields(tripTitle: String?,
                                 tripDescription: String?,
                                 dateFrom: Date,
-                                dateTo: Date,
+                                dateTo: Date?,
                                 mountainName: String){
         this.dateFrom = dateFrom
         this.dateTo = dateTo
@@ -158,17 +163,22 @@ class TripFormView : Fragment(), OnMapReadyCallback {
     }
 
     private fun ValidateDateTo() : Boolean {
-        if (dateTo == null){
-            tripForm_endDate_editInput.error = "Data jest wymagana"
-            return false
-        }
-        else if (dateTo!! < Calendar.getInstance().time){
-            tripForm_endDate_editInput.error = "Wycieczka nie może kończyć się w przeszłości"
-            return false
+        if (isOneDay){
+            return true
         }
         else{
-            tripForm_endDate_editInput.error = null
-            return true
+            if (dateTo == null){
+                tripForm_endDate_editInput.error = "Data jest wymagana"
+                return false
+            }
+            else if (dateTo!! < Calendar.getInstance().time){
+                tripForm_endDate_editInput.error = "Wycieczka nie może kończyć się w przeszłości"
+                return false
+            }
+            else{
+                tripForm_endDate_editInput.error = null
+                return true
+            }
         }
     }
 
@@ -196,8 +206,9 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                 val trip = TripCommand(
                     tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
                     authorId = userSystemId!!,
-                    dateFrom = beginTripCalendar.time,
-                    dateTo = endTripCalendar.time,
+                    dateFrom = dateFrom!!,
+                    dateTo = dateTo,
+                    isOneDay = isOneDay,
                     description = fragment_trip_form_view_description.text.toString(),
                     tripDestinations = tripDestinations.values.toList()
                 )
@@ -242,6 +253,17 @@ class TripFormView : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupOnClickListeners(){
+        radioBtn_ManyDays.setOnCheckedChangeListener{radioBtn, isChecked ->
+            tripForm_endDate_editInput.isEnabled = isChecked
+            if (!isChecked){
+                isOneDay = true
+                dateTo = null
+                tripForm_endDate_editText.text?.clear()
+            }
+            else{
+                isOneDay = false
+            }
+        }
         tripForm_beginDate_editText.setOnFocusChangeListener{x, hasFocus ->
             if (hasFocus){
                 DatePickerDialog(requireContext(), {view, year, month, day ->
@@ -267,9 +289,9 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                 android.R.layout.simple_dropdown_item_1line, // Layout
                 mountains
             )
-            tripForm_searchView_1.setAdapter(adapter)
+            tripForm_searchView.setAdapter(adapter)
         })
-        tripForm_searchView_1.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
+        tripForm_searchView.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
             val selectedItem =  parent.getItemAtPosition(position) as Mountain
             val index = 1
             tripDestinations[index] = TripDestinationCommand(
@@ -282,14 +304,6 @@ class TripFormView : Fragment(), OnMapReadyCallback {
             markersMap[index] = marker
         }
 
-        trip_form_removeDestinationBtn.setOnClickListener{
-            tripForm_destinations_layout.removeView(tripForm_destinationRowLayout)
-            val index = 1
-            tripDestinations.remove(index)
-            val marker = markersMap[index]
-            marker?.remove()
-            markersMap.remove(index)
-        }
         upcomingTripsView_addDestination_button.setOnClickListener {
             val destinationRowView = requireActivity().layoutInflater.inflate(R.layout.upcoming_trips_destination_field, null)
             val adapter = MountainArrayAdapter(

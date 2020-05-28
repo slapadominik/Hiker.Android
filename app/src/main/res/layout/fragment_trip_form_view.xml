@@ -33,6 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -42,8 +44,6 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="20dp"
                     android:orientation="vertical">
 
@@ -59,37 +59,109 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="1"
-                            android:text="Cele wyjazdu:"
+                            android:text="Cele wyjazdu"
                             android:textColor="#555555"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:layout_marginBottom="5dp"/>
 
-                    <include layout="@layout/upcoming_trips_destination_field"/>
+
+                    <include layout="@layout/upcoming_trips_destination_main_field"/>
                 </LinearLayout>
 
                 <Button
                         android:id="@+id/upcomingTripsView_addDestination_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="-8dp"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         app:icon="@drawable/ic_add_black_20dp"
                         android:text="Dodaj nowy cel"
+                        android:textSize="13sp"
                         android:textColor="@color/colorPrimary" />
             </LinearLayout>
 
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+                <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:text="Typ wyjazdu"
+                        android:textColor="#555555"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="5dp"/>
+                <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkedButton="@+id/radioBtn_OneDay"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp">
+                    <RadioButton
+                            android:id="@+id/radioBtn_OneDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jednodniowy"/>
+                    <RadioButton
+                            android:id="@+id/radioBtn_ManyDays"
+                            android:layout_marginLeft="40dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kilkudniowy"/>
+                </RadioGroup>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp">
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tripForm_beginDate_editInput"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true"
+                        app:startIconDrawable="@drawable/ic_date_range_grey_20dp"
+                        app:startIconContentDescription="elp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:hint="Początek">
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tripForm_beginDate_editText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tripForm_endDate_editInput"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true"
+                        android:layout_marginLeft="10dp"
+                        app:startIconDrawable="@drawable/ic_date_range_grey_20dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:hint="Koniec"
+                        android:enabled="false">
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tripForm_endDate_editText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp" />
 
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fragment_trip_form_view_tripInput"
                     android:layout_width="match_parent"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="wrap_content"
                     android:hint="Nazwa wyjazdu"
                     app:errorEnabled="true"
                     app:counterEnabled="true"
                     app:counterMaxLength="20"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -99,53 +171,16 @@
                         android:fontFamily="@font/roboto"
                         android:maxLength="20"
                         android:maxLines="1"
-                        android:textSize="16sp"/>
+                        android:textSize="15sp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tripForm_beginDate_editInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    app:errorEnabled="true"
-                    app:startIconDrawable="@drawable/ic_date_range_grey_20dp"
-                    app:startIconContentDescription="elp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                    android:hint="Początek wyjazdu">
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/tripForm_beginDate_editText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tripForm_endDate_editInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    app:errorEnabled="true"
-                    app:startIconDrawable="@drawable/ic_date_range_grey_20dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                    android:hint="Koniec wyjazdu">
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/tripForm_endDate_editText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:counterEnabled="true"
                     app:counterMaxLength="250"
                     android:hint="Opis wyjazdu">
@@ -154,7 +189,7 @@
                         android:id="@+id/fragment_trip_form_view_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

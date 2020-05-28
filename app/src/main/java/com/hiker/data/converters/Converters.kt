@@ -5,6 +5,7 @@ import com.hiker.data.db.entity.UserBrief
 import com.hiker.data.remote.dto.command.EditUserCommand
 import com.hiker.data.remote.dto.query.TripQuery
 import com.hiker.domain.entities.*
+import com.hiker.domain.extensions.isNullOrEmpty
 
 
 fun com.hiker.data.remote.dto.MountainBrief.asDbModel() = com.hiker.data.db.entity.Mountain(
@@ -79,7 +80,8 @@ fun com.hiker.data.remote.dto.TripBrief.asDomainModel() = TripBrief(
     id = id,
     tripTitle = tripTitle,
     dateFrom = dateFrom,
-    dateTo = dateTo
+    dateTo = dateTo,
+    isOneDay = isOneDay
 )
 
 
@@ -110,5 +112,6 @@ fun TripQuery.asDbModel() = Trip(
     title = tripTitle,
     dateFrom = dateFrom,
     dateTo = dateTo,
-    description = description
+    description = description,
+    isOneDay = isOneDay
 )

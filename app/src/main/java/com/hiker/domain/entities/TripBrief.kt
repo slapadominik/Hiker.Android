@@ -6,5 +6,6 @@ data class TripBrief(
     val id: Int,
     val tripTitle: String,
     val dateFrom: Date,
-    val dateTo: Date
+    val dateTo: Date?,
+    val isOneDay: Boolean
 )

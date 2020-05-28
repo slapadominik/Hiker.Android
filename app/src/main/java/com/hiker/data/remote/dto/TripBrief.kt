@@ -7,5 +7,6 @@ data class TripBrief (
     @SerializedName("id") val id: Int,
     @SerializedName("tripTitle") val tripTitle: String,
     @SerializedName("dateFrom") val dateFrom: Date,
-    @SerializedName("dateTo") val dateTo: Date
+    @SerializedName("dateTo") val dateTo: Date,
+    @SerializedName("isOneDay") val isOneDay: Boolean
 )

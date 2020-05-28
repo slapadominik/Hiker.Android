@@ -17,11 +17,19 @@ class TripViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView
     private var titleTextView: TextView = itemView.findViewById(R.id.trip_list_item_title)
     private var dateFormater: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
     private var itemLayout: LinearLayout = itemView.findViewById(R.id.trip_list_item_layout)
+    private var minus: TextView = itemView.findViewById(R.id.trip_list_item_minus)
 
     fun bind(trip: Trip, clickListener: (Trip) -> Unit){
         titleTextView.text = trip.title
         dateFromTextView.text = dateFormater.format(trip.dateFrom)
-        dateToTextView.text = dateFormater.format(trip.dateTo)
+
+        if (!trip.isOneDay){
+            dateToTextView.text = dateFormater.format(trip.dateTo)
+        }
+        else{
+            dateToTextView.text = null
+            minus.text = null
+        }
         itemLayout.setOnClickListener{ clickListener(trip) }
     }
 

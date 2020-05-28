@@ -33,10 +33,14 @@ import com.hiker.domain.consts.OperationType
 import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.exceptions.TypeNotSupportedException
+import com.hiker.domain.extensions.getWeekDayName
 import com.hiker.presentation.user.tripParticipant.TripParticipantViewArgs
 import kotlinx.android.synthetic.main.fragment_trip_details_view.*
 import kotlinx.android.synthetic.main.fragment_trip_form_view.*
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -45,6 +49,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMapView : com.google.android.gms.maps.MapView
     private lateinit var tripsDetailsViewModel: TripDetailsViewModel
+    private val dateFormater  = SimpleDateFormat("yyyy-MM-dd")
     private val userBriefAdapter =  UserBriefAdapter {
         val action = TripDetailsViewDirections.actionTripDetailsViewToTripParticipantView(it.id)
         findNavController().navigate(action)
@@ -80,7 +85,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         val userSystemId = UUID.fromString(sharedPref.getString(getString(R.string.preferences_userSystemId), null))
         arguments?.let {
             val safeArgs = TripDetailsViewArgs.fromBundle(it)
-            setUpTextViews(safeArgs.tripTitle, safeArgs.tripDateFrom, safeArgs.tripDateTo)
+            setUpTextViews(safeArgs.tripTitle, safeArgs.tripDateFrom, safeArgs.tripDateTo, safeArgs.isOneDay)
             setUpJoinTripButton(safeArgs.tripId, userSystemId)
             setUpQuitTripButton(safeArgs.tripId, userSystemId)
             getTripDetails(safeArgs.tripId, userSystemId)
@@ -110,7 +115,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
     private fun getTripDetails(tripId: Int, userSystemId: UUID){
         try{
             tripsDetailsViewModel.getTrip(tripId).observe(this, Observer { trip ->
-                if (trip.author.id == userSystemId && trip.dateTo > Calendar.getInstance().time){
+                if (trip.author.id == userSystemId && trip.dateFrom > Calendar.getInstance().time){
                    setUpToolbarMenu(trip.id, trip.tripTitle, trip.description)
                 }
                 if (!trip.tripParticipants.any { x -> x.id ==  userSystemId} && trip.author.id != userSystemId){
@@ -176,11 +181,19 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         findNavController().navigate(action)
     }
 
-    private fun setUpTextViews(tripTitle: String, tripDateFrom: String, tripDateTo: String)
+    private fun setUpTextViews(tripTitle: String, tripDateFrom: String, tripDateTo: String, isOneDay: Boolean)
     {
         trip_details_view_tripTitle_textView.text = tripTitle
         trip_details_view_dateFrom_textView.text = tripDateFrom
-        trip_details_view_dateTo_textView.text = tripDateTo
+        if (isOneDay){
+            trip_details_view_minus.visibility = View.GONE
+            trip_details_view_dateTo_textView.visibility = View.GONE
+            val date = dateFormater.parse(tripDateFrom)
+            trip_details_view_oneDay_textView.text = "("+date.getWeekDayName()+")"
+        }
+        else{
+            trip_details_view_dateTo_textView.text = tripDateTo
+        }
     }
 
     private fun setUpJoinTripButton(tripId: Int, userId: UUID){
