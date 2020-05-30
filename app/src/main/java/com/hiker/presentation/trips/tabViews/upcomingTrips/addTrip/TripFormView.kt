@@ -3,7 +3,6 @@ package com.hiker.presentation.trips.tabViews.upcomingTrips.addTrip
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +31,6 @@ import com.hiker.data.remote.dto.command.TripDestinationCommand
 import com.hiker.domain.consts.OperationType
 import com.hiker.domain.extensions.isNullOrEmpty
 import com.hiker.domain.extensions.setUpMarker
-import kotlinx.android.synthetic.main.upcoming_trips_destination_field.*
 import kotlinx.android.synthetic.main.upcoming_trips_destination_main_field.*
 
 
@@ -233,12 +231,6 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                     description = fragment_trip_form_view_description.text.toString(),
                     tripDestinations = tripDestinations.values.toList()
                 )
-                Log.i("TripFormView",
-                    "tripTitle: ${trip.tripTitle}, " +
-                            "authorId: ${trip.authorId}," +
-                            "dateFrom: ${trip.dateFrom}, " +
-                            "dateTo: ${trip.dateTo}," +
-                            "description: ${trip.description}")
                 try{
                     viewModel.addTrip(trip).observe(this, Observer { tripId-> findNavController().popBackStack()})
                 }

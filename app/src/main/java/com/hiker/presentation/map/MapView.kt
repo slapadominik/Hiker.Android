@@ -159,7 +159,7 @@ class MapView : Fragment(), OnMapReadyCallback {
                         }
                         var text = "Brak szczytów z wycieczkami"
                         if (!it.isEmpty()){
-                            text = "Znaleziono ${it.count()} szczyty z wycieczkami"
+                            text = "Znaleziono ${it.count()} ${getPluralText(it.count(), "szczyt", "szczyty", "szczytów")} z wycieczkami"
                         }
                         Snackbar.make(relativeLayout,text, Snackbar.LENGTH_LONG)
                             .setAnchorView(coordinatorLayout)
@@ -171,6 +171,8 @@ class MapView : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
+
 
     private fun setUpMap() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

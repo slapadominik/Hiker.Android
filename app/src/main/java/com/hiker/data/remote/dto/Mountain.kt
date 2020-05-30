@@ -7,7 +7,7 @@ class Mountain(
     @SerializedName("name") val name: String,
     @SerializedName("metersAboveSeaLevel") val metersAboveSeaLevel: Int,
     @SerializedName("location") val location: Location,
-    @SerializedName("thumbnailId") val thumbnailId : String,
     @SerializedName("trails") val trails : List<MountainTrail>,
-    @SerializedName("mountainImages") val mountainImages: List<Image>
+    @SerializedName("mountainImages") val mountainImages: List<Image>,
+    @SerializedName("description") val description: String
 )

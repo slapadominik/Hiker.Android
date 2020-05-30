@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_mountain_information_view.*
 
 
 private const val ARG_TRAILS = "ARG_TRAILS"
+private const val ARG_DESCRIPTION = "ARG_DESCRIPTION"
 
 class MountainInformationTabView : Fragment() {
 
@@ -22,12 +23,15 @@ class MountainInformationTabView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //val trails = listOf<Trail>(Trail(1, 2.5f, "blue"), Trail(2, 3.15f, "red"), Trail(2, 3.15f, "red"))
         arguments?.let{
             val trails = it.getParcelableArrayList<MountainTrail>(ARG_TRAILS)
+            val description = it.getString(ARG_DESCRIPTION)
             if (trails != null){
                 mountain_information_trailsList.layoutManager = LinearLayoutManager(activity)
                 mountain_information_trailsList.adapter = TrailAdapter(requireContext(), trails.map { t -> Trail(t.id,t.timeToTopMinutes/60,t.color) })
+            }
+            if (description != null){
+                mountain_information_description.text = description
             }
         }
 
@@ -35,10 +39,11 @@ class MountainInformationTabView : Fragment() {
 
     companion object {
         @JvmStatic
-        fun create(trails: ArrayList<MountainTrail>) =
+        fun create(trails: ArrayList<MountainTrail>, description: String) =
             MountainInformationTabView().apply {
                 arguments = Bundle().apply {
                     putParcelableArrayList(ARG_TRAILS, trails)
+                    putString(ARG_DESCRIPTION, description)
                 }
             }
     }

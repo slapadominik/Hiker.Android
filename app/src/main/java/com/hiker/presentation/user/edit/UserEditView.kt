@@ -57,9 +57,12 @@ class UserEditView : Fragment() {
         viewModel.getUsersData(UUID.fromString(userSystemId)).observe(requireActivity(), Observer {
             if (it != null){
                 birthday = it.birthday
+
                 user_edit_firstNameInput.setText(it.firstName)
                 user_edit_lastNameInput.setText(it.lastName)
-                user_edit_birthdayInput.setText(dateFormater.format(it.birthday))
+                if (it.birthday != null){
+                    user_edit_birthdayInput.setText(dateFormater.format(it.birthday))
+                }
                 user_edit_phoneNumberInput.setText(it.phoneNumber)
                 user_edit_aboutMeInput.setText(it.aboutMe)
             }
@@ -91,7 +94,7 @@ class UserEditView : Fragment() {
 
         }
 
-        user_edit_birthday.setOnFocusChangeListener{x, hasFocus ->
+        user_edit_birthdayInput.setOnFocusChangeListener{x, hasFocus ->
             if (hasFocus){
                 DatePickerDialog(requireContext(), {view, year, month, day ->
                     birthdayCalendar.set(year, month, day)
@@ -154,7 +157,7 @@ class UserEditView : Fragment() {
 
 
     private fun IsPhoneNumberValid() : Boolean{
-        val phoneNumber = user_edit_phoneNumberInput.toString()
+        val phoneNumber = user_edit_phoneNumberInput.text.toString()
         if (phoneNumber.length != 9 || !phoneNumber.isPhoneNumber()){
             user_edit_phoneNumber.error = "Numer telefonu musi mieć 9 cyfr"
             return false

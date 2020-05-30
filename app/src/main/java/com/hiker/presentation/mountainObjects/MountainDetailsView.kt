@@ -48,7 +48,7 @@ class MountainDetailsView : Fragment() {
     private fun getMountainDetails(tripDestinationType: Int, mountainId: Int){
         mountainDetailsViewModel.getMountainDetails(mountainId).observe(this, Observer {
             mountain_details_imageSlider.sliderAdapter = SliderAdapter(requireContext(), it.mountainImages)
-            setUpTabs(ArrayList(it.trails),tripDestinationType,mountainId)
+            setUpTabs(ArrayList(it.trails), it.description, tripDestinationType, mountainId)
         })
     }
 
@@ -58,9 +58,9 @@ class MountainDetailsView : Fragment() {
         mountainDetailsView_metersAboveSea.text = metersAboveSeaLevel.toString()
     }
 
-    private fun setUpTabs(trails: ArrayList<MountainTrail>, tripDestinationType: Int, mountainId: Int){
+    private fun setUpTabs(trails: ArrayList<MountainTrail>, description: String, tripDestinationType: Int, mountainId: Int){
         val fragmentAdapter = MountainDetailsViewPagerAdapter(childFragmentManager)
-        fragmentAdapter.addFragment(MountainInformationTabView.create(trails), "Informacje")
+        fragmentAdapter.addFragment(MountainInformationTabView.create(trails, description), "Informacje")
         fragmentAdapter.addFragment(MountainTripsTabView.create(tripDestinationType, mountainId, 0), "Wycieczki")
         mountain_details_viewpager.adapter = fragmentAdapter
         mountain_details_tablayout.setupWithViewPager(mountain_details_viewpager)

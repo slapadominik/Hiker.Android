@@ -55,6 +55,17 @@ private fun bitmapDescriptorFromVectorSize(context: Context, @DrawableRes vector
     return BitmapDescriptorFactory.fromBitmap(bitmap)
 }
 
+fun getPluralText(itemsCount: Int, text1: String, text2: String, text3: String) : String {
+    if ( itemsCount == 1 ) {
+        return text1
+    }
+    if ( itemsCount % 10 > 1 && itemsCount % 10 < 5 && ! ( itemsCount % 100 >= 10 && itemsCount % 100 <= 21 ) ) {
+        return text2;
+    }
+
+    return text3;
+}
+
 private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {
     val background = ContextCompat.getDrawable(context, vectorDrawableResourceId)
     background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
@@ -108,6 +119,9 @@ fun Date.getWeekDayName() : String {
 }
 
 
-const val REG = "^(\\+91[\\-\\s]?)?[0]?(91)?[789]\\d{9}\$"
-var PATTERN: Pattern = Pattern.compile(REG)
-fun CharSequence.isPhoneNumber() : Boolean = PATTERN.matcher(this).find()
+fun String.isPhoneNumber() : Boolean {
+    if(!Pattern.matches("[a-zA-Z]+", this)) {
+        return this.length in 7..13
+    }
+    return false;
+}
