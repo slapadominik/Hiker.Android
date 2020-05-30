@@ -1,6 +1,8 @@
 package com.hiker.presentation.user.tripParticipant
 
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +15,7 @@ import com.hiker.R
 import com.hiker.presentation.login.LoginViewModelFactory
 import com.hiker.presentation.user.UserViewModel
 import kotlinx.android.synthetic.main.fragment_trip_participant_view.*
+import java.lang.Exception
 import java.util.*
 
 
@@ -34,6 +37,14 @@ class TripParticipantView : Fragment() {
         arguments?.let {
             val safeArgs = TripParticipantViewArgs.fromBundle(it)
             setupObservers(safeArgs.userId)
+        }
+        trip_participant_facebookBtn.setOnClickListener{
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/2658397584210487"));
+                startActivity(intent)
+            } catch(e: Exception) {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/appetizerandroid")));
+            }
         }
         trip_participant_toolbar.setNavigationOnClickListener{
             findNavController().popBackStack()

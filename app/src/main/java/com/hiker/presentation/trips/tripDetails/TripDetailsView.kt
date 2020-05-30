@@ -34,13 +34,8 @@ import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.exceptions.TypeNotSupportedException
 import com.hiker.domain.extensions.getWeekDayName
-import com.hiker.presentation.user.tripParticipant.TripParticipantViewArgs
 import kotlinx.android.synthetic.main.fragment_trip_details_view.*
-import kotlinx.android.synthetic.main.fragment_trip_form_view.*
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 

@@ -66,14 +66,14 @@
                         android:layout_gravity="center"
                         android:orientation="horizontal"
                         android:layout_marginTop="20dp"
-                        android:layout_marginBottom="30dp">
+                        android:layout_marginBottom="20dp">
 
                     <TextView
                             android:id="@+id/tripParticipant_firstName_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto"
-                            android:text=""
+                            android:text="asd"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -84,18 +84,25 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:fontFamily="@font/roboto"
-                            android:text=""
+                            android:text="asd"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
                 </LinearLayout>
+                <ImageView
+                        android:id="@+id/trip_participant_facebookBtn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_facebook"
+                        android:layout_gravity="center_horizontal"/>
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp">
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp">
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -107,6 +114,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0"
                                 android:text="Wiek:"
+                                android:textStyle="bold"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp" />
 
@@ -119,11 +127,7 @@
                                 android:text="Brak informacji"
                                 android:textSize="16sp"   />
                     </LinearLayout>
-                    <View
-                            android:layout_marginTop="3dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/lighter_gray"/>
+
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -136,6 +140,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0"
                                 android:text="Telefon:"
+                                android:textStyle="bold"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp" />
 
@@ -148,11 +153,6 @@
                                 android:text="Brak informacji"
                                 android:textSize="16sp"  />
                     </LinearLayout>
-                    <View
-                            android:layout_marginTop="3dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/lighter_gray"/>
 
                     <LinearLayout
                             android:layout_width="match_parent"
@@ -165,7 +165,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0"
-                                android:text="O mnie"
+                                android:text="O mnie:"
+                                android:textStyle="bold"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp"  />
 
@@ -178,11 +179,6 @@
                                 android:text="Brak informacji"
                                 android:textSize="16sp"  />
                     </LinearLayout>
-                    <View
-                            android:layout_marginTop="1dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/lighter_gray"/>
                 </LinearLayout>
 
             </LinearLayout>
