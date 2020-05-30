@@ -85,7 +85,7 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                 tipFormView_toolbar.title = "Edytuj wycieczkę"
                 viewModel.getTripFromDb(safeArgs.tripId).observe(this, Observer {
                     if (it != null){
-                        setUpTextFields(it.trip.title, it.trip.description, it.trip.dateFrom, it.trip.dateTo, it.mountains[0].name)
+                        setUpEditFields(it.trip.title, it.trip.description, it.trip.dateFrom, it.trip.dateTo, it.mountains, it.trip.isOneDay)
                     }
                     else{
                         Toast.makeText(requireContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show()
@@ -110,18 +110,40 @@ class TripFormView : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpTextFields(tripTitle: String?,
+    private fun setUpEditFields(tripTitle: String?,
                                 tripDescription: String?,
                                 dateFrom: Date,
                                 dateTo: Date?,
-                                mountainName: String){
+                                mountains: List<Mountain>,
+                                isOneDay: Boolean){
         this.dateFrom = dateFrom
         this.dateTo = dateTo
+        this.isOneDay = isOneDay
+
         fragment_trip_form_view_tripTitle.setText(tripTitle)
         fragment_trip_form_view_description.setText(tripDescription)
         tripForm_beginDate_editText.setText(dateFormater.format(dateFrom))
-        tripForm_endDate_editText.setText(dateFormater.format(dateTo))
-        tripForm_searchView_1.setText(mountainName)
+
+        if (!isOneDay){
+            tripForm_endDate_editInput.isEnabled = true
+            tripForm_endDate_editText.setText(dateFormater.format(dateTo))
+            radioBtn_ManyDays.isChecked = true
+        }
+
+        mountains.forEach{
+            val chip = createChip(it)
+            trip_form_chipGroup.addView(chip)
+
+            tripDestinations[destinationsCount] = TripDestinationCommand(
+                type = 1,
+                mountainId = it.mountainId,
+                rockId = null
+            )
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude),7.5f))
+            val marker = googleMap.setUpMarker(it.latitude, it.longitude, it.name, requireContext())
+            markersMap[destinationsCount] = marker
+            destinationsCount++
+        }
     }
 
     private fun showAlertDialog() : androidx.appcompat.app.AlertDialog{
@@ -239,7 +261,8 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                         tripId,
                         EditTripCommand(fragment_trip_form_view_tripTitle.text.toString(),
                             dateFrom!!,
-                            dateTo!!,
+                            dateTo,
+                            isOneDay,
                             description = fragment_trip_form_view_description.text.toString(),
                             tripDestinations = tripDestinations.values.toList()))
                     findNavController().popBackStack()
@@ -292,18 +315,7 @@ class TripFormView : Fragment(), OnMapReadyCallback {
         })
         tripForm_searchView.onItemClickListener = AdapterView.OnItemClickListener{ parent,view,position,id ->
             val selectedItem =  parent.getItemAtPosition(position) as Mountain
-            val chip = Chip(context)
-            chip.text = selectedItem.name+", "+selectedItem.metersAboveSeaLevel+" m n.p.m."
-            chip.isCloseIconVisible = true
-            chip.setOnCloseIconClickListener {
-                val viewRowIndex = trip_form_chipGroup.indexOfChild(it)
-                tripDestinations.remove(viewRowIndex)
-                val marker = markersMap[viewRowIndex]
-                marker?.remove()
-                markersMap.remove(viewRowIndex)
-                trip_form_chipGroup.removeView(it)
-                destinationsCount--
-            }
+            val chip = createChip(selectedItem)
             trip_form_chipGroup.addView(chip as View)
 
             tripDestinations[destinationsCount] = TripDestinationCommand(
@@ -318,6 +330,22 @@ class TripFormView : Fragment(), OnMapReadyCallback {
             tripForm_searchView.text.clear()
             destinationsCount++
         }
+    }
+
+    private fun createChip(mountain: Mountain) : Chip {
+        val chip = Chip(context)
+        chip.text = mountain.name+", "+mountain.metersAboveSeaLevel+" m n.p.m."
+        chip.isCloseIconVisible = true
+        chip.setOnCloseIconClickListener {
+            val viewRowIndex = trip_form_chipGroup.indexOfChild(it)
+            tripDestinations.remove(viewRowIndex)
+            val marker = markersMap[viewRowIndex]
+            marker?.remove()
+            markersMap.remove(viewRowIndex)
+            trip_form_chipGroup.removeView(it)
+            destinationsCount--
+        }
+        return chip
     }
 
     private fun initViewModels() {

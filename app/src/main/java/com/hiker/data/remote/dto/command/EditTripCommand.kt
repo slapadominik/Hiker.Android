@@ -6,7 +6,8 @@ import java.util.*
 data class EditTripCommand(
     @SerializedName("tripTitle") val tripTitle: String,
     @SerializedName("dateFrom") val dateFrom: Date,
-    @SerializedName("dateTo") val dateTo: Date,
+    @SerializedName("dateTo") val dateTo: Date?,
+    @SerializedName("isOneDay") val isOneDay: Boolean,
     @SerializedName("description") val description: String,
     @SerializedName("tripDestinations")  val tripDestinations: List<TripDestinationCommand>
 )
