@@ -13,7 +13,7 @@ class TripDetailsViewModelFactory(private val context: Context) : ViewModelProvi
         val db = ApplicationDatabase.getDatabase(context)
         return TripDetailsViewModel(
             TripParticipantsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao()),
-            TripsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao(), db.tripDao(), db.tripMountainCrossRefDao()),
+            TripsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao(), db.tripDao(), db.tripMountainCrossRefDao(), context),
             UserRepositoryImpl(context)
         ) as T
     }

@@ -21,4 +21,6 @@
     <string name="user_about_me">O mnie:</string>
     <string name="user_age">Wiek:</string>
     <string name="details">Szczegóły</string>
+    <string name="no_internet">Brak połączenia z internetem</string>
+    <string name="API_error">Wystąpił nieoczekiwany błąd</string>
 </resources>

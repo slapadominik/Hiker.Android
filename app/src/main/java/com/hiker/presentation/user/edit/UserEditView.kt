@@ -12,7 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.hiker.R
+import com.hiker.domain.entities.Status
 import com.hiker.domain.entities.User
 import com.hiker.domain.extensions.isPhoneNumber
 import com.hiker.presentation.login.LoginViewModelFactory
@@ -55,17 +57,23 @@ class UserEditView : Fragment() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
         viewModel.getUsersData(UUID.fromString(userSystemId)).observe(requireActivity(), Observer {
-            if (it != null){
-                birthday = it.birthday
-
-                user_edit_firstNameInput.setText(it.firstName)
-                user_edit_lastNameInput.setText(it.lastName)
-                if (it.birthday != null){
-                    user_edit_birthdayInput.setText(dateFormater.format(it.birthday))
+            if (it.status == Status.SUCCESS){
+                val user = it.data
+                if (user != null){
+                    birthday = user.birthday
+                    user_edit_firstNameInput.setText(user.firstName)
+                    user_edit_lastNameInput.setText(user.lastName)
+                    if (user.birthday != null){
+                        user_edit_birthdayInput.setText(dateFormater.format(user.birthday))
+                    }
+                    user_edit_phoneNumberInput.setText(user.phoneNumber)
+                    user_edit_aboutMeInput.setText(user.aboutMe)
                 }
-                user_edit_phoneNumberInput.setText(it.phoneNumber)
-                user_edit_aboutMeInput.setText(it.aboutMe)
             }
+            else{
+               Snackbar.make(requireView(), it.message!!, Snackbar.LENGTH_LONG).show()
+            }
+
         })
         user_edit_submitButton.setOnClickListener{
             val firstNameValid = IsFirstNameValid()

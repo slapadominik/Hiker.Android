@@ -1,6 +1,8 @@
 package com.hiker.data.repository
 
+import android.content.Context
 import androidx.lifecycle.LiveData
+import com.hiker.R
 import com.hiker.data.converters.asDatabaseModel
 import com.hiker.data.converters.asDbModel
 import com.hiker.data.converters.asDomainModel
@@ -14,17 +16,19 @@ import com.hiker.data.remote.api.TripsService
 import com.hiker.data.remote.dto.command.EditTripCommand
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.query.TripQuery
+import com.hiker.domain.entities.Resource
 import com.hiker.domain.entities.TripBrief
 import com.hiker.domain.exceptions.ApiException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 interface TripsRepository {
-    suspend fun getUserUpcomingTripsBriefs(userId: String, dateFrom: Date) : List<TripBrief>
-    suspend fun getUserHistoryTripsBriefs(userId: String, dateTo: Date) : List<TripBrief>
+    suspend fun getUserUpcomingTripsBriefs(userId: String, dateFrom: Date) : Resource<List<TripBrief>>
+    suspend fun getUserHistoryTripsBriefs(userId: String, dateTo: Date) : Resource<List<TripBrief>>
     suspend fun getUpcomingTripsBriefsForMountainObject(tripDestinationType: Int, mountainId: Int?, rockId: Int?, dateFrom: Date) : List<TripBrief>
     suspend fun getTrip(tripId: Int) : TripQuery
     fun getTripFromDb(tripId: Int) : LiveData<Trip?>
@@ -36,7 +40,8 @@ interface TripsRepository {
 class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
                           private val userBriefDao: UserBriefDao,
                           private val tripDao : TripDao,
-                          private val tripMountainCrossRefDao: TripMountainCrossRefDao) : TripsRepository {
+                          private val tripMountainCrossRefDao: TripMountainCrossRefDao,
+                          val context: Context) : TripsRepository {
 
     private val tripsService = TripsService.create()
     private val dateFormater = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
@@ -79,21 +84,34 @@ class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
         } else throw ApiException(response.errorBody()?.string())
     }
 
-    override suspend fun getUserHistoryTripsBriefs(userId: String, dateTo: Date): List<TripBrief> {
-        val response = tripsService.getUserHistoryTripsBriefs(userId, dateFormater.format(dateTo))
-        return if (response.isSuccessful){
-            response.body()!!.map { x -> x.asDomainModel() }
-        } else throw ApiException(response.errorBody()?.string())
+    override suspend fun getUserHistoryTripsBriefs(userId: String, dateTo: Date): Resource<List<TripBrief>> {
+        try{
+            val response = tripsService.getUserHistoryTripsBriefs(userId, dateFormater.format(dateTo))
+            if (response.isSuccessful){
+                Resource.success(response.body()!!.map { x -> x.asDomainModel() })
+            }
+            return Resource.error(context.getString(R.string.API_error), null)
+        }
+        catch (exception: Exception){
+            return Resource.error(context.getString(R.string.no_internet), null)
+        }
+
     }
 
     override suspend fun getUserUpcomingTripsBriefs(
         userId: String,
         dateFrom: Date
-    ): List<TripBrief> {
-        val response = tripsService.getUserIncomingTripsBriefs(userId, dateFormater.format(dateFrom))
-        return if (response.isSuccessful){
-            response.body()!!.map { x -> x.asDomainModel() }
-        } else throw ApiException(response.errorBody()?.string())
+    ): Resource<List<TripBrief>> {
+        try{
+            val response = tripsService.getUserIncomingTripsBriefs(userId, dateFormater.format(dateFrom))
+            if (response.isSuccessful){
+                return Resource.success(response.body()!!.map { x -> x.asDomainModel() })
+            }
+            return Resource.error(context.getString(R.string.API_error), null)
+        }
+        catch (exception: Exception){
+            return Resource.error(context.getString(R.string.no_internet), null)
+        }
     }
 
     override suspend fun addTrip(tripCommand: TripCommand) : Int {
@@ -117,10 +135,11 @@ class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
         fun getInstance(tripParticipantDao: TripParticipantDao,
                         userBriefDao: UserBriefDao,
                         tripDao: TripDao,
-                        tripMountainCrossRefDao: TripMountainCrossRefDao): TripsRepositoryImpl{
+                        tripMountainCrossRefDao: TripMountainCrossRefDao,
+                        context: Context): TripsRepositoryImpl{
             if (instance == null)
                 instance =
-                    TripsRepositoryImpl(tripParticipantDao, userBriefDao, tripDao, tripMountainCrossRefDao)
+                    TripsRepositoryImpl(tripParticipantDao, userBriefDao, tripDao, tripMountainCrossRefDao, context)
             return instance as TripsRepositoryImpl
         }
     }

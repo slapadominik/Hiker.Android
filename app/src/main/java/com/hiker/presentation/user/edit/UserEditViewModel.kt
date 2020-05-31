@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hiker.data.remote.api.ApiConsts
 import com.hiker.data.repository.UserRepository
+import com.hiker.domain.entities.Resource
 import com.hiker.domain.entities.User
 import com.makeramen.roundedimageview.RoundedTransformationBuilder
 import com.squareup.picasso.Picasso
@@ -15,8 +16,8 @@ import java.util.*
 
 class UserEditViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    fun getUsersData(userSystemId: UUID) : LiveData<User>{
-        val liveData = MutableLiveData<User>()
+    fun getUsersData(userSystemId: UUID) : LiveData<Resource<User>>{
+        val liveData = MutableLiveData<Resource<User>>()
         viewModelScope.launch {
             liveData.postValue(userRepository.getUserBySystemId(userSystemId))
         }

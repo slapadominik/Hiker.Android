@@ -2,7 +2,9 @@ package com.hiker.data.repository
 
 
 import android.content.Context
+import android.provider.Settings.Global.getString
 import androidx.lifecycle.LiveData
+import com.hiker.R
 import com.hiker.data.converters.asDomainModel
 import com.hiker.data.converters.toEditUserCommand
 import com.hiker.data.db.ApplicationDatabase
@@ -10,9 +12,11 @@ import com.hiker.data.db.entity.UserBrief
 import com.hiker.domain.entities.User
 import com.hiker.data.remote.api.UserService
 import com.hiker.data.remote.dto.FacebookToken
+import com.hiker.domain.entities.Resource
 import com.hiker.domain.exceptions.ApiException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.util.*
 
 const val TAG : String = "UserRepositoryImpl"
@@ -20,23 +24,29 @@ const val TAG : String = "UserRepositoryImpl"
 interface UserRepository {
     suspend fun getRemoteUserByFacebookId(facebookId: String) : User?
     suspend fun registerFacebookUser(facebookToken: String) : UUID
-    suspend fun getUserBySystemId(userSystemId: UUID): User
+    suspend fun getUserBySystemId(userSystemId: UUID): Resource<User>
     fun getUserBriefs(userIds: List<String>) : LiveData<List<UserBrief>>
     suspend fun addUserToLocalDb(userBrief: UserBrief)
     suspend fun editUser(user: User) : UUID
     suspend fun cacheUser(user: com.hiker.data.db.entity.User)
 }
 
-class UserRepositoryImpl(context: Context) : UserRepository {
+class UserRepositoryImpl(val context: Context) : UserRepository {
     private val userService = UserService.create()
     private val database = ApplicationDatabase.getDatabase(context)
 
-    override suspend fun getUserBySystemId(userSystemId: UUID): User {
-        val response= userService.getUserBySystemId(userSystemId)
-        return if (response.isSuccessful){
-            response.body()!!.asDomainModel()
+    override suspend fun getUserBySystemId(userSystemId: UUID): Resource<User> {
+        try{
+            val response= userService.getUserBySystemId(userSystemId)
+            if (response.isSuccessful){
+                 return Resource.success(response.body()!!.asDomainModel())
+            }
+            else return Resource.error(context.getString(R.string.no_internet), null)
         }
-        else throw ApiException(response.message())
+        catch (exception: Exception){
+            return Resource.error(context.getString(R.string.no_internet), null)
+        }
+
     }
 
     override suspend fun editUser(user: User) : UUID {

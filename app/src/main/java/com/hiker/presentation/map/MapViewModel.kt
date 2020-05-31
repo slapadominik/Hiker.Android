@@ -8,6 +8,7 @@ import com.hiker.data.db.repository.MountainLocalRepository
 import com.hiker.data.remote.api.ApiConsts
 import com.hiker.data.remote.dto.MountainBrief
 import com.hiker.data.remote.repository.MountainRemoteRepository
+import com.hiker.domain.entities.Resource
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 
@@ -24,8 +25,8 @@ class MapViewModel(private val mountainsRemoteRepository: MountainRemoteReposito
         }
     }
 
-    fun getMountains() : LiveData<List<MountainBrief>> {
-        val mountains = MutableLiveData<List<MountainBrief>>()
+    fun getMountains() : LiveData<Resource<List<MountainBrief>>> {
+        val mountains = MutableLiveData<Resource<List<MountainBrief>>>()
             viewModelScope.launch {
                 mountains.postValue(mountainsRemoteRepository.getAll())
             }

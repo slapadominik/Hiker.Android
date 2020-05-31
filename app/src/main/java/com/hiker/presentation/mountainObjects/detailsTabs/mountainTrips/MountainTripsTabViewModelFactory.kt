@@ -11,7 +11,7 @@ class MountainTripsTabViewModelFactory(private val context: Context) : ViewModel
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val db = ApplicationDatabase.getDatabase(context)
         return modelClass.getConstructor(TripsRepository::class.java).newInstance(
-            TripsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao(), db.tripDao(), db.tripMountainCrossRefDao())
+            TripsRepositoryImpl.getInstance(db.tripParticipantDao(), db.userBriefDao(), db.tripDao(), db.tripMountainCrossRefDao(), context)
         )
     }
 

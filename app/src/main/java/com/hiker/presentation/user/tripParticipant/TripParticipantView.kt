@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.hiker.R
+import com.hiker.domain.entities.Status
 import com.hiker.presentation.login.LoginViewModelFactory
 import com.hiker.presentation.user.UserViewModel
 import kotlinx.android.synthetic.main.fragment_trip_participant_view.*
@@ -45,23 +47,28 @@ class TripParticipantView : Fragment() {
 
     private fun setupObservers(userSystemId: String){
         userViewModel.getUser(UUID.fromString(userSystemId)).observe(requireActivity(), Observer{
-            if (it != null){
-                tripParticipant_firstName_textView.text = it.firstName
-                tripParticipant_lastName_textView.text = it.lastName
-                if (it.birthday != null){
-                    tripParticipant_age_textView.text =  com.hiker.domain.extensions.Period.between(it.birthday, Calendar.getInstance().time).toString()
-                }
-                tripParticipant_imageView.visibility = View.VISIBLE
-                imgProgress.visibility = View.GONE
-                userViewModel.setUserThumbnail(tripParticipant_imageView, it.facebookId)
+            if (it.status == Status.SUCCESS){
+                val user = it.data
+                if (user!= null){
+                    tripParticipant_firstName_textView.text = user.firstName
+                    tripParticipant_lastName_textView.text = user.lastName
+                    if (user.birthday != null){
+                        tripParticipant_age_textView.text =  com.hiker.domain.extensions.Period.between(user.birthday, Calendar.getInstance().time).toString()
+                    }
+                    tripParticipant_imageView.visibility = View.VISIBLE
+                    imgProgress.visibility = View.GONE
+                    userViewModel.setUserThumbnail(tripParticipant_imageView, user.facebookId)
 
-                if (!it.aboutMe.isNullOrEmpty()){
-                    tripParticipant_aboutMe_textView.text = it.aboutMe
+                    if (!user.aboutMe.isNullOrEmpty()){
+                        tripParticipant_aboutMe_textView.text = user.aboutMe
+                    }
+                    if (!user.phoneNumber.isNullOrEmpty()){
+                        tripParticipant_phoneNumber_textView.text = user.phoneNumber
+                    }
                 }
-                if (!it.phoneNumber.isNullOrEmpty()){
-                    tripParticipant_phoneNumber_textView.text = it.phoneNumber
-                }
-
+            }
+            else{
+                Snackbar.make(requireView(), it.message!!, Snackbar.LENGTH_LONG).show()
             }
         })
     }

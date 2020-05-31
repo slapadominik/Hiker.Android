@@ -42,6 +42,7 @@ fun Marker.setNormalStyle(context: Context){
     this.setIcon(bitmapDescriptorFromVector(context, R.drawable.ic_marker_pin_0_trips))
 }
 
+
 fun Marker.setFilteredStyle(context: Context){
     this.setIcon(bitmapDescriptorFromVectorSize(context, R.drawable.ic_marker_pin_0_trips_red, 90, 90))
 }

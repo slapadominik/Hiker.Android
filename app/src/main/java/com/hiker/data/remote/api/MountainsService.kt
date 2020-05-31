@@ -1,5 +1,6 @@
 package com.hiker.data.remote.api
 
+import android.content.Context
 import com.hiker.data.remote.dto.Mountain
 import com.hiker.data.remote.dto.MountainBrief
 import okhttp3.OkHttpClient
@@ -31,6 +32,7 @@ interface MountainsService {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .build()
+
             return Retrofit.Builder()
                 .baseUrl(ApiConsts.HikerAPI)
                 .addConverterFactory(GsonConverterFactory.create())

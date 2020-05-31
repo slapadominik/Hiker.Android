@@ -39,12 +39,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.hiker.data.remote.dto.MountainBrief
+import com.hiker.domain.entities.Status
 import com.hiker.domain.extensions.*
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_scan_map_trips.*
 import kotlinx.android.synthetic.main.fragment_map_view.*
+import java.net.ConnectException
 import kotlin.math.log
 
 const val MapViewBundleKey = "MapViewBundleKey"
@@ -108,13 +110,21 @@ class MapView : Fragment(), OnMapReadyCallback {
     }
 
     private fun fetchMountains(){
-        mapViewModel.getMountains().observe(this, Observer { mountains ->
-            mountains.forEach { mountain ->
-                val marker = googleMap.setUpMarker(mountain.location.latitude, mountain.location.longitude, mountain.name, requireContext())
-                mountainsMarkers[marker] = mountain
-                markersMountainIds[mountain.id] = marker
+        mapViewModel.getMountains().observe(this, Observer { response ->
+            if (response.status == Status.SUCCESS){
+                response.data!!.forEach { mountain ->
+                    val marker = googleMap.setUpMarker(mountain.location.latitude, mountain.location.longitude, mountain.name, requireContext())
+                    mountainsMarkers[marker] = mountain
+                    markersMountainIds[mountain.id] = marker
+                }
+                mapViewModel.cacheMountains(response.data)
             }
-            mapViewModel.cacheMountains(mountains)
+            else {
+                val snack = Snackbar.make(requireView(), response.message!!, Snackbar.LENGTH_LONG)
+                snack.anchorView = coordinatorLayout
+                snack.show()
+                //Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
+            }
         })
     }
 

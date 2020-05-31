@@ -1,13 +1,15 @@
 package com.hiker.data.remote.repository
 
+import android.util.Log
 import com.hiker.data.remote.api.MountainsService
 import com.hiker.data.remote.dto.Mountain
 import com.hiker.data.remote.dto.MountainBrief
+import com.hiker.domain.entities.Resource
 import com.hiker.domain.exceptions.ApiException
 import java.util.concurrent.TimeUnit
 
 interface IMountainRemoteRepository {
-    suspend fun getAll() : List<MountainBrief>
+    suspend fun getAll() : Resource<List<MountainBrief>>
     suspend fun getById(mountainId: Int) : Mountain
     suspend fun getMountainsWithUpcomingTripsByRadius(latitude: Double, longitude: Double, radius: Int) : List<MountainBrief>
 }
@@ -25,13 +27,18 @@ class MountainRemoteRepository() : IMountainRemoteRepository {
         }
     }
 
-    override suspend fun getAll(): List<MountainBrief> {
-        val response = mountainsService.getAll()
-        if (response.isSuccessful){
-            return response.body()!!
+    override suspend fun getAll(): Resource<List<MountainBrief>> {
+        try{
+            val response = mountainsService.getAll()
+            if (response.isSuccessful){
+                return Resource.success(response.body()!!)
+            }
+            else{
+                return Resource.error("API timeout", null)
+            }
         }
-        else{
-            throw ApiException("Request network failed: GET Mountains.")
+        catch (e: Exception){
+            return Resource.error("Brak połączenia z internetem", null)
         }
     }
 
@@ -41,13 +48,11 @@ class MountainRemoteRepository() : IMountainRemoteRepository {
             return response.body()!!
         }
         else{
-            throw ApiException("Request network failed: GET Mountains.")
+            throw ApiException(response.message())
         }
     }
 
     companion object {
-        val FRESH_TIMEOUT = TimeUnit.DAYS.toMillis(1)
-
         private var instance: MountainRemoteRepository? = null
 
         @Synchronized

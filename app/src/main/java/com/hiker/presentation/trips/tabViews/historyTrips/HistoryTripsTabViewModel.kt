@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hiker.data.repository.TripsRepository
+import com.hiker.domain.entities.Resource
 import com.hiker.domain.entities.TripBrief
 import kotlinx.coroutines.launch
 import java.util.*
@@ -13,8 +14,8 @@ class HistoryTripsTabViewModel(private val tripsRepository: TripsRepository) : V
 
     private val calendar = Calendar.getInstance()
 
-    fun getUserHistoryTripsBriefs(userId: String) : LiveData<List<TripBrief>> {
-        var upcomingTrips = MutableLiveData<List<TripBrief>>()
+    fun getUserHistoryTripsBriefs(userId: String) : LiveData<Resource<List<TripBrief>>> {
+        var upcomingTrips = MutableLiveData<Resource<List<TripBrief>>>()
         viewModelScope.launch {
             upcomingTrips.value = tripsRepository.getUserHistoryTripsBriefs(userId, calendar.time)
         }

@@ -12,7 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.hiker.R
+import com.hiker.domain.entities.Status
 import com.hiker.presentation.trips.TripsViewDirections
 import com.hiker.presentation.trips.tabViews.Trip
 import com.hiker.presentation.trips.tabViews.TripAdapter
@@ -42,32 +45,41 @@ class HistoryTripsTabView : Fragment() {
     private fun setupTripsList(){
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
-        historyTripsTabViewModel.getUserHistoryTripsBriefs(userSystemId!!).observe(this, Observer { tripsBriefs ->
-            if (tripsBriefs.isEmpty()){
-                historyTripsView_emptyList_textView.visibility = View.VISIBLE
-                historyTripsView_recyclerView.visibility = View.GONE
+        historyTripsTabViewModel.getUserHistoryTripsBriefs(userSystemId!!).observe(this, Observer { response ->
+            if (response.status == Status.SUCCESS){
+                val tripsBriefs = response.data!!
+                if (tripsBriefs.isEmpty()){
+                    historyTripsView_emptyList_textView.visibility = View.VISIBLE
+                    historyTripsView_recyclerView.visibility = View.GONE
+                }
+                else{
+                    historyTripsView_emptyList_textView.visibility = View.GONE
+                    historyTripsView_recyclerView.visibility = View.VISIBLE
+                    historyTripsView_recyclerView.layoutManager = LinearLayoutManager(activity)
+                    historyTripsView_recyclerView.adapter =
+                        TripAdapter(tripsBriefs.map { x ->
+                            Trip(
+                                x.id,
+                                x.tripTitle,
+                                x.dateFrom,
+                                x.dateTo,
+                                x.isOneDay
+                            )
+                        }, requireContext()) {
+                            val action = TripsViewDirections.actionTripsViewToTripDetailsView()
+                            action.tripId = it.id
+                            action.tripTitle = it.title
+                            action.tripDateFrom = dateFormater.format(it.dateFrom)
+                            action.tripDateTo = dateFormater.format(it.dateTo)
+                            findNavController().navigate(action)
+                        }
+                }
             }
             else{
-                historyTripsView_emptyList_textView.visibility = View.GONE
-                historyTripsView_recyclerView.visibility = View.VISIBLE
-                historyTripsView_recyclerView.layoutManager = LinearLayoutManager(activity)
-                historyTripsView_recyclerView.adapter =
-                    TripAdapter(tripsBriefs.map { x ->
-                        Trip(
-                            x.id,
-                            x.tripTitle,
-                            x.dateFrom,
-                            x.dateTo,
-                            x.isOneDay
-                        )
-                    }, requireContext()) {
-                        val action = TripsViewDirections.actionTripsViewToTripDetailsView()
-                        action.tripId = it.id
-                        action.tripTitle = it.title
-                        action.tripDateFrom = dateFormater.format(it.dateFrom)
-                        action.tripDateTo = dateFormater.format(it.dateTo)
-                        findNavController().navigate(action)
-                    }
+                val snack = Snackbar.make(requireView(), response.message!!, Snackbar.LENGTH_LONG)
+                val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+                snack.anchorView = bottomNav
+                snack.show()
             }
         })
     }

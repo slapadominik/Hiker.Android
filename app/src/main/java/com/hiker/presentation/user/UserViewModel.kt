@@ -11,14 +11,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.hiker.data.converters.asDbModel
 import com.hiker.data.repository.UserRepository
+import com.hiker.domain.entities.Resource
 import com.makeramen.roundedimageview.RoundedTransformationBuilder
 import kotlinx.coroutines.launch
 
 
 class UserViewModel(private val userRepository: UserRepository) : ViewModel(){
 
-    fun getUser(userSystemId: UUID) : LiveData<User> {
-        val liveData = MutableLiveData<User>()
+    fun getUser(userSystemId: UUID) : LiveData<Resource<User>> {
+        val liveData = MutableLiveData<Resource<User>>()
         viewModelScope.launch {
             liveData.postValue(userRepository.getUserBySystemId(userSystemId))
         }
