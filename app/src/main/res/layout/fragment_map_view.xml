@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/colorPrimary"
                 android:color="@color/colorPrimary"
-                android:text="Szczegóły"
+                android:text="@string/details"
                 android:textColor="@color/white"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"

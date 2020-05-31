@@ -102,7 +102,6 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
             })
         }
         catch (ex: Exception){
-            Log.e("TripDetailsView", ex.message)
         }
     }
 

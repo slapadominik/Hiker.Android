@@ -1,22 +1,17 @@
 package com.hiker.presentation.user
 
-import android.graphics.Color
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.hiker.domain.entities.User
 import com.hiker.data.remote.api.ApiConsts
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import java.util.*
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.hiker.data.converters.asDbModel
 import com.hiker.data.repository.UserRepository
 import com.makeramen.roundedimageview.RoundedTransformationBuilder
-import kotlinx.android.synthetic.main.fragment_user_view.*
 import kotlinx.coroutines.launch
 
 

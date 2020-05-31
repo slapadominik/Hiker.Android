@@ -59,6 +59,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var searchView: SearchView
+    private var menu: Menu? = null
     private var userLocation: Location? = null
     private var circle: Circle? = null
     private val mountainsMarkers = HashMap<Marker, MountainBrief>()
@@ -188,9 +189,17 @@ class MapView : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun hideMenuToolbar(){
+        searchView.clearFocus()
+        searchView.setQuery("", true)
+        val menuItem = menu?.findItem(R.id.action_search)
+        menuItem?.collapseActionView()
+    }
+
     private fun showToolbarMenu() {
         val toolbar = view?.findViewById<Toolbar>(R.id.mapview_toolbar)
         toolbar?.inflateMenu(R.menu.search_menu)
+        menu = toolbar?.menu
         searchView =  toolbar?.menu?.findItem(R.id.action_search)?.actionView as SearchView
         searchView.findViewById<AutoCompleteTextView>(R.id.search_src_text).threshold = 1
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
@@ -322,6 +331,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         googleMapView.onResume()
+        hideMenuToolbar()
     }
     override fun onLowMemory() {
         super.onLowMemory()

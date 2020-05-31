@@ -24,7 +24,6 @@ import com.hiker.data.converters.asUserBrief
 import kotlinx.android.synthetic.main.fragment_login_view.*
 import java.lang.Exception
 
-private const val TAG : String = "LoginView"
 
 class LoginView : Fragment() {
 
@@ -43,7 +42,6 @@ class LoginView : Fragment() {
         initLoginViewModel()
         AccessToken.refreshCurrentAccessTokenAsync()
         loginViewModel.isUserLoggedIn(AccessToken.getCurrentAccessToken()).observe(viewLifecycleOwner, Observer { result ->
-            Log.d("LoginView", "Authentication state: ${result}")
             if (result){
                 findNavController().navigate(R.id.mapView)
             }
@@ -65,7 +63,6 @@ class LoginView : Fragment() {
                 override fun onSuccess(loginResult: LoginResult) {
                     loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {user ->
                         if (user != null){
-                            Log.i(TAG, "Facebook user already exist")
                             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
                             if (sharedPref != null) {
                                 with (sharedPref.edit()){
@@ -77,7 +74,6 @@ class LoginView : Fragment() {
                             findNavController().navigate(R.id.mapView)
                         }
                         else{
-                            Log.i(TAG, "Facebook user does not exist")
                             loginViewModel.registerUserFromFacebook(loginResult.accessToken.token).observe(this@LoginView, Observer {
                                 loginViewModel.getUserBySystemId(it).observe(this@LoginView, Observer { user ->
                                     loginViewModel.addUserToDatabase(user!!.asUserBrief())
@@ -89,11 +85,10 @@ class LoginView : Fragment() {
                 }
 
                 override fun onCancel() {
-                    Toast.makeText(requireContext(), "elo", Toast.LENGTH_LONG).show()
                 }
 
                 override fun onError(error: FacebookException) {
-                    Toast.makeText(requireContext(), "elo", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show()
                 }
             })
         }

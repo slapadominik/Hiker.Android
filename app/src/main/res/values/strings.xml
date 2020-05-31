@@ -20,4 +20,5 @@
     <string name="no_info">Brak informacji</string>
     <string name="user_about_me">O mnie:</string>
     <string name="user_age">Wiek:</string>
+    <string name="details">Szczegóły</string>
 </resources>

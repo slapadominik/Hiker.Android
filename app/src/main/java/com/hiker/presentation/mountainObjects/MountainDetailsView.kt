@@ -37,8 +37,7 @@ class MountainDetailsView : Fragment() {
             val safeArgs = MountainDetailsViewArgs.fromBundle(it)
             val mountainId = safeArgs.mountainId
             if (mountainId<=0){
-                Log.e(TAG, "MountainId is 0 in safeArgs")
-                throw IllegalArgumentException("MountainId should be ")
+                throw IllegalArgumentException("MountainId should be")
             }
             setBasicMountainInfo(safeArgs.mountainName, safeArgs.regionName, safeArgs.metersAboveSea)
             getMountainDetails(MountainTripDestinationType, mountainId)

@@ -1,15 +1,12 @@
 package com.hiker.presentation.user
 
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.lifecycle.Observer
@@ -18,20 +15,11 @@ import androidx.navigation.fragment.findNavController
 import com.facebook.login.LoginManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
-import com.hiker.data.remote.api.ApiConsts
-import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
-import com.hiker.presentation.login.UserViewModelFactory
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user_view.*
-import java.time.LocalDateTime
-import java.time.Period
 import java.util.*
 
 
-/**
- * A simple [Fragment] subclass.
- */
 class UserView : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
