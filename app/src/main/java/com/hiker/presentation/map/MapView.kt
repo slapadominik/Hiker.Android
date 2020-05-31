@@ -252,19 +252,8 @@ class MapView : Fragment(), OnMapReadyCallback {
             if (mountain != null) {
                 setMountainWindowData(mountain.id, mountain.name, mountain.location.regionName, mountain.metersAboveSeaLevel, mountain.upcomingTripsCount)
                 animateCamera(mountain.location.latitude, mountain.location.longitude, 9f)
+                showMountainWindow()
             }
-            mountain_details_button.setOnClickListener {
-                val action = MapViewDirections.actionMapViewToMountainDetailsView()
-                if (mountain != null) {
-                    action.mountainId = mountain.id
-                    action.mountainName = mountain.name
-                    action.regionName = mountain.location.regionName
-                    action.metersAboveSea = mountain.metersAboveSeaLevel
-                }
-                findNavController().navigate(action)
-            }
-            showMountainWindow()
-
             true
         }
     }
@@ -292,6 +281,14 @@ class MapView : Fragment(), OnMapReadyCallback {
             marker_object_regionName.text = regionName
             marker_object_metersAboveSeaLevel.text = metersAboveSeaLevel.toString()
             marker_object_tripsCount.text = upcomingTripsCount.toString()
+            mountain_details_button.setOnClickListener {
+                val action = MapViewDirections.actionMapViewToMountainDetailsView()
+                action.mountainId = mountainId
+                action.mountainName = name
+                action.regionName = regionName
+                action.metersAboveSea = metersAboveSeaLevel
+                findNavController().navigate(action)
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
