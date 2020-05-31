@@ -16,4 +16,8 @@
     <string name="edit">Edytuj</string>
     <string name="toolbar_add_trip_title">Utwórz wycieczkę</string>
     <string name="search_mountains">Szukaj celu...</string>
+    <string name="user_phone">Telefon:</string>
+    <string name="no_info">Brak informacji</string>
+    <string name="user_about_me">O mnie:</string>
+    <string name="user_age">Wiek:</string>
 </resources>

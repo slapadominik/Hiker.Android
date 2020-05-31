@@ -95,8 +95,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp">
+                        android:layout_marginTop="30dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp">
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -109,7 +110,8 @@
                                 android:layout_weight="0"
                                 android:text="Wiek:"
                                 android:textColor="@android:color/black"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                android:textStyle="bold"/>
 
                         <TextView
                                 android:id="@+id/userView_age_textView"
@@ -120,11 +122,7 @@
                                 android:text="Brak informacji"
                                 android:textSize="16sp"   />
                     </LinearLayout>
-                    <View
-                            android:layout_marginTop="3dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/lighter_gray"/>
+
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -137,6 +135,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0"
                                 android:text="Telefon:"
+                                android:textStyle="bold"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp" />
 
@@ -149,11 +148,6 @@
                                 android:text="Brak informacji"
                                 android:textSize="16sp"  />
                     </LinearLayout>
-                    <View
-                            android:layout_marginTop="3dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/lighter_gray"/>
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -166,6 +160,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0"
                                 android:text="O mnie"
+                                android:textStyle="bold"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp"  />
 
@@ -178,11 +173,6 @@
                                 android:text="Brak informacji"
                                 android:textSize="16sp"  />
                     </LinearLayout>
-                    <View
-                            android:layout_marginTop="1dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/lighter_gray"/>
                 </LinearLayout>
 
             </LinearLayout>

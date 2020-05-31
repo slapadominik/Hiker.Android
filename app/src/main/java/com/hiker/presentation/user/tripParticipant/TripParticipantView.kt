@@ -38,14 +38,6 @@ class TripParticipantView : Fragment() {
             val safeArgs = TripParticipantViewArgs.fromBundle(it)
             setupObservers(safeArgs.userId)
         }
-        trip_participant_facebookBtn.setOnClickListener{
-            try {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/2658397584210487"));
-                startActivity(intent)
-            } catch(e: Exception) {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/appetizerandroid")));
-            }
-        }
         trip_participant_toolbar.setNavigationOnClickListener{
             findNavController().popBackStack()
         }

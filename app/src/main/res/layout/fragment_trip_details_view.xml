@@ -46,7 +46,7 @@
                             android:id="@+id/trip_details_view_tripTitle_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tytuł wycieczki"
+                            android:text=""
                             android:fontFamily="@font/roboto"
                             android:textColor="@color/white"
                             android:textSize="18sp"
@@ -64,7 +64,7 @@
                                 android:id="@+id/trip_details_view_dateFrom_textView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Data od"
+                                android:text=""
                                 android:textSize="14sp"
                                 android:layout_marginBottom="15dp"
                                 android:textColor="@color/white"
@@ -83,7 +83,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
-                                android:text="Data do"
+                                android:text=""
                                 android:textColor="@color/white"
                                 android:textSize="14sp"/>
 

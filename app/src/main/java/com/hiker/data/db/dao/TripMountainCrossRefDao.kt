@@ -15,6 +15,9 @@ interface TripMountainCrossRefDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(trip: TripMountainCrossRef)
 
+    @Query("DELETE FROM TripMountainCrossRef WHERE tripId == :tripId")
+    suspend fun deleteByTripId(tripId: Int)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(tripList: List<TripMountainCrossRef>)
 }

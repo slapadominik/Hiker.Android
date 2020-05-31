@@ -17,4 +17,7 @@ interface TripDao{
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(trip: Trip)
+
+    @Update
+    suspend fun updateTrip(trip: Trip)
 }

@@ -21,19 +21,18 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
 import com.hiker.data.converters.asDbModel
 import com.hiker.data.converters.asDomainModel
+import com.hiker.data.db.entity.Mountain
 import com.hiker.domain.consts.OperationType
 import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
 import com.hiker.domain.exceptions.TypeNotSupportedException
 import com.hiker.domain.extensions.getWeekDayName
+import com.hiker.presentation.trips.tripDetails.models.MountainTripDestination
 import kotlinx.android.synthetic.main.fragment_trip_details_view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -80,7 +79,6 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         val userSystemId = UUID.fromString(sharedPref.getString(getString(R.string.preferences_userSystemId), null))
         arguments?.let {
             val safeArgs = TripDetailsViewArgs.fromBundle(it)
-            setUpTextViews(safeArgs.tripTitle, safeArgs.tripDateFrom, safeArgs.tripDateTo, safeArgs.isOneDay)
             setUpJoinTripButton(safeArgs.tripId, userSystemId)
             setUpQuitTripButton(safeArgs.tripId, userSystemId)
             getTripDetails(safeArgs.tripId, userSystemId)
@@ -119,15 +117,16 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
                 if (trip.tripParticipants.any{x -> x.id == userSystemId}){
                     trip_details_quitTripButton.visibility = View.VISIBLE
                 }
-                trip_details_description.text = trip.description
+
+                setUpTextViews(trip.tripTitle, trip.dateFrom, trip.dateTo, trip.isOneDay, trip.description)
                 trip_destination_destinationsList.layoutManager = LinearLayoutManager(activity)
                 trip_destination_destinationsList.adapter = TripDestinationAdapter(trip.tripDestinations!!.mapIndexed { index, td -> TripDestination(index,td.type, td.mountainBrief?.asDbModel(), td.rock?.asDomainModel()) })
                 val destinationsLocations = trip.tripDestinations.map { x ->
                     if (x.type == TripDestinationType.Mountain){
-                        LatLng(x.mountainBrief!!.location.latitude, x.mountainBrief.location.longitude)
+                        MountainTripDestination(LatLng(x.mountainBrief!!.location.latitude, x.mountainBrief.location.longitude), x.mountainBrief?.name)
                     }
                     else if (x.type == TripDestinationType.Rock){
-                        LatLng(x.rock!!.location.latitude, x.rock.location.longitude)
+                        MountainTripDestination( LatLng(x.rock!!.location.latitude, x.rock.location.longitude), null)
                     }
                     else throw TypeNotSupportedException("Trip destination type ${x.type} not supported.")
                 }
@@ -176,18 +175,18 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         findNavController().navigate(action)
     }
 
-    private fun setUpTextViews(tripTitle: String, tripDateFrom: String, tripDateTo: String, isOneDay: Boolean)
+    private fun setUpTextViews(tripTitle: String, dateFrom: Date, dateTo: Date?, isOneDay: Boolean, description: String)
     {
         trip_details_view_tripTitle_textView.text = tripTitle
-        trip_details_view_dateFrom_textView.text = tripDateFrom
+        trip_details_view_dateFrom_textView.text = dateFormater.format(dateFrom)
+        trip_details_description.text = description
         if (isOneDay){
             trip_details_view_minus.visibility = View.GONE
             trip_details_view_dateTo_textView.visibility = View.GONE
-            val date = dateFormater.parse(tripDateFrom)
-            trip_details_view_oneDay_textView.text = "("+date.getWeekDayName()+")"
+            trip_details_view_oneDay_textView.text = "("+dateFrom.getWeekDayName()+")"
         }
         else{
-            trip_details_view_dateTo_textView.text = tripDateTo
+            trip_details_view_dateTo_textView.text = dateFormater.format(dateTo)
         }
     }
 
@@ -217,13 +216,20 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpDestinationMarkers(map: GoogleMap,locations: List<LatLng>){
-        var markers = locations.map {  MarkerOptions()
-            .position(LatLng(it.latitude, it.longitude))
-            .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips))}
-        markers.forEach{map.addMarker(it)}
-        if (locations.isNotEmpty()){
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(locations[0], 7.5f))
+    private fun setUpDestinationMarkers(map: GoogleMap,mountains: List<MountainTripDestination>){
+        if (mountains.isNotEmpty()){
+            val markers = mountains.map {
+                MarkerOptions()
+                    .title(it.mountainName)
+                    .position(LatLng(it.location.latitude, it.location.longitude))
+                    .icon(bitmapDescriptorFromVector(requireContext(),R.drawable.ic_marker_pin_0_trips))
+            }
+            var markerList: MutableList<Marker> = mutableListOf()
+            markers.forEach{
+                markerList.add(map.addMarker(it))
+            }
+            markerList[0].showInfoWindow()
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(mountains[0].location, 7.5f))
         }
     }
 
