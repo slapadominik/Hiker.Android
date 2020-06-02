@@ -7,8 +7,8 @@
 
     <ImageView
             android:id="@+id/mountain_trail_item_trailColor"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:srcCompat="@drawable/ic_vc_black_trail" />
     <TextView
             android:id="@+id/textView"
@@ -24,7 +24,7 @@
             android:id="@+id/mountain_trail_item_timeToTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2,5"
+            android:text="0"
             android:layout_marginLeft="4dp"
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:layout_gravity="center_vertical"/>
@@ -33,6 +33,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="h"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:layout_gravity="center_vertical"/>
+    <TextView
+            android:id="@+id/mountain_trail_item_timeToTop_minutes"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_height="wrap_content"
+            android:text="40"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:layout_gravity="center_vertical"/>
+    <TextView
+            android:id="@+id/textView_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="min"
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:layout_gravity="center_vertical"/>
 </LinearLayout>

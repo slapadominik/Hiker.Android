@@ -22,10 +22,8 @@ import com.hiker.R
 import android.provider.BaseColumns
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +33,6 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.hiker.data.remote.dto.MountainBrief
@@ -43,11 +40,7 @@ import com.hiker.domain.entities.Status
 import com.hiker.domain.extensions.*
 import com.hiker.presentation.login.LoginViewModel
 import com.hiker.presentation.login.LoginViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_scan_map_trips.*
 import kotlinx.android.synthetic.main.fragment_map_view.*
-import java.net.ConnectException
-import kotlin.math.log
 
 const val MapViewBundleKey = "MapViewBundleKey"
 
@@ -61,6 +54,8 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var searchView: SearchView
+    private var suggestionClicked = false
+
     private var menu: Menu? = null
     private var userLocation: Location? = null
     private var circle: Circle? = null
@@ -100,8 +95,6 @@ class MapView : Fragment(), OnMapReadyCallback {
         initViewModels()
         setUpOnFilterButtonClick()
     }
-
-
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         setUpMap()
@@ -123,7 +116,6 @@ class MapView : Fragment(), OnMapReadyCallback {
                 val snack = Snackbar.make(requireView(), response.message!!, Snackbar.LENGTH_LONG)
                 snack.anchorView = coordinatorLayout
                 snack.show()
-                //Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -200,8 +192,6 @@ class MapView : Fragment(), OnMapReadyCallback {
     }
 
     private fun hideMenuToolbar(){
-        searchView.clearFocus()
-        searchView.setQuery("", true)
         val menuItem = menu?.findItem(R.id.action_search)
         menuItem?.collapseActionView()
     }
@@ -224,16 +214,18 @@ class MapView : Fragment(), OnMapReadyCallback {
             }
 
             override fun onSuggestionClick(position: Int): Boolean {
+                hideKeyboard()
+                suggestionClicked = true
                 val cursor = searchView.suggestionsAdapter.getItem(position) as Cursor
                 val mountainName = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
                 val mountainId = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
                 searchView.setQuery(mountainName, false)
-                mapViewModel.getMountain(mountainId).observe(requireActivity(), Observer {
-                    animateCamera(it.latitude, it.longitude, 9f)
-                    setMountainWindowData(it.mountainId, it.name, it.regionName, it.metersAboveSeaLevel, it.upcomingTripsCount)
-                    showMountainWindow()
-                })
-                hideKeyboard()
+                val it = mapViewModel.getMountain(mountainId)
+                animateCamera(it.latitude, it.longitude, 9f)
+                setMountainWindowData(it.mountainId, it.name, it.regionName, it.metersAboveSeaLevel, it.upcomingTripsCount)
+                showMountainWindow()
+
+
                 return true
             }
         })
@@ -262,8 +254,7 @@ class MapView : Fragment(), OnMapReadyCallback {
     private fun setUpMountainInfoWindow(map : GoogleMap){
         map.setOnMapClickListener {
             hideMountainWindow()
-            searchView.clearFocus()
-            searchView.setQuery("", true)
+            hideMenuToolbar()
             hideKeyboard()
         }
         map.setOnMarkerClickListener { marker ->
@@ -291,7 +282,6 @@ class MapView : Fragment(), OnMapReadyCallback {
         if ( mapview_search_trip_button != null){
             mapview_search_trip_button.hide()
         }
-
     }
 
     private fun setMountainWindowData(mountainId: Int, name: String, regionName: String, metersAboveSeaLevel: Int, upcomingTripsCount: Int){
@@ -301,12 +291,14 @@ class MapView : Fragment(), OnMapReadyCallback {
             marker_object_metersAboveSeaLevel.text = metersAboveSeaLevel.toString()
             marker_object_tripsCount.text = upcomingTripsCount.toString()
             mountain_details_button.setOnClickListener {
-                val action = MapViewDirections.actionMapViewToMountainDetailsView()
-                action.mountainId = mountainId
-                action.mountainName = name
-                action.regionName = regionName
-                action.metersAboveSea = metersAboveSeaLevel
-                findNavController().navigate(action)
+                if (findNavController().currentDestination?.id == R.id.mapView) {
+                    val action = MapViewDirections.actionMapViewToMountainDetailsView()
+                    action.mountainId = mountainId
+                    action.mountainName = name
+                    action.regionName = regionName
+                    action.metersAboveSea = metersAboveSeaLevel
+                    findNavController().navigate(action)
+                }
             }
         }
     }
@@ -342,6 +334,7 @@ class MapView : Fragment(), OnMapReadyCallback {
         super.onResume()
         googleMapView.onResume()
         hideMenuToolbar()
+        suggestionClicked = false
     }
     override fun onLowMemory() {
         super.onLowMemory()

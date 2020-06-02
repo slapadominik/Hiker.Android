@@ -166,6 +166,15 @@ class TripFormView : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun ValidateDestinations() : Boolean {
+        if (tripDestinations.isEmpty()){
+            tripForm_searchView.error = "Wymagany jest co najmniej 1 cel"
+            return false
+        }
+        tripForm_searchView.error = null
+        return true
+    }
+
     private fun ValidateDateFrom() : Boolean {
         if (dateFrom == null){
             tripForm_beginDate_editInput.error = "Data jest wymagana";
@@ -216,12 +225,13 @@ class TripFormView : Fragment(), OnMapReadyCallback {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val userSystemId = sharedPref.getString(getString(R.string.preferences_userSystemId), null)
         upcomingTripsView_submit_button.setOnClickListener{
+            val destinationsValid = ValidateDestinations()
             val tripTitleValid = ValidateTripTitle()
             val dateFromValid = ValidateDateFrom()
             val dateToValid = ValidateDateTo()
             val dateFromDateToValid = ValidateDateToDateFrom()
 
-            if (tripTitleValid && dateFromValid && dateToValid && dateFromDateToValid){
+            if (destinationsValid && tripTitleValid && dateFromValid && dateToValid && dateFromDateToValid){
                 val trip = TripCommand(
                     tripTitle = fragment_trip_form_view_tripTitle.text.toString(),
                     authorId = userSystemId!!,
@@ -243,11 +253,13 @@ class TripFormView : Fragment(), OnMapReadyCallback {
 
     private fun setupEditOnclickListeners(tripId: Int){
         upcomingTripsView_submit_button.setOnClickListener{
+            val destinationsValid = ValidateDestinations()
             val tripTitleValid = ValidateTripTitle()
             val dateFromValid = ValidateDateFrom()
             val dateToValid = ValidateDateTo()
             val dateFromDateToValid = ValidateDateToDateFrom()
-            if (tripTitleValid && dateFromValid && dateToValid && dateFromDateToValid){
+
+            if (destinationsValid && tripTitleValid && dateFromValid && dateToValid && dateFromDateToValid){
                 try{
                     viewModel.editTrip(
                         tripId,
@@ -287,6 +299,15 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                 }, beginTripCalendar.get(Calendar.YEAR), beginTripCalendar.get(Calendar.MONTH), beginTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
             }
         }
+
+        tripForm_beginDate_editText.setOnClickListener{
+            DatePickerDialog(requireContext(), {view, year, month, day ->
+                beginTripCalendar.set(year, month, day)
+                tripForm_beginDate_editText.setText(dateFormater.format(beginTripCalendar.time))
+                dateFrom = beginTripCalendar.time
+            }, beginTripCalendar.get(Calendar.YEAR), beginTripCalendar.get(Calendar.MONTH), beginTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
         tripForm_endDate_editText.setOnFocusChangeListener{x, hasFocus ->
             if (hasFocus){
                 DatePickerDialog(requireContext(), {view, year, month, day ->
@@ -296,6 +317,15 @@ class TripFormView : Fragment(), OnMapReadyCallback {
                 }, endTripCalendar.get(Calendar.YEAR), endTripCalendar.get(Calendar.MONTH), endTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
             }
         }
+
+        tripForm_endDate_editText.setOnClickListener{
+            DatePickerDialog(requireContext(), {view, year, month, day ->
+                endTripCalendar.set(year, month, day)
+                tripForm_endDate_editText.setText(dateFormater.format(endTripCalendar.time))
+                dateTo = endTripCalendar.time
+            }, endTripCalendar.get(Calendar.YEAR), endTripCalendar.get(Calendar.MONTH), endTripCalendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
         viewModel.getMountains().observe(viewLifecycleOwner, Observer { mountains ->
             this.mountains = mountains
             val adapter = MountainArrayAdapter(

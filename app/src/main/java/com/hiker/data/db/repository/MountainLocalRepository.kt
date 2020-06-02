@@ -7,7 +7,7 @@ import com.hiker.data.db.entity.Mountain
 interface IMountainLocalRepository{
     fun getAll(): LiveData<List<Mountain>>
     fun getByName(queryText: String): LiveData<List<Mountain>>
-    fun getById(mountainId: Int) : LiveData<Mountain>
+    suspend  fun getById(mountainId: Int) : Mountain
     suspend fun addMountain(mountain: Mountain)
     suspend fun addMoutanins(mountains: List<Mountain>)
 }
@@ -26,7 +26,7 @@ class MountainLocalRepository(private val mountainsDao: MountainsDao) : IMountai
     }
 
 
-    override fun getById(mountainId: Int): LiveData<Mountain> {
+    override suspend fun getById(mountainId: Int): Mountain {
         return mountainsDao.getMountainById(mountainId)
     }
 

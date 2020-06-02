@@ -102,7 +102,7 @@ class UserEditView : Fragment() {
 
         }
 
-        user_edit_birthdayInput.setOnFocusChangeListener{x, hasFocus ->
+       user_edit_birthdayInput.setOnFocusChangeListener{x, hasFocus ->
             if (hasFocus){
                 DatePickerDialog(requireContext(), {view, year, month, day ->
                     birthdayCalendar.set(year, month, day)
@@ -110,6 +110,13 @@ class UserEditView : Fragment() {
                     birthday = birthdayCalendar.time
                 }, birthdayCalendar.get(Calendar.YEAR), birthdayCalendar.get(Calendar.MONTH), birthdayCalendar.get(Calendar.DAY_OF_MONTH)).show()
             }
+        }
+        user_edit_birthdayInput.setOnClickListener{
+            DatePickerDialog(requireContext(), {view, year, month, day ->
+                birthdayCalendar.set(year, month, day)
+                user_edit_birthdayInput.setText(dateFormater.format(birthdayCalendar.time))
+                birthday = birthdayCalendar.time
+            }, birthdayCalendar.get(Calendar.YEAR), birthdayCalendar.get(Calendar.MONTH), birthdayCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
     }
 
@@ -139,8 +146,13 @@ class UserEditView : Fragment() {
     private fun IsBirthdayValid() : Boolean{
         var result = false
         if (birthday != null){
+            val minimumAge = Calendar.getInstance()
+            minimumAge.add(Calendar.YEAR, -16)
             if (birthday!! >= Calendar.getInstance().time){
                 user_edit_birthday.error = "Data jest wymagana";
+            }
+            else if (birthday!! >= minimumAge.time) {
+                user_edit_birthday.error = "Musisz mieć ukończone 16 lat";
             }
             else{
                 result = true

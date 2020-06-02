@@ -11,13 +11,12 @@ import com.hiker.data.remote.repository.MountainRemoteRepository
 import com.hiker.domain.entities.Resource
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MapViewModel(private val mountainsRemoteRepository: MountainRemoteRepository,
                    private val mountainsLocalRepository: MountainLocalRepository) : ViewModel() {
 
-    fun getMountain(mountainId: Int) : LiveData<Mountain> {
-        return mountainsLocalRepository.getById(mountainId)
-    }
+    fun getMountain(mountainId: Int) : Mountain = runBlocking { mountainsLocalRepository.getById(mountainId) }
 
     fun cacheMountains(mountains: List<MountainBrief>){
         viewModelScope.launch {

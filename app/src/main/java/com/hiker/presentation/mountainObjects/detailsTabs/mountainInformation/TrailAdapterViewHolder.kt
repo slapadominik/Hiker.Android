@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hiker.R
+import org.w3c.dom.Text
 
 const val red = "red"
 const val blue = "blue"
@@ -16,6 +17,8 @@ const val yellow = "yellow"
 class TrailAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     private val trailColorImage : ImageView = itemView.findViewById(R.id.mountain_trail_item_trailColor)
     private val timeToTopText : TextView = itemView.findViewById(R.id.mountain_trail_item_timeToTop)
+    private val timeToTopMinutesText: TextView = itemView.findViewById(R.id.mountain_trail_item_timeToTop_minutes)
+    private val textViewMinutes : TextView = itemView.findViewById(R.id.textView_minutes)
 
     fun bind(trail:Trail){
         when (trail.color){
@@ -25,6 +28,16 @@ class TrailAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             yellow -> trailColorImage.setImageResource(R.drawable.ic_vc_yellow_trail)
             black -> trailColorImage.setImageResource(R.drawable.ic_vc_black_trail)
         }
-        timeToTopText.text = trail.timeToTopHours.toString()
+        val hours = trail.timeToTopMinutes/60
+        val minutes = trail.timeToTopMinutes%60
+        timeToTopText.text = hours.toString()
+        if (minutes == 0){
+            timeToTopMinutesText.visibility = View.GONE
+            textViewMinutes.visibility = View.GONE
+        }
+        else{
+            timeToTopMinutesText.text = minutes.toString()
+        }
+
     }
 }

@@ -66,8 +66,9 @@ class UpcomingTripsTabView : Fragment() {
                     upcomingTrips_emptyList_textView.visibility = View.GONE
                     upcomingTripsView_recyclerView.visibility = View.VISIBLE
                     upcomingTripsView_recyclerView.layoutManager = LinearLayoutManager(activity)
+                    val orderedTrips = tripsBriefs.sortedBy { x -> x.dateFrom }
                     upcomingTripsView_recyclerView.adapter =
-                        TripAdapter(tripsBriefs.map { x ->
+                        TripAdapter(orderedTrips.map { x ->
                             Trip(
                                 x.id,
                                 x.tripTitle,

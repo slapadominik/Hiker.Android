@@ -88,7 +88,7 @@ class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
         try{
             val response = tripsService.getUserHistoryTripsBriefs(userId, dateFormater.format(dateTo))
             if (response.isSuccessful){
-                Resource.success(response.body()!!.map { x -> x.asDomainModel() })
+                return Resource.success(response.body()!!.map { x -> x.asDomainModel() })
             }
             return Resource.error(context.getString(R.string.API_error), null)
         }

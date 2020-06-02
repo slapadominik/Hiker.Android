@@ -201,7 +201,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:textColor="@color/black"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
                             android:textSize="16sp"
                             android:text="Treść opisu"
                             android:fontFamily="@font/roboto"/>

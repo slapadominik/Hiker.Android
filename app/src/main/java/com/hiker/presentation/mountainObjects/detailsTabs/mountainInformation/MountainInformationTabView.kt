@@ -28,7 +28,7 @@ class MountainInformationTabView : Fragment() {
             val description = it.getString(ARG_DESCRIPTION)
             if (trails != null){
                 mountain_information_trailsList.layoutManager = LinearLayoutManager(activity)
-                val adapter = TrailAdapter(requireContext(), trails.map { t -> Trail(t.id,t.timeToTopMinutes/60,t.color) })
+                val adapter = TrailAdapter(requireContext(), trails.map { t -> Trail(t.id, t.timeToTopMinutes.toInt(),t.color) })
                 mountain_information_trailsList.adapter = adapter
                 adapter.notifyDataSetChanged()
             }

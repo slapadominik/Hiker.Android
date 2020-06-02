@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.hiker.R
 import com.hiker.data.remote.dto.MountainTrail
 import com.hiker.domain.extensions.TAG
@@ -32,6 +34,9 @@ class MountainDetailsView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().popBackStack()
+        }
         initViewModel()
         arguments?.let {
             val safeArgs = MountainDetailsViewArgs.fromBundle(it)

@@ -12,7 +12,7 @@ import com.hiker.data.db.entity.Mountain
 interface MountainsDao {
 
     @Query("SELECT * FROM Mountain WHERE mountainId == :mountainId")
-    fun getMountainById(mountainId: Int) : LiveData<Mountain>
+    suspend fun getMountainById(mountainId: Int) : Mountain
 
     @Query("SELECT * FROM Mountain WHERE name LIKE :searchText")
     fun getMountainsByName(searchText : String) : LiveData<List<Mountain>>
