@@ -60,7 +60,7 @@ class TripsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
     override suspend fun editTrip(tripId: Int, editTripCommand: EditTripCommand) {
         val response = tripsService.editTrip(tripId, editTripCommand)
         if (response.isSuccessful){
-            tripDao.updateTrip(Trip(tripId, editTripCommand.tripTitle, editTripCommand.description, editTripCommand.dateFrom, editTripCommand.dateTo, editTripCommand.isOneDay))
+            tripDao.updateTrip(tripId, editTripCommand.tripTitle, editTripCommand.description, editTripCommand.dateFrom, editTripCommand.dateTo, editTripCommand.isOneDay)
             tripMountainCrossRefDao.deleteByTripId(tripId)
             tripMountainCrossRefDao.add(editTripCommand.tripDestinations.map { x -> TripMountainCrossRef(tripId, x.mountainId!!) })
         }

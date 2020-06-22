@@ -3,6 +3,7 @@ package com.hiker.data.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.hiker.data.db.entity.TripParticipant
+import com.hiker.data.db.relations.TripWithParticipants
 
 
 @Dao
@@ -17,7 +18,8 @@ interface TripParticipantDao{
     @Delete
     suspend fun delete(tripParticipant: TripParticipant)
 
-    @Query("SELECT * FROM TripParticipant where TripId = :tripId")
-    fun getTripParticipants(tripId: Int) : LiveData<List<TripParticipant>>
+    @Transaction
+    @Query("SELECT * FROM Trip where TripId = :tripId")
+    fun getTripParticipants(tripId: Int) : LiveData<TripWithParticipants>
 
 }

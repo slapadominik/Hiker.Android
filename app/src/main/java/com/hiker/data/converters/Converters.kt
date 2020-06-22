@@ -5,7 +5,6 @@ import com.hiker.data.db.entity.UserBrief
 import com.hiker.data.remote.dto.command.EditUserCommand
 import com.hiker.data.remote.dto.query.TripQuery
 import com.hiker.domain.entities.*
-import com.hiker.domain.extensions.isNullOrEmpty
 
 
 fun com.hiker.data.remote.dto.MountainBrief.asDbModel() = com.hiker.data.db.entity.Mountain(
@@ -39,7 +38,7 @@ fun com.hiker.data.remote.dto.User.asDomainModel() = User(
 )
 
 fun com.hiker.data.remote.dto.User.asDatabaseModel() = com.hiker.data.db.entity.User(
-    id = id.toString(),
+    userId = id.toString(),
     birthday = birthday,
     lastName = lastName,
     firstName = firstName,
@@ -56,7 +55,7 @@ fun User.toEditUserCommand() = EditUserCommand(
 )
 
 fun com.hiker.data.db.entity.User.asDomainModel() = User(
-    id = id,
+    id = userId,
     facebookId = facebookId,
     birthday = birthday,
     firstName = firstName,
@@ -67,7 +66,7 @@ fun com.hiker.data.db.entity.User.asDomainModel() = User(
 
 
 fun User.asDbModel() =com.hiker.data.db.entity.User(
-    id = id,
+    userId = id,
     facebookId = facebookId,
     birthday = birthday,
     firstName = firstName,
@@ -81,7 +80,8 @@ fun com.hiker.data.remote.dto.TripBrief.asDomainModel() = TripBrief(
     tripTitle = tripTitle,
     dateFrom = dateFrom,
     dateTo = dateTo,
-    isOneDay = isOneDay
+    isOneDay = isOneDay,
+    authorId = authorId
 )
 
 
@@ -92,7 +92,7 @@ fun com.hiker.data.remote.dto.Rock.asDomainModel() = Rock(
 )
 
 fun com.hiker.data.remote.dto.query.UserBrief.asDatabaseModel() = UserBrief(
-    id = id.toString(),
+    userId = id.toString(),
     firstName = firstName,
     lastName = lastName,
     birthday = birthday,
@@ -100,7 +100,7 @@ fun com.hiker.data.remote.dto.query.UserBrief.asDatabaseModel() = UserBrief(
 )
 
 fun User.asUserBrief() = UserBrief(
-    id = id,
+    userId = id,
     firstName = firstName,
     lastName = lastName,
     birthday = birthday,
@@ -113,5 +113,6 @@ fun TripQuery.asDbModel() = Trip(
     dateFrom = dateFrom,
     dateTo = dateTo,
     description = description,
-    isOneDay = isOneDay
+    isOneDay = isOneDay,
+    authorId = author.id.toString()
 )

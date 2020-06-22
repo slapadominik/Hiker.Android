@@ -18,9 +18,13 @@
     <string name="search_mountains">Szukaj celu...</string>
     <string name="user_phone">Telefon:</string>
     <string name="no_info">Brak informacji</string>
+    <string name="user_phoneValue"><u>Brak informacji</u></string>
     <string name="user_about_me">O mnie:</string>
     <string name="user_age">Wiek:</string>
     <string name="details">Szczegóły</string>
     <string name="no_internet">Brak połączenia z internetem</string>
     <string name="API_error">Wystąpił nieoczekiwany błąd</string>
+    <string name="trail">Szlaki turystyczne</string>
+    <string name="description">Opis</string>
+    <string name="organizer">Organizator</string>
 </resources>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <LinearLayout
@@ -18,7 +20,7 @@
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Opis"
+                        android:text="@string/description"
                         android:fontFamily="@font/roboto"
                         android:textSize="15sp" />
 
@@ -26,7 +28,7 @@
                         android:id="@+id/mountain_information_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Opis"
+                        android:text="@string/description"
                         android:justificationMode="inter_word"
                         android:fontFamily="@font/roboto"
                         android:textColor="@color/black"
@@ -49,7 +51,7 @@
                         android:id="@+id/textView15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Szlaki turystyczne"
+                        android:text="@string/trail"
                         android:fontFamily="@font/roboto"
                         android:textSize="15sp" />
 
@@ -59,8 +61,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:nestedScrollingEnabled="false"/>
+                        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="vertical"
+                        android:scrollbars="none"
+                        android:layout_marginEnd="15dp" />
             </LinearLayout>
 
             <View
@@ -68,6 +73,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="15dp"
                     android:background="@color/lighter_gray"/>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

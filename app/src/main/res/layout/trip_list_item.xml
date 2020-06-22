@@ -17,59 +17,75 @@
             app:srcCompat="@drawable/ic_mountains" />
 
     <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp">
-
-        <TextView
-                android:id="@+id/trip_list_item_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nazwa wycieczki"
-                android:fontFamily="@font/roboto"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-
+            android:orientation="horizontal"
+            android:layout_gravity="center">
         <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp">
 
             <TextView
-                    android:id="@+id/trip_list_item_dateFrom"
+                    android:id="@+id/trip_list_item_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:text="Nazwa wycieczki"
                     android:fontFamily="@font/roboto"
-                    android:layout_weight="1"
-                    android:text="Data od"
-                    android:textSize="12sp" />
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
 
-            <TextView
-                    android:id="@+id/trip_list_item_minus"
+            <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:text="-"
-                    android:fontFamily="@font/roboto"
-                    android:textSize="12sp" />
+                    android:layout_height="wrap_content">
 
-            <TextView
-                    android:id="@+id/trip_list_item_dateTo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/roboto"
-                    android:layout_weight="1"
-                    android:text="Data do"
-                    android:textSize="12sp" />
+                <TextView
+                        android:id="@+id/trip_list_item_dateFrom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/roboto"
+                        android:layout_weight="1"
+                        android:text="Data od"
+                        android:textSize="12sp" />
+
+                <TextView
+                        android:id="@+id/trip_list_item_minus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:fontFamily="@font/roboto"
+                        android:textSize="12sp" />
+
+                <TextView
+                        android:id="@+id/trip_list_item_dateTo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/roboto"
+                        android:layout_weight="1"
+                        android:text="Data do"
+                        android:textSize="12sp" />
+            </LinearLayout>
+
         </LinearLayout>
-
+        <TextView
+                android:id="@+id/trip_list_item_participantType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="@string/organizer"
+                android:gravity="end"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center"
+                android:textSize="12sp" />
     </LinearLayout>
+
 
 </LinearLayout>
 

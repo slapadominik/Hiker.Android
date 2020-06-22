@@ -356,7 +356,7 @@ class TripFormView : Fragment(), OnMapReadyCallback {
 
     private fun createChip(mountain: Mountain) : Chip {
         val chip = Chip(context)
-        chip.text = mountain.name+", "+mountain.metersAboveSeaLevel+" m n.p.m."
+        chip.text = mountain.name+" ("+mountain.regionName+", "+mountain.metersAboveSeaLevel+" m n.p.m.)"
         chip.isCloseIconVisible = true
         chip.setOnCloseIconClickListener {
             val viewRowIndex = trip_form_chipGroup.indexOfChild(it)

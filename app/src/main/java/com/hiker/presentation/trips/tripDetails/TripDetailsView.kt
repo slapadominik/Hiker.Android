@@ -10,7 +10,6 @@ import android.view.*
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.annotation.DrawableRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -27,7 +26,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hiker.R
 import com.hiker.data.converters.asDbModel
 import com.hiker.data.converters.asDomainModel
-import com.hiker.data.db.entity.Mountain
 import com.hiker.domain.consts.OperationType
 import com.hiker.domain.consts.TripDestinationType
 import com.hiker.domain.exceptions.ApiException
@@ -72,6 +70,9 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().popBackStack()
+        }
         initViewModel()
         setUpToolbarNavigationClick()
         trip_details_participantsList.layoutManager = LinearLayoutManager(activity)
@@ -93,17 +94,21 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
         googleMap.uiSettings.isMyLocationButtonEnabled = false
     }
 
-    private fun getTripParticipants(tripId: Int){
-        try{
-            tripsDetailsViewModel.getTripParticipants(tripId).observe(this, Observer {participants ->
-                tripsDetailsViewModel.getUsersBriefs(participants.map { x -> x.userId }).observe(this, Observer{ users ->
-                   userBriefAdapter.setData(users)
-                })
-            })
-        }
-        catch (ex: Exception){
-        }
-    }
+   private fun getTripParticipants(tripId: Int) {
+       tripsDetailsViewModel.getTripParticipants(tripId).observe(this, Observer { participants ->
+               if (participants != null){
+                   val tripParticipants = participants.participants.map { x ->
+                       if (x.userId == participants.trip.authorId){
+                           UserBrief(x.userId, x.firstName, x.lastName, x.profilePictureUrl, true)
+                       }
+                       else {
+                           UserBrief(x.userId, x.firstName, x.lastName, x.profilePictureUrl, false)
+                       }}
+                   userBriefAdapter.setData(tripParticipants)
+               }
+           })
+   }
+
 
     private fun getTripDetails(tripId: Int, userSystemId: UUID){
         try{
@@ -117,6 +122,11 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
                 if (trip.tripParticipants.any{x -> x.id == userSystemId}){
                     trip_details_quitTripButton.visibility = View.VISIBLE
                 }
+
+                /*val author = UserBrief(trip.author.userId.toString(), trip.author.firstName, trip.author.lastName, trip.author.profilePictureUrl, true)
+                val participants = trip.tripParticipants.map { x -> UserBrief(x.userId.toString(), x.firstName, x.lastName, x.profilePictureUrl, false) }.toMutableList()
+                participants.add(author)
+                userBriefAdapter.setData(participants)*/
 
                 setUpTextViews(trip.tripTitle, trip.dateFrom, trip.dateTo, trip.isOneDay, trip.description)
                 trip_destination_destinationsList.layoutManager = LinearLayoutManager(activity)

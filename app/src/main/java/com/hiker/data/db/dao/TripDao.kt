@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.hiker.data.db.entity.Trip
 import com.hiker.data.db.relations.TripWithMountains
+import java.util.*
 
 @Dao
 interface TripDao{
@@ -18,6 +19,11 @@ interface TripDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(trip: Trip)
 
-    @Update
-    suspend fun updateTrip(trip: Trip)
+    @Query("UPDATE Trip SET Title = :title, Description = :description, DateFrom = :dateFrom, DateTo = :dateTo, IsOneDay = :isOneDay WHERE tripId = :tripId")
+    suspend fun updateTrip(tripId: Int,
+                           title: String,
+                           description: String,
+                           dateFrom: Date,
+                           dateTo: Date?,
+                           isOneDay: Boolean)
 }

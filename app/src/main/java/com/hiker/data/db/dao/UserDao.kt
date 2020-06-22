@@ -13,10 +13,10 @@ import retrofit2.http.GET
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM User where Id = :id")
+    @Query("SELECT * FROM User where UserId = :id")
     fun getById(id: String) : LiveData<User?>
 
-    @Query("SELECT * FROM User where Id = :id LIMIT 1")
+    @Query("SELECT * FROM User where UserId = :id LIMIT 1")
     suspend fun hasUser(id: String) : User?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

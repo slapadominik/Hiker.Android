@@ -5,6 +5,7 @@ import com.hiker.data.db.dao.TripParticipantDao
 import com.hiker.data.db.dao.UserBriefDao
 import com.hiker.data.db.entity.TripParticipant
 import com.hiker.data.db.entity.UserBrief
+import com.hiker.data.db.relations.TripWithParticipants
 import com.hiker.data.remote.api.TripsService
 import com.hiker.domain.exceptions.ApiException
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,7 @@ import java.util.*
 interface TripParticipantsRepository{
     suspend fun addTripParticipant(tripId: Int, userId: UUID)
     suspend fun removeTripParticipant(tripId: Int, userId: UUID)
-    fun getTripParticipants(tripId: Int): LiveData<List<TripParticipant>>
+    fun getTripParticipants(tripId: Int): LiveData<TripWithParticipants>
 }
 
 class TripParticipantsRepositoryImpl(private val tripParticipantDao: TripParticipantDao,
@@ -45,7 +46,7 @@ class TripParticipantsRepositoryImpl(private val tripParticipantDao: TripPartici
         }
     }
 
-    override fun getTripParticipants(tripId: Int): LiveData<List<TripParticipant>> {
+    override fun getTripParticipants(tripId: Int): LiveData<TripWithParticipants> {
         return tripParticipantDao.getTripParticipants(tripId)
     }
 

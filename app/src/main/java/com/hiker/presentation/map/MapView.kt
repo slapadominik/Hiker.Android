@@ -54,7 +54,6 @@ class MapView : Fragment(), OnMapReadyCallback {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var searchView: SearchView
-    private var suggestionClicked = false
 
     private var menu: Menu? = null
     private var userLocation: Location? = null
@@ -215,7 +214,6 @@ class MapView : Fragment(), OnMapReadyCallback {
 
             override fun onSuggestionClick(position: Int): Boolean {
                 hideKeyboard()
-                suggestionClicked = true
                 val cursor = searchView.suggestionsAdapter.getItem(position) as Cursor
                 val mountainName = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
                 val mountainId = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
@@ -224,8 +222,6 @@ class MapView : Fragment(), OnMapReadyCallback {
                 animateCamera(it.latitude, it.longitude, 9f)
                 setMountainWindowData(it.mountainId, it.name, it.regionName, it.metersAboveSeaLevel, it.upcomingTripsCount)
                 showMountainWindow()
-
-
                 return true
             }
         })
@@ -334,7 +330,6 @@ class MapView : Fragment(), OnMapReadyCallback {
         super.onResume()
         googleMapView.onResume()
         hideMenuToolbar()
-        suggestionClicked = false
     }
     override fun onLowMemory() {
         super.onLowMemory()

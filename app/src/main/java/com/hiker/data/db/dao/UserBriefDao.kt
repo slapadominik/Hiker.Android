@@ -10,7 +10,7 @@ import com.hiker.data.db.entity.UserBrief
 @Dao
 interface UserBriefDao {
 
-    @Query("SELECT * FROM UserBrief WHERE id IN (:userIds)")
+    @Query("SELECT * FROM UserBrief WHERE userId IN (:userIds)")
     fun getMany(userIds: List<String>) : LiveData<List<UserBrief>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

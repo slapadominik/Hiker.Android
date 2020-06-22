@@ -1,6 +1,7 @@
 package com.hiker.presentation.trips.tripDetails
 
 import androidx.lifecycle.*
+import com.hiker.data.db.relations.TripWithParticipants
 import com.hiker.data.remote.dto.TripParticipant
 import com.hiker.data.remote.dto.command.TripCommand
 import com.hiker.data.remote.dto.query.TripQuery
@@ -24,19 +25,19 @@ class TripDetailsViewModel(private val tripParticipantsRepository: TripParticipa
         return trip
     }
 
-    fun getUsersBriefs(userIds: List<String>) : LiveData<List<UserBrief>> {
+   /* fun getUsersBriefs(userIds: List<String>) : LiveData<List<UserBrief>> {
         return Transformations.map(userRepository.getUserBriefs(userIds)){
             it.map { x ->
                 if (x.birthday != null){
-                    UserBrief(x.id, x.firstName, x.lastName, Period.between(x.birthday, Calendar.getInstance().time).toString(), x.profilePictureUrl)
+                    UserBrief(x.userId, x.firstName, x.lastName, x.profilePictureUrl)
                 }
             else{
-                    UserBrief(x.id, x.firstName, x.lastName, "", x.profilePictureUrl)
+                    UserBrief(x.userId, x.firstName, x.lastName, x.profilePictureUrl)
                 }}
         }
-    }
+    }*/
 
-    fun getTripParticipants(tripId: Int) : LiveData<List<com.hiker.data.db.entity.TripParticipant>> {
+    fun getTripParticipants(tripId: Int) : LiveData<TripWithParticipants> {
         return tripParticipantsRepository.getTripParticipants(tripId)
     }
 

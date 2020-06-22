@@ -8,10 +8,10 @@ import java.util.*
 
 @Entity(tableName = "User")
 @TypeConverters(DateConverter::class)
-data class User(@PrimaryKey val id: String,
-                 val firstName: String,
-                 val lastName: String,
-                 val birthday: Date?,
-                 val facebookId: String,
-                 val phoneNumber: String?,
-                 val aboutMe: String?)
+data class User(@PrimaryKey val userId: String,
+                val firstName: String,
+                val lastName: String,
+                val birthday: Date?,
+                val facebookId: String,
+                val phoneNumber: String?,
+                val aboutMe: String?)

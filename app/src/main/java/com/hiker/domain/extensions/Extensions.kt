@@ -1,5 +1,6 @@
 package com.hiker.domain.extensions
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -65,6 +66,11 @@ fun getPluralText(itemsCount: Int, text1: String, text2: String, text3: String) 
     }
 
     return text3;
+}
+
+fun getUserId(activity: Activity) : String?{
+    val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
+    return sharedPref.getString(activity.getString(R.string.preferences_userSystemId), null)
 }
 
 private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {

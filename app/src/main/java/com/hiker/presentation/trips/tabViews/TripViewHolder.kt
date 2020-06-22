@@ -1,6 +1,7 @@
 package com.hiker.presentation.trips.tabViews
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,6 +19,7 @@ class TripViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView
     private var dateFormater: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY)
     private var itemLayout: LinearLayout = itemView.findViewById(R.id.trip_list_item_layout)
     private var minus: TextView = itemView.findViewById(R.id.trip_list_item_minus)
+    private var participantTypeTextView: TextView = itemView.findViewById(R.id.trip_list_item_participantType)
 
     fun bind(trip: Trip, clickListener: (Trip) -> Unit){
         titleTextView.text = trip.title
@@ -30,6 +32,14 @@ class TripViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView
             dateToTextView.text = null
             minus.text = null
         }
+
+        if (trip.isAuthor){
+            participantTypeTextView.text = "Organizator"
+        }
+        else{
+            participantTypeTextView.visibility = View.GONE
+        }
+        
         itemLayout.setOnClickListener{ clickListener(trip) }
     }
 

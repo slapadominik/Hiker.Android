@@ -8,7 +8,7 @@ import java.util.*
 
 
 @Entity(tableName = "UserBrief")
-data class UserBrief(@PrimaryKey val id: String,
+data class UserBrief(@PrimaryKey val userId: String,
                      val firstName: String,
                      val lastName: String,
                      val birthday: Date?,

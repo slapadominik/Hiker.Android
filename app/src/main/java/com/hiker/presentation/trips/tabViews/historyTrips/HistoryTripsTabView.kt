@@ -63,7 +63,8 @@ class HistoryTripsTabView : Fragment() {
                                 x.tripTitle,
                                 x.dateFrom,
                                 x.dateTo,
-                                x.isOneDay
+                                x.isOneDay,
+                                x.authorId == userSystemId
                             )
                         }, requireContext()) {
                             val action = TripsViewDirections.actionTripsViewToTripDetailsView()

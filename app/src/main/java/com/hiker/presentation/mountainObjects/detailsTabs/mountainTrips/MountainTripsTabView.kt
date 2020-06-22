@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiker.R
 import com.hiker.domain.extensions.empty
+import com.hiker.domain.extensions.getUserId
 import com.hiker.presentation.mountainObjects.MountainDetailsViewDirections
 import com.hiker.presentation.trips.tabViews.Trip
 import com.hiker.presentation.trips.tabViews.TripAdapter
@@ -35,6 +36,7 @@ class MountainTripsTabView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModels()
+        val userSystemId = getUserId(requireActivity())
         arguments?.let {
             val tripDestinationType = it.getInt(ARG_TRIP_DESTINATION_TYPE)
             var mountainId : Int? = it.getInt(ARG_MOUNTAIN_ID)
@@ -64,7 +66,8 @@ class MountainTripsTabView : Fragment() {
                                         tB.tripTitle,
                                         tB.dateFrom,
                                         tB.dateTo,
-                                        tB.isOneDay
+                                        tB.isOneDay,
+                                        tB.authorId == userSystemId
                                     )
                                 },
                                 requireContext()
