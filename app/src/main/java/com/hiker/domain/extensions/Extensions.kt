@@ -73,6 +73,11 @@ fun getUserId(activity: Activity) : String?{
     return sharedPref.getString(activity.getString(R.string.preferences_userSystemId), null)
 }
 
+fun getJwtToken(activity: Activity) : String?{
+    val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
+    return sharedPref.getString(activity.getString(R.string.preferences_token), null)
+}
+
 private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {
     val background = ContextCompat.getDrawable(context, vectorDrawableResourceId)
     background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)

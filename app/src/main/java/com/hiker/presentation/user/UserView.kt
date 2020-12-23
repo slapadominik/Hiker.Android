@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.hiker.R
 import com.hiker.domain.entities.Status
 import com.hiker.presentation.login.LoginViewModelFactory
+import com.hiker.presentation.login.UserViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user_view.*
 import java.util.*
@@ -108,6 +109,6 @@ class UserView : Fragment() {
             .show()
     }
     private fun initViewModel() {
-        userViewModel = ViewModelProviders.of(this, LoginViewModelFactory(requireContext())).get(UserViewModel::class.java)
+        userViewModel = ViewModelProviders.of(this, UserViewModelFactory(requireContext())).get(UserViewModel::class.java)
     }
 }

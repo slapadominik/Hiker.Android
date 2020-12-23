@@ -1,2 +1,6 @@
 # Hiker.Android
-Android application to searching buddies for mountain trips (trekking, climbing, skiing).
+Android application for searching hiking partners.
+
+## Screenshot
+
+

@@ -1,12 +1,10 @@
-package com.hiker.data.remote.repository
+package com.hiker.data.repository
 
-import android.util.Log
 import com.hiker.data.remote.api.MountainsService
 import com.hiker.data.remote.dto.Mountain
 import com.hiker.data.remote.dto.MountainBrief
 import com.hiker.domain.entities.Resource
 import com.hiker.domain.exceptions.ApiException
-import java.util.concurrent.TimeUnit
 
 interface IMountainRemoteRepository {
     suspend fun getAll() : Resource<List<MountainBrief>>

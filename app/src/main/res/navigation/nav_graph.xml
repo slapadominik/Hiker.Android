@@ -125,6 +125,9 @@
                 android:name="isOneDay"
                 app:argType="boolean"
                 android:defaultValue="false" />
+        <action
+                android:id="@+id/action_tripDetailsView_to_chatView"
+                app:destination="@id/chatView" />
     </fragment>
     <fragment
             android:id="@+id/userEditView"
@@ -143,5 +146,12 @@
         <argument
                 android:name="userId"
                 app:argType="string" />
+    </fragment>
+    <fragment
+            android:id="@+id/chatView"
+            android:name="com.hiker.presentation.chat.ChatView"
+            android:label="ChatView" >
+        <argument android:name="tripId"
+                app:argType="integer" />
     </fragment>
 </navigation>

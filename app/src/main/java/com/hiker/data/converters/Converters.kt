@@ -99,6 +99,14 @@ fun com.hiker.data.remote.dto.query.UserBrief.asDatabaseModel() = UserBrief(
     profilePictureUrl = profilePictureUrl
 )
 
+fun com.hiker.data.remote.dto.User.asUserBrief() = UserBrief(
+    userId = id.toString(),
+    firstName = firstName,
+    lastName = lastName,
+    birthday = birthday,
+    profilePictureUrl = "https://graph.facebook.com/${facebookId}/picture?width=300&height=300"
+)
+
 fun User.asUserBrief() = UserBrief(
     userId = id,
     firstName = firstName,

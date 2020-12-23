@@ -83,6 +83,7 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
             val safeArgs = TripDetailsViewArgs.fromBundle(it)
             setUpJoinTripButton(safeArgs.tripId, userSystemId)
             setUpQuitTripButton(safeArgs.tripId, userSystemId)
+            setupChatButton(safeArgs.tripId)
             getTripDetails(safeArgs.tripId, userSystemId)
             getTripParticipants(safeArgs.tripId)
         }
@@ -210,6 +211,13 @@ class TripDetailsView : Fragment(), OnMapReadyCallback {
             catch (apiException: ApiException){
                 Log.e("TripDetailsView", apiException.message.toString())
             }
+        }
+    }
+
+    private fun setupChatButton(chatRoomId: Int){
+        trip_details_chat_btn.setOnClickListener{
+            val action = TripDetailsViewDirections.actionTripDetailsViewToChatView(chatRoomId)
+            findNavController().navigate(action)
         }
     }
 

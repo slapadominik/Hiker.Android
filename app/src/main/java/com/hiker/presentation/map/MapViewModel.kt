@@ -7,7 +7,7 @@ import com.hiker.data.db.entity.Mountain
 import com.hiker.data.db.repository.MountainLocalRepository
 import com.hiker.data.remote.api.ApiConsts
 import com.hiker.data.remote.dto.MountainBrief
-import com.hiker.data.remote.repository.MountainRemoteRepository
+import com.hiker.data.repository.MountainRemoteRepository
 import com.hiker.domain.entities.Resource
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
@@ -38,12 +38,6 @@ class MapViewModel(private val mountainsRemoteRepository: MountainRemoteReposito
             mountains.postValue(mountainsRemoteRepository.getMountainsWithUpcomingTripsByRadius(latitude, longitude, radius))
         }
         return mountains
-    }
-
-    fun setMountainThumbnail(imageView: ImageView, mountainId: Int){
-        Picasso.get()
-            .load(buildThumbnailUri(mountainId))
-            .into(imageView)
     }
 
     fun getMountainsByName(queryText: String) : LiveData<List<Mountain>>{

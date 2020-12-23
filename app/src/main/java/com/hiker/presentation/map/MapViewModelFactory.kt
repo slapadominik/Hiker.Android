@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hiker.data.db.ApplicationDatabase
 import com.hiker.data.db.repository.MountainLocalRepository
-import com.hiker.data.remote.repository.MountainRemoteRepository
+import com.hiker.data.repository.MountainRemoteRepository
 
 class MapViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

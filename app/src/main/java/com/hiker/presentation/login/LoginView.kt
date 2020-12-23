@@ -19,8 +19,10 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.android.material.snackbar.Snackbar
 import com.hiker.R
 import com.hiker.data.converters.asUserBrief
+import com.hiker.domain.entities.Status
 import kotlinx.android.synthetic.main.fragment_login_view.*
 import java.lang.Exception
 
@@ -61,25 +63,30 @@ class LoginView : Fragment() {
             login_button.fragment = this;
             LoginManager.getInstance().registerCallback(facebookCallbackManager,  object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
-                    loginViewModel.getUserByFacebookId(loginResult.accessToken.userId).observe(this@LoginView, Observer {user ->
-                        if (user != null){
+                    loginViewModel.login(loginResult.accessToken.token).observe(this@LoginView, Observer {response ->
+                        if (response.status == Status.SUCCESS){
                             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
                             if (sharedPref != null) {
                                 with (sharedPref.edit()){
-                                    putString(getString(R.string.preferences_userSystemId), user.id)
+                                    putString(getString(R.string.preferences_userSystemId), response.data!!.user.id.toString())
+                                    putString(getString(R.string.preferences_token), response.data.token)
                                     commit()
                                 }
                             }
-                            loginViewModel.addUserToDatabase(user.asUserBrief())
+                            loginViewModel.addUserToDatabase(response.data!!.user.asUserBrief())
                             findNavController().navigate(R.id.mapView)
                         }
-                        else{
+                        else if (response.status == Status.UNAUTHORIZED){
                             loginViewModel.registerUserFromFacebook(loginResult.accessToken.token).observe(this@LoginView, Observer {
                                 loginViewModel.getUserBySystemId(it).observe(this@LoginView, Observer { user ->
                                     loginViewModel.addUserToDatabase(user!!.asUserBrief())
                                 })
                                 findNavController().navigate(R.id.mapView)
                             })
+                        }
+                        else{
+                            val snack = Snackbar.make(requireView(), response.message!!, Snackbar.LENGTH_LONG)
+                            snack.show()
                         }
                     })
                 }
@@ -88,7 +95,8 @@ class LoginView : Fragment() {
                 }
 
                 override fun onError(error: FacebookException) {
-                    Toast.makeText(requireContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show()
+                    val snack = Snackbar.make(requireView(), "Wystąpił błąd", Snackbar.LENGTH_LONG)
+                    snack.show()
                 }
             })
         }

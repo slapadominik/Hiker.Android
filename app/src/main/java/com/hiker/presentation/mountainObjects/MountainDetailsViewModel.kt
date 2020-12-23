@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hiker.data.remote.dto.Mountain
-import com.hiker.data.remote.repository.MountainRemoteRepository
+import com.hiker.data.repository.MountainRemoteRepository
 import kotlinx.coroutines.launch
 
 class MountainDetailsViewModel(private val mountainsRepository: MountainRemoteRepository) : ViewModel(){
